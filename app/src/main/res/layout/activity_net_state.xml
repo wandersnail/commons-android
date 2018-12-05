@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <Button
+        android:id="@+id/btnGoConnect"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="连接Wifi" />
+
+    <Button
+        android:id="@+id/btnGoLocation"
+        android:text="跳转位置服务"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    
+    <TableLayout
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TableRow>
+
+            <TextView android:text="网络是否可用：" />
+
+            <TextView
+                android:id="@+id/tvNetAvailable"
+                android:text="否" />
+        </TableRow>
+
+        <TableRow
+            android:layout_marginTop="4dp">
+
+            <TextView android:text="当前是否WiFi：" />
+
+            <TextView
+                android:id="@+id/tvCurrentWifi"
+                android:text="否" />
+        </TableRow>
+
+        <TableRow
+            android:layout_marginTop="4dp">
+
+            <TextView android:text="位置服务是否开启：" />
+
+            <TextView
+                android:id="@+id/tvLocationEnabled"
+                android:text="否" />
+        </TableRow>
+
+        <TableRow
+            android:layout_marginTop="4dp">
+
+            <TextView android:text="GPS是否开启：" />
+
+            <TextView
+                android:id="@+id/tvGpsEnabled"
+                android:text="否" />
+        </TableRow>
+    </TableLayout>
+</LinearLayout>
