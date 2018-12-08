@@ -33,40 +33,59 @@ public class AppHolder implements Application.ActivityLifecycleCallbacks {
     
     private AppHolder() {
         mainHandler = new Handler(Looper.getMainLooper());
+        //尝试获取application
+        mainHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (app == null) {
+                    synchronized (AppHolder.this) {
+                        if (app == null) {
+                            app = tryGetApplication();
+                            if (app != null) {
+                                app.registerActivityLifecycleCallbacks(AppHolder.this);
+                            }
+                        }
+                    }
+                }                
+            }
+        });
     }
-    
+
+    private Application tryGetApplication() {
+        try {
+            Class<?> clazz = Class.forName("android.app.ActivityThread");
+            Method acThreadMethod = clazz.getMethod("currentActivityThread");
+            acThreadMethod.setAccessible(true);
+            Object acThread = acThreadMethod.invoke(null);
+            Method appMethod = acThread.getClass().getMethod("getApplication");
+            return (Application) appMethod.invoke(acThread);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     private static class Holder {
         private static final AppHolder APP_HOLDER = new AppHolder();
     }
     
     public static void init(@NonNull Application app) {
-        if (Holder.APP_HOLDER.app != null) {
-            Holder.APP_HOLDER.app.unregisterActivityLifecycleCallbacks(Holder.APP_HOLDER);
+        synchronized (Holder.APP_HOLDER) {
+            if (Holder.APP_HOLDER.app != null) {
+                Holder.APP_HOLDER.app.unregisterActivityLifecycleCallbacks(Holder.APP_HOLDER);
+            }
+            Holder.APP_HOLDER.app = app;
+            app.registerActivityLifecycleCallbacks(Holder.APP_HOLDER);
         }
-        Holder.APP_HOLDER.app = app;
-        app.registerActivityLifecycleCallbacks(Holder.APP_HOLDER);
     }
     
     public static Context getContext() {
         if (Holder.APP_HOLDER.app == null) {
-            synchronized(Holder.APP_HOLDER) {
-                if (Holder.APP_HOLDER.app == null) {
-                    try {
-                        Class<?> clazz = Class.forName("android.app.ActivityThread");
-                        Method acThreadMethod = clazz.getMethod("currentActivityThread");
-                        acThreadMethod.setAccessible(true);
-                        Object acThread = acThreadMethod.invoke(null);
-                        Method appMethod = acThread.getClass().getMethod("getApplication");
-                        Application app = (Application) appMethod.invoke(acThread);
-                        init(app);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    if (Holder.APP_HOLDER.app == null) {
-                        throw new RuntimeException("cn.zfs.common.AppHolder is uninitialized, please invoke AppHolder.init(app)");
-                    }
-                }
+            Application app = Holder.APP_HOLDER.tryGetApplication();
+            if (app == null) {
+                throw new RuntimeException("AppHolder is uninitialized, please invoke AppHolder.init(app)");
             }
+            return app;
         }
         return Holder.APP_HOLDER.app;
     }
