@@ -5,6 +5,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.Build;
+import android.support.annotation.NonNull;
 
 import java.util.List;
 
@@ -15,21 +16,36 @@ import java.util.List;
  */
 public class SignUtils {
 
-    /**
-     * 从APK中读取签名
-     *
-     * @param algorithm 算法。{@link EncryptUtils#MD5}, {@link EncryptUtils#SHA1}
-     */
-    public static String getSignatureFromApk(Context context, String apkPath, String algorithm) {
-        return getSignatureFromApk(context, apkPath, algorithm, "");
+    public static final class SignInfo {
+        public int hashCode;
+        public String md5;
+        public String sha1;
+
+        /**
+         * 在MD5或SHA1加密过的字符串基础上加上分隔符
+         * @param code MD5或SHA1加密过的字符串
+         * @param separator 分隔符
+         */
+        public String addSeparator(@NonNull String code, @NonNull String separator) {
+            return EncryptUtils.addSeparator(code, separator);
+        }
+    }
+    
+    private static SignInfo getSignature(Signature signature) {
+        SignInfo info = new SignInfo();
+        info.hashCode = signature.hashCode();
+        info.md5 = EncryptUtils.encryptByMessageDigest(signature.toByteArray(), EncryptUtils.MD5);
+        if (info.md5 == null) {
+            return null;
+        }
+        info.sha1 = EncryptUtils.encryptByMessageDigest(signature.toByteArray(), EncryptUtils.SHA1);
+        if (info.sha1 == null) {
+            return null;
+        }
+        return info;
     }
 
-    private static String getSignature(Signature signature, String algorithm, String separator) {
-        String code = EncryptUtils.encryptByMessageDigest(signature.toByteArray(), algorithm);
-        return EncryptUtils.addSeparator(code, separator);
-    }
-
-    private static String getSignature(PackageInfo info, String algorithm, String separator) {
+    private static SignInfo getSignature(PackageInfo info) {
         Signature signature;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             if (info.signingInfo.hasMultipleSigners()) {
@@ -40,25 +56,22 @@ public class SignUtils {
         } else {
             signature = info.signatures[0];
         }
-        return getSignature(signature, algorithm, separator);
+        return getSignature(signature);
     }
 
     /**
      * 从APK中读取签名
-     *
-     * @param algorithm 算法。{@link EncryptUtils#MD5}, {@link EncryptUtils#SHA1}
-     * @param separator 用来分隔的字符串
      */
-    public static String getSignatureFromApk(Context context, String apkPath, String algorithm, String separator) {
+    public static SignInfo getSignatureFromApk(Context context, String apkPath) {
         try {
             PackageInfo packageSign;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 PackageInfo info = context.getPackageManager().getPackageArchiveInfo(apkPath, PackageManager.GET_SIGNING_CERTIFICATES);
                 packageSign = context.getPackageManager().getPackageInfo(info.packageName, PackageManager.GET_SIGNING_CERTIFICATES);
-                return getSignature(packageSign, algorithm, separator);
+                return getSignature(packageSign);
             } else {
                 packageSign = context.getPackageManager().getPackageArchiveInfo(apkPath, PackageManager.GET_SIGNATURES);
-                return getSignature(packageSign, algorithm, separator);
+                return getSignature(packageSign);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -68,18 +81,8 @@ public class SignUtils {
 
     /**
      * 从已安装的应用读取签名
-     * @param algorithm 算法。{@link EncryptUtils#MD5}, {@link EncryptUtils#SHA1}
      */
-    public static String getSignatureInstalled(Context context, String packageName, String algorithm) {
-        return getSignatureInstalled(context, packageName, algorithm, "");
-    }
-
-    /**
-     * 从已安装的应用读取签名
-     * @param algorithm 算法。{@link EncryptUtils#MD5}, {@link EncryptUtils#SHA1}
-     * @param separator 用来分隔的字符串
-     */
-    public static String getSignatureInstalled(Context context, String packageName, String algorithm, String separator) {
+    public static SignInfo getSignatureInstalled(Context context) {
         try {
             List<PackageInfo> infos;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
@@ -88,8 +91,8 @@ public class SignUtils {
                 infos = context.getPackageManager().getInstalledPackages(PackageManager.GET_SIGNATURES);
             }
             for (PackageInfo info : infos) {
-                if (info.packageName.equals(packageName)) {
-                    return getSignature(info, algorithm, separator);
+                if (info.packageName.equals(context.getPackageName())) {
+                    return getSignature(info);
                 }
             }
         } catch (Exception e) {
