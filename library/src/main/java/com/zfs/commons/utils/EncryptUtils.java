@@ -29,13 +29,13 @@ public class EncryptUtils {
      * @param code MD5或SHA1加密过的字符串
      * @param separator 分隔符
      */
-    public static String addSeparator(@NonNull String code, @NonNull String separator) {
+    public static String addSeparator(@NonNull String code, String separator) {
         try {
             StringBuilder sb = new StringBuilder();
             int loopTimes = code.length();
-            for (int i = 0; i < loopTimes; i += 2) {            
+            for (int i = 0; i < loopTimes; i += 2) {
                 if (i != loopTimes - 2) {
-                    sb.append(code.substring(i, i + 2)).append(separator);
+                    sb.append(code.substring(i, i + 2)).append(separator == null ? "" : separator);
                 } else {
                     sb.append(code.substring(i, i + 2));
                 }

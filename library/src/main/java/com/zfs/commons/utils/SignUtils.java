@@ -26,7 +26,7 @@ public class SignUtils {
          * @param code MD5或SHA1加密过的字符串
          * @param separator 分隔符
          */
-        public String addSeparator(@NonNull String code, @NonNull String separator) {
+        public String addSeparator(@NonNull String code, String separator) {
             return EncryptUtils.addSeparator(code, separator);
         }
     }
