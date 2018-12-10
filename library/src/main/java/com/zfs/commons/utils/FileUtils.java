@@ -10,16 +10,7 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.nio.channels.FileChannel;
 import java.text.DecimalFormat;
 import java.util.UUID;
@@ -412,13 +403,15 @@ public class FileUtils {
     }
 
     /**
-     * 复制文件，适合Android平台
+     * 从流保存到文件
+     * @param inputStream 输入流
+     * @param targetFile 目标文件
      */
-    public static void copyFile(File srcFile, File targetFile) {
-        BufferedInputStream in = null;
+    public static void saveToFile(InputStream inputStream, File targetFile) {
         BufferedOutputStream out = null;
+        BufferedInputStream in = null;
         try {
-            in = new BufferedInputStream(new FileInputStream(srcFile));
+            in = new BufferedInputStream(inputStream);
             out = new BufferedOutputStream(new FileOutputStream(targetFile));
             // 缓冲数组   
             byte[] b = new byte[1024 * 5];
@@ -436,6 +429,17 @@ public class FileUtils {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+    }
+    
+    /**
+     * 复制文件，适合Android平台
+     */
+    public static void copyFile(File srcFile, File targetFile) {
+        try {
+            saveToFile(new FileInputStream(srcFile), targetFile);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
