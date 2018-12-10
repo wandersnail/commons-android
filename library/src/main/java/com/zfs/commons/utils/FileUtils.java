@@ -20,6 +20,7 @@ public class FileUtils {
 
     /**
      * 格式化文件大小，根据文件大小不同使用不同单位
+     *
      * @param size 文件大小
      * @return 字符串形式的大小，包含单位(B,KB,MB,GB,TB,PB)
      */
@@ -29,6 +30,7 @@ public class FileUtils {
 
     /**
      * 格式化文件大小，根据文件大小不同使用不同单位
+     *
      * @param size 文件大小
      * @return 字符串形式的大小，包含单位(B,KB,MB,GB,TB,PB)
      */
@@ -54,18 +56,19 @@ public class FileUtils {
 
     /**
      * 从路径中获取文件名，包含扩展名
+     *
      * @param path 路径
      * @return 如果所传参数是合法路径，截取文件名，如果不是返回原值
      */
     public static String getFileName(String path) {
-        if (path != null && (path.contains("/")||path.contains("\\"))) {
+        if (path != null && (path.contains("/") || path.contains("\\"))) {
             String fileName = path.trim();
             int beginIndex;
-            if ((beginIndex=fileName.lastIndexOf("\\")) != -1) {
-                fileName = fileName.substring(beginIndex+1);
+            if ((beginIndex = fileName.lastIndexOf("\\")) != -1) {
+                fileName = fileName.substring(beginIndex + 1);
             }
-            if ((beginIndex=fileName.lastIndexOf("/")) != -1) {
-                fileName = fileName.substring(beginIndex+1);
+            if ((beginIndex = fileName.lastIndexOf("/")) != -1) {
+                fileName = fileName.substring(beginIndex + 1);
             }
             return fileName;
         }
@@ -74,18 +77,19 @@ public class FileUtils {
 
     /**
      * 从路径中获取文件名，不包含扩展名
+     *
      * @param path 路径
      * @return 如果所传参数是合法路径，截取文件名，如果不是返回原值
      */
     public static String getFileNameWithoutSuffix(String path) {
-        if (path != null && (path.contains("/")||path.contains("\\"))) {
+        if (path != null && (path.contains("/") || path.contains("\\"))) {
             String fileName = path.trim();
             int beginIndex;
-            if ((beginIndex=fileName.lastIndexOf("\\")) != -1) {
-                fileName = fileName.substring(beginIndex+1);
+            if ((beginIndex = fileName.lastIndexOf("\\")) != -1) {
+                fileName = fileName.substring(beginIndex + 1);
             }
-            if ((beginIndex=fileName.lastIndexOf("/")) != -1) {
-                fileName = fileName.substring(beginIndex+1);
+            if ((beginIndex = fileName.lastIndexOf("/")) != -1) {
+                fileName = fileName.substring(beginIndex + 1);
             }
             return deleteSuffix(fileName);
         }
@@ -94,6 +98,7 @@ public class FileUtils {
 
     /**
      * 获取扩展名
+     *
      * @param s 路径或后缀
      * @return 不存在后缀时返回null
      */
@@ -124,7 +129,7 @@ public class FileUtils {
                 String sub = fileName.substring(0, fileName.lastIndexOf("."));
                 fileName = fileName.replace(sub, sub + "_" + System.currentTimeMillis());
             } else {
-                fileName = fileName+"_"+ System.currentTimeMillis();
+                fileName = fileName + "_" + System.currentTimeMillis();
             }
             return new File(target.getParent(), fileName);
         }
@@ -133,10 +138,11 @@ public class FileUtils {
 
     /**
      * 移动文件或文件夹
-     * @param src 要移动的文件或文件夹
-     * @param target 目标文件或文件夹。类型需与源相同，如源为文件，则目标也必须是文件
+     *
+     * @param src     要移动的文件或文件夹
+     * @param target  目标文件或文件夹。类型需与源相同，如源为文件，则目标也必须是文件
      * @param replace 当有重名文件时是否替换。传false时，自动在原文件名后加上当前时间的毫秒值
-     * @return 移动成功返回true,否则返回false
+     * @return 移动成功返回true, 否则返回false
      */
     public static boolean moveFile(File src, File target, boolean replace) {
         if (src == null || !src.exists() || target == null) {
@@ -167,10 +173,11 @@ public class FileUtils {
 
     /**
      * 移动文件或文件夹
-     * @param src 要移动的文件或文件夹
-     * @param target 目标文件或文件夹。类型需与源相同，如源为文件，则目标也必须是文件
+     *
+     * @param src     要移动的文件或文件夹
+     * @param target  目标文件或文件夹。类型需与源相同，如源为文件，则目标也必须是文件
      * @param replace 当有重名文件时是否替换。传false时，自动在原文件名后加上当前时间的毫秒值
-     * @return 移动成功返回true,否则返回false
+     * @return 移动成功返回true, 否则返回false
      */
     public static boolean moveFileFit(File src, File target, boolean replace) {
         if (src == null || !src.exists() || target == null) {
@@ -187,14 +194,15 @@ public class FileUtils {
 
     /**
      * 去掉字符串中重复部分字符串
-     * @param dup 重复部分字符串
+     *
+     * @param dup  重复部分字符串
      * @param strs 要去重的字符串
      * @return 按参数先后顺序返回一个字符串数组
      */
     public static String[] removeDuplicate(String dup, String... strs) {
         for (int i = 0; i < strs.length; i++) {
             if (strs[i] != null) {
-                strs[i] = strs[i].replaceAll(dup+"+", "");
+                strs[i] = strs[i].replaceAll(dup + "+", "");
             }
         }
         return strs;
@@ -202,6 +210,7 @@ public class FileUtils {
 
     /**
      * 获取随机UUID文件名
+     *
      * @param fileName 原文件名
      * @return 生成的文件名
      */
@@ -217,7 +226,8 @@ public class FileUtils {
 
     /**
      * 删除文件夹
-     * @param dir 文件夹
+     *
+     * @param dir         文件夹
      * @param includeSelf 是否包括本身
      */
     public static void deleteDir(File dir, boolean includeSelf) {
@@ -238,6 +248,7 @@ public class FileUtils {
 
     /**
      * 删除文件内所有文件，不包含文件夹
+     *
      * @param dir 文件夹
      */
     public static void deleteAllFiles(File dir) {
@@ -255,6 +266,7 @@ public class FileUtils {
 
     /**
      * 获取文件夹的大小
+     *
      * @param dir 目录
      * @return 所传参数是目录且存在，则返回文件夹大小，否则返回-1
      */
@@ -300,11 +312,12 @@ public class FileUtils {
                 e.printStackTrace();
             }
         }
-        return newData ;
+        return newData;
     }
 
     /**
      * 压缩文件
+     *
      * @param source 源文件
      * @param target 目标文件
      */
@@ -333,10 +346,10 @@ public class FileUtils {
     }
 
     /*
-	 * 快速复制文件，不适合Android
-	 * @param source 源文件
-	 * @param target 目标文件
-	 */
+     * 快速复制文件，不适合Android
+     * @param source 源文件
+     * @param target 目标文件
+     */
     private static void nioCopyFile(File source, File target) {
         FileChannel in = null;
         FileChannel out = null;
@@ -382,7 +395,8 @@ public class FileUtils {
 
     /**
      * 复制文件或文件夹，不适合Android
-     * @param src 源文件或文件夹
+     *
+     * @param src    源文件或文件夹
      * @param target 目标文件或文件夹
      */
     public static void copy(String src, String target) {
@@ -391,7 +405,8 @@ public class FileUtils {
 
     /**
      * 复制文件或文件夹，不适合Android
-     * @param src 源文件或文件夹
+     *
+     * @param src    源文件或文件夹
      * @param target 目标文件或文件夹。类型需与源相同，如源为文件，则目标也必须是文件
      */
     public static void copy(File src, File target) {
@@ -404,8 +419,9 @@ public class FileUtils {
 
     /**
      * 从流保存到文件
+     *
      * @param inputStream 输入流
-     * @param targetFile 目标文件
+     * @param targetFile  目标文件
      */
     public static void saveToFile(InputStream inputStream, File targetFile) {
         BufferedOutputStream out = null;
@@ -431,7 +447,7 @@ public class FileUtils {
             }
         }
     }
-    
+
     /**
      * 复制文件，适合Android平台
      */
@@ -445,6 +461,7 @@ public class FileUtils {
 
     /**
      * 复制文件或文件夹，适合Android
+     *
      * @param src    源文件或文件夹
      * @param target 目标文件或文件夹
      */
@@ -458,7 +475,8 @@ public class FileUtils {
 
     /**
      * 序列化对象到文件
-     * @param obj 要序列化的对象
+     *
+     * @param obj  要序列化的对象
      * @param file 保存到的文件
      */
     public static void saveObjectToFile(Serializable obj, File file) {
@@ -473,6 +491,7 @@ public class FileUtils {
 
     /**
      * 从文件反序列化对象
+     *
      * @param file 保存对象的文件
      */
     public static Object getObjectFromFile(File file) {
@@ -502,7 +521,7 @@ public class FileUtils {
     public static String getFileRealPath(Context context, @NonNull String path) {
         return getRealPathFromUri(context, Uri.parse(path));
     }
-    
+
     private static String getRealPathFromUri(Context context, Uri uri) {
         // DocumentProvider
         if (DocumentsContract.isDocumentUri(context, uri)) {
