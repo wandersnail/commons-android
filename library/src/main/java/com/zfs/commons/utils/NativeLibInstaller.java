@@ -15,8 +15,14 @@ import java.util.List;
  * 时间: 2018/12/10 11:17
  * 作者: zengfansheng
  */
-public class NativeLibLoader {
+public class NativeLibInstaller {
 
+    /**
+     * 将包含so文件的目录添加到系统可加载列表中
+     * @param classLoader
+     * @param folder
+     * @throws Throwable
+     */
     public static synchronized void installLibrary(ClassLoader classLoader, File folder) throws Throwable {
         if (folder == null || !folder.exists()) {
             return;

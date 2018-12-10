@@ -90,10 +90,6 @@ public class AppHolder implements Application.ActivityLifecycleCallbacks {
         return Holder.APP_HOLDER.app;
     }
     
-    public static Handler getMainHandler() {
-        return Holder.APP_HOLDER.mainHandler;
-    }
-
     public static void postToMainThread(final Runnable runnable) {
         if (Looper.myLooper() == Looper.getMainLooper()) {//判断是否在主线程
             runnable.run();            
