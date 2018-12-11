@@ -38,10 +38,10 @@ artifacts {
 }
 
 publish {
-    userOrg = 'fszeng2017' //bintray.com用户名  
-    groupId = 'com.github.fszeng2011' //jcenter上的路径  
+    userOrg = 'wandersnail' //bintray.com用户名  
+    groupId = 'com.github.wandersnail' //jcenter上的路径  
     artifactId = 'commons' //项目名称  
     publishVersion = "$lib_version" //版本号  
     desc = 'widely used tools'
-    website = 'https://github.com/fszeng2011'
+    website = 'https://github.com/wandersnail'
 }
