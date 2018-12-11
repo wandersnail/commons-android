@@ -192,7 +192,7 @@ public class ZipHelper {
                                 zos.setMethod(method);
                             }
                         }
-                        addEntry(File.separator, file, zos);
+                        addEntry( "/", file, zos);
                         first = false;
                     }
                     return zipFile;
@@ -232,10 +232,10 @@ public class ZipHelper {
                 if (files.length > 0) {
                     for (File file : files) {
                         // 递归列出目录下的所有文件，添加文件Entry
-                        addEntry(base + File.separator, file, zos);
+                        addEntry(base + "/", file, zos);
                     }
                 } else {
-                    zos.putNextEntry(new ZipEntry(base + File.separator));
+                    zos.putNextEntry(new ZipEntry(base + "/"));
                 }
             } else {
                 BufferedInputStream bis = null;
