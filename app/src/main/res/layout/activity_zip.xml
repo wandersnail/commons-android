@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/btnSelectZip"
+            android:minWidth="0dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="40dp"
+            android:text="选择zip"/>
+        <Button
+            android:id="@+id/btnUnzipTo"
+            android:minWidth="0dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="40dp"
+            android:text="解压到"/>
+        <Button
+            android:id="@+id/btnSelectFile"
+            android:minWidth="0dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="40dp"
+            android:text="选择文件"/>
+        <Button
+            android:id="@+id/btnZipTo"
+            android:minWidth="0dp"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:text="压缩到"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvPaths"
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+</LinearLayout>

@@ -2,11 +2,16 @@ package com.zfs.commons.entity;
 
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
+
+import com.zfs.commons.AppHolder;
+import com.zfs.commons.annotation.RunThread;
+import com.zfs.commons.annotation.ThreadType;
 import com.zfs.commons.interfaces.Callback;
 import com.zfs.commons.utils.FileUtils;
 import com.zfs.commons.utils.IOUtils;
 
 import java.io.*;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -30,12 +35,40 @@ public class ZipHelper {
         return new UnzipExecutor();
     }
 
+    @SuppressWarnings("unchecked")
+    private static void handleCallback(final Callback callback, final Object obj) {
+        if (callback != null) {
+            try {
+                Method method;
+                if (obj == null) {
+                    method = callback.getClass().getMethod("onCallback", Object.class);
+                } else {
+                    method = callback.getClass().getMethod("onCallback", obj.getClass());
+                }
+                RunThread annotation = method.getAnnotation(RunThread.class);
+                if (annotation != null && annotation.value() == ThreadType.MAIN) {
+                    AppHolder.postToMainThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            callback.onCallback(obj);
+                        }
+                    });
+                } else {
+                    callback.onCallback(obj);
+                }
+            } catch (Exception e) {
+                callback.onCallback(obj);
+            }
+        }
+    }
+    
     public static class ZipExecutor {
         private String comment;
         private int method = -1;
         private int level = -1;
         private List<File> files = new ArrayList<>();
-        private String targetPath;
+        private String targetDir;
+        private String targetName;
         private boolean replace;
 
         private ZipExecutor() {
@@ -83,10 +116,25 @@ public class ZipHelper {
         }
 
         /**
-         * 压缩包保存路径
+         * 添加待压缩文件
          */
-        public ZipExecutor setTargetPath(String targetPath) {
-            this.targetPath = targetPath;
+        public ZipExecutor addSourceFiles(@NonNull List<File> files) {
+            if (!files.isEmpty()) {
+                for (File file : files) {
+                    addSourceFile(file);
+                }
+            }
+            return this;
+        }
+
+        /**
+         * 压缩包保存路径
+         * @param dir 保存目录
+         * @param filename 保存的文件名，不含后缀           
+         */
+        public ZipExecutor setTarget(String dir, String filename) {
+            targetDir = dir;
+            targetName = filename;
             return this;
         }
 
@@ -106,13 +154,16 @@ public class ZipHelper {
                 return null;
             } else {
                 File zipFile;
-                if (targetPath == null) {
-                    File f = files.get(0);
-                    zipFile = new File(f.getParent(), f.getParentFile().getName() + ".zip");
+                File f = files.get(0);
+                if (targetDir == null) {
+                    zipFile = new File(f.getParent(), (targetName == null ? f.getParentFile().getName() : targetName) + ".zip");
                 } else {
-                    zipFile = new File(targetPath);
+                    zipFile = new File(targetDir, (targetName == null ? f.getParentFile().getName() : targetName) + ".zip");
                 }
-                zipFile.mkdirs();
+                File zipParentFile = zipFile.getParentFile();
+                if (!zipParentFile.exists()) {
+                    zipParentFile.mkdirs();
+                }
                 ZipOutputStream zos = null;
                 try {
                     boolean first = true;
@@ -161,10 +212,7 @@ public class ZipHelper {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    File file = execute();
-                    if (callback != null) {
-                        callback.onCallback(file);
-                    }
+                    handleCallback(callback, execute());
                 }
             }).start();
         }
@@ -213,9 +261,18 @@ public class ZipHelper {
 
         private UnzipExecutor() {}
         
-        public UnzipExecutor addZipPath(@NonNull File zipFile) {
+        public UnzipExecutor addZipFile(@NonNull File zipFile) {
             if (zipFile.exists() && !zipFiles.contains(zipFile)) {
                 zipFiles.add(zipFile);
+            }
+            return this;
+        }
+        
+        public UnzipExecutor addZipFiles(@NonNull List<File> zipFiles) {
+            if (!zipFiles.isEmpty()) {
+                for (File file : zipFiles) {
+                    addZipFile(file);
+                }
             }
             return this;
         }
@@ -281,10 +338,7 @@ public class ZipHelper {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    boolean result = execute();
-                    if (callback != null) {
-                        callback.onCallback(result);
-                    }
+                    handleCallback(callback, execute());
                 }
             }).start();
         }

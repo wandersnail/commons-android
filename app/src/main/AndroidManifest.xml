@@ -52,5 +52,8 @@
         <activity android:name=".ConnectWifiActivity"
                   android:configChanges="keyboardHidden|orientation|navigation|screenSize|keyboard"
                   android:screenOrientation="portrait"/>
+        <activity android:name=".ZipActivity"
+                  android:configChanges="keyboardHidden|orientation|navigation|screenSize|keyboard"
+                  android:screenOrientation="portrait"/>
     </application>
 </manifest>
