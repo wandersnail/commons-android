@@ -192,7 +192,7 @@ public class ZipHelper {
                                 zos.setMethod(method);
                             }
                         }
-                        addEntry( "/", file, zos);
+                        addEntry( "", file, zos);
                         first = false;
                     }
                     return zipFile;
@@ -229,7 +229,7 @@ public class ZipHelper {
             base += source.getName();
             if (source.isDirectory()) {
                 File[] files = source.listFiles();
-                if (files.length > 0) {
+                if (files != null && files.length > 0) {
                     for (File file : files) {
                         // 递归列出目录下的所有文件，添加文件Entry
                         addEntry(base + "/", file, zos);

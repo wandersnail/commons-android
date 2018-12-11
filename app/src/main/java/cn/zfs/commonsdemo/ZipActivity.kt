@@ -30,6 +30,9 @@ class ZipActivity : BaseActivity() {
         val loadDialog = ProgressDialog(this)
         loadDialog.setCancelable(false)
         fileSelector.setRoot(Environment.getExternalStorageDirectory())
+        fileSelector.setFilenameFilter { dir, name -> 
+            !name.startsWith(".")
+        }
         btnSelectZip.setOnClickListener { 
             selectType = 0
             fileSelector.setMultiSelect(true)
