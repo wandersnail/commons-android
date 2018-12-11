@@ -7,9 +7,9 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.widget.ArrayAdapter
-import com.zfs.commons.entity.WifiHelper
-import com.zfs.commons.utils.NetworkUtils
-import com.zfs.commons.utils.SystemUtils
+import com.snail.commons.entity.WifiHelper
+import com.snail.commons.utils.NetworkUtils
+import com.snail.commons.utils.SystemUtils
 import kotlinx.android.synthetic.main.activity_static_ip.*
 import java.net.InetAddress
 

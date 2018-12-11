@@ -5,11 +5,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
 import cn.zfs.fileselector.FileSelector
-import com.zfs.commons.annotation.RunThread
-import com.zfs.commons.annotation.ThreadType
-import com.zfs.commons.entity.ZipHelper
-import com.zfs.commons.interfaces.Callback
-import com.zfs.commons.utils.ToastUtils
+import com.snail.commons.annotation.RunThread
+import com.snail.commons.annotation.ThreadType
+import com.snail.commons.entity.ZipHelper
+import com.snail.commons.interfaces.Callback
+import com.snail.commons.utils.ToastUtils
 import kotlinx.android.synthetic.main.activity_zip.*
 import java.io.File
 

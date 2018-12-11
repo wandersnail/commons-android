@@ -4,11 +4,11 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
-import com.zfs.commons.base.BaseHolder
-import com.zfs.commons.base.BaseListAdapter
-import com.zfs.commons.entity.Storage
-import com.zfs.commons.utils.FileUtils
-import com.zfs.commons.utils.SystemUtils
+import com.snail.commons.base.BaseHolder
+import com.snail.commons.base.BaseListAdapter
+import com.snail.commons.entity.Storage
+import com.snail.commons.utils.FileUtils
+import com.snail.commons.utils.SystemUtils
 import kotlinx.android.synthetic.main.activity_storage.*
 
 

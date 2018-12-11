@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
 import cn.zfs.fileselector.FileSelector
-import com.zfs.commons.utils.ShareUtils
+import com.snail.commons.utils.ShareUtils
 import kotlinx.android.synthetic.main.activity_share.*
 import java.io.File
 

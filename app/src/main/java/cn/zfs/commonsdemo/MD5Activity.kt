@@ -4,8 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
 import cn.zfs.fileselector.FileSelector
-import com.zfs.commons.utils.EncryptUtils
-import com.zfs.commons.utils.SignUtils
+import com.snail.commons.utils.EncryptUtils
+import com.snail.commons.utils.SignUtils
 import kotlinx.android.synthetic.main.activity_md5.*
 
 /**

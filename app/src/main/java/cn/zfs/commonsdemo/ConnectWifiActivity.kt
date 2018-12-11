@@ -13,11 +13,11 @@ import android.widget.AbsListView
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
-import com.zfs.commons.base.BaseHolder
-import com.zfs.commons.base.BaseListAdapter
-import com.zfs.commons.entity.WifiHelper
-import com.zfs.commons.utils.ToastUtils
-import com.zfs.commons.utils.UiUtils
+import com.snail.commons.base.BaseHolder
+import com.snail.commons.base.BaseListAdapter
+import com.snail.commons.entity.WifiHelper
+import com.snail.commons.utils.ToastUtils
+import com.snail.commons.utils.UiUtils
 import kotlinx.android.synthetic.main.activity_connect_wifi.*
 
 /**
