@@ -1,5 +1,5 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="cn.zfs.commonsdemo">
+<manifest package="cn.zfs.commonsdemo"
+          xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
@@ -9,51 +9,54 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
-    
-    <application android:allowBackup="true"
-                 android:name=".App"
-                 android:label="@string/app_name"
-                 android:icon="@mipmap/ic_launcher"
-                 android:roundIcon="@mipmap/ic_launcher_round"
-                 android:supportsRtl="true"
-                 android:theme="@style/AppTheme">
+
+    <application
+        android:name=".App"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
 
         <activity
-                android:name=".MainActivity"
-                android:configChanges="keyboardHidden|orientation|navigation|screenSize|keyboard"
-                android:screenOrientation="portrait">
+            android:name=".MainActivity"
+            android:configChanges="keyboardHidden|orientation|navigation|screenSize|keyboard"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
                 <action android:name="android.intent.action.MAIN"/>
+
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
         <activity
-                android:name=".StorageActivity"
-                android:configChanges="keyboardHidden|orientation|navigation|screenSize|keyboard"
-                android:screenOrientation="portrait"/>
+            android:name=".StorageActivity"
+            android:configChanges="keyboardHidden|orientation|navigation|screenSize|keyboard"
+            android:screenOrientation="portrait"/>
         <activity
-                android:name=".StaticIpActivity"
-                android:configChanges="keyboardHidden|orientation|navigation|screenSize|keyboard"
-                android:screenOrientation="portrait"/>
+            android:name=".StaticIpActivity"
+            android:configChanges="keyboardHidden|orientation|navigation|screenSize|keyboard"
+            android:screenOrientation="portrait"/>
         <activity
-                android:name=".MD5Activity"
-                android:configChanges="keyboardHidden|orientation|navigation|screenSize|keyboard"
-                android:screenOrientation="portrait"/>
+            android:name=".MD5Activity"
+            android:configChanges="keyboardHidden|orientation|navigation|screenSize|keyboard"
+            android:screenOrientation="portrait"/>
         <activity
-                android:name=".ShareActivity"
-                android:configChanges="keyboardHidden|orientation|navigation|screenSize|keyboard"
-                android:screenOrientation="portrait"/>
+            android:name=".ShareActivity"
+            android:configChanges="keyboardHidden|orientation|navigation|screenSize|keyboard"
+            android:screenOrientation="portrait"/>
         <activity
-                android:name=".NetStateActivity"
-                android:configChanges="keyboardHidden|orientation|navigation|screenSize|keyboard"
-                android:screenOrientation="portrait"/>
-        <activity android:name=".ConnectWifiActivity"
-                  android:configChanges="keyboardHidden|orientation|navigation|screenSize|keyboard"
-                  android:screenOrientation="portrait"/>
-        <activity android:name=".ZipActivity"
-                  android:configChanges="keyboardHidden|orientation|navigation|screenSize|keyboard"
-                  android:screenOrientation="portrait"/>
+            android:name=".NetStateActivity"
+            android:configChanges="keyboardHidden|orientation|navigation|screenSize|keyboard"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ConnectWifiActivity"
+            android:configChanges="keyboardHidden|orientation|navigation|screenSize|keyboard"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ZipActivity"
+            android:configChanges="keyboardHidden|orientation|navigation|screenSize|keyboard"
+            android:screenOrientation="portrait"/>
     </application>
 </manifest>
