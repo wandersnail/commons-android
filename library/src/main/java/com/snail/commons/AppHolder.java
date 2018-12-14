@@ -83,7 +83,7 @@ public class AppHolder implements Application.ActivityLifecycleCallbacks {
         if (Holder.APP_HOLDER.app == null) {
             Application app = Holder.APP_HOLDER.tryGetApplication();
             if (app == null) {
-                throw new RuntimeException("AppHolder is uninitialized, please invoke AppHolder.init(app)");
+                throw new RuntimeException("The AppHolder has not been initialized, make sure to call AppHolder.init(app) first.");
             }
             return app;
         }
