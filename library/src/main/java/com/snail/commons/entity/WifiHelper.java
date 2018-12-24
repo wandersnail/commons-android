@@ -11,12 +11,12 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
-
 import com.snail.commons.utils.NetworkUtils;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class WifiHelper {
 
@@ -345,11 +345,11 @@ public class WifiHelper {
 
     public static int getSecurity(@NonNull ScanResult result) {
         if (result.capabilities != null) {
-            if (result.capabilities.toUpperCase().contains("WEP")) {
+            if (result.capabilities.toUpperCase(Locale.ENGLISH).contains("WEP")) {
                 return SECURITY_WEP;
-            } else if (result.capabilities.toUpperCase().contains("PSK")) {
+            } else if (result.capabilities.toUpperCase(Locale.ENGLISH).contains("PSK")) {
                 return SECURITY_PSK;
-            } else if (result.capabilities.toUpperCase().contains("EAP")) {
+            } else if (result.capabilities.toUpperCase(Locale.ENGLISH).contains("EAP")) {
                 return SECURITY_EAP;
             }
         }
@@ -361,11 +361,11 @@ public class WifiHelper {
      */
     public static int getWificipher(@NonNull ScanResult result) {
         if (result.capabilities != null) {
-            if (result.capabilities.toUpperCase().contains("WEP")) {
+            if (result.capabilities.toUpperCase(Locale.ENGLISH).contains("WEP")) {
                 return WIFICIPHER_WEP;
-            } else if (result.capabilities.toUpperCase().contains("WPA2-PSK")) {
+            } else if (result.capabilities.toUpperCase(Locale.ENGLISH).contains("WPA2-PSK")) {
                 return WIFICIPHER_WPA2;
-            } else if (result.capabilities.toUpperCase().contains("WPA-PSK")) {
+            } else if (result.capabilities.toUpperCase(Locale.ENGLISH).contains("WPA-PSK")) {
                 return WIFICIPHER_WPA;
             }
         }

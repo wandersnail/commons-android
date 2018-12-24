@@ -29,7 +29,7 @@ public class StringUtils {
                 stringBuilder.append(separator);
             }
         }
-        String s = stringBuilder.toString().toUpperCase();
+        String s = stringBuilder.toString().toUpperCase(Locale.ENGLISH);
         if (separator != null) {
             s = s.substring(0, s.length() - separator.length());
         }

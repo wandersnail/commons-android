@@ -3,11 +3,7 @@ package com.snail.commons.utils;
 import android.app.ActivityManager;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.pm.ActivityInfo;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.ServiceInfo;
+import android.content.pm.*;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Environment;
@@ -15,18 +11,14 @@ import android.os.PowerManager;
 import android.os.StatFs;
 import android.os.storage.StorageManager;
 import android.provider.Settings;
-
 import com.snail.commons.entity.Storage;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 
 /**
@@ -301,7 +293,7 @@ public class SystemUtils {
                 storage.description = desc;
                 storage.isAllowMassStorage = isAllowMassStorage;
                 storage.isPrimary = isPrimary;
-                storage.isUsb = desc != null && desc.toLowerCase().contains("usb");
+                storage.isUsb = desc != null && desc.toLowerCase(Locale.ENGLISH).contains("usb");
                 list.add(storage);
             }
             return list;

@@ -6,7 +6,6 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Environment;
 import android.support.annotation.NonNull;
-
 import com.snail.commons.utils.DateUtils;
 import com.snail.commons.utils.IOUtils;
 
@@ -18,6 +17,7 @@ import java.lang.Thread.UncaughtExceptionHandler;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * 描述: 崩溃处理
@@ -119,7 +119,7 @@ public class CrashHandler implements UncaughtExceptionHandler {
     private void appendParams(PrintWriter pw, List<String> needInfos, Field[] fields) throws IllegalAccessException {
         for (Field field : fields) {
             field.setAccessible(true);
-            if (needInfos.contains(field.getName().toUpperCase())) {
+            if (needInfos.contains(field.getName().toUpperCase(Locale.ENGLISH))) {
                 String value = "";
                 Object o = field.get(null);
                 if (o != null) {

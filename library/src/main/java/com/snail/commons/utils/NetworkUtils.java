@@ -9,7 +9,6 @@ import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.support.annotation.NonNull;
-
 import com.snail.commons.entity.WifiHelper;
 
 import java.lang.reflect.Constructor;
@@ -17,10 +16,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.List;
+import java.util.*;
 
 /**
  * 描述:
@@ -44,7 +40,7 @@ public class NetworkUtils {
             WifiHelper wifiHelper = new WifiHelper(context);
             for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements(); ) {
                 NetworkInterface intf = en.nextElement();
-                if (intf.getName().toLowerCase().equals("eth0") || intf.getName().toLowerCase().equals("wlan0")) {
+                if (intf.getName().toLowerCase(Locale.ENGLISH).equals("eth0") || intf.getName().toLowerCase(Locale.ENGLISH).equals("wlan0")) {
                     for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements(); ) {
                         InetAddress inetAddress = enumIpAddr.nextElement();
                         if (!inetAddress.isLoopbackAddress()) {
@@ -52,7 +48,7 @@ public class NetworkUtils {
                             if (ipaddress.matches("\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}")) {//符合规则才行
                                 NetInfo info = new NetInfo();
                                 info.ip = ipaddress;
-                                info.type = intf.getName().toLowerCase();
+                                info.type = intf.getName().toLowerCase(Locale.ENGLISH);
                                 info.mac = StringUtils.bytesToHexString(intf.getHardwareAddress(), ":");
                                 if (info.type.equals("wlan0")) {
                                     if (isCurrentNetworkWifi(context)) {
