@@ -22,7 +22,6 @@ class CheckableParcelable<T : Parcelable> : CheckableItem<T>, Parcelable {
     }
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
-        dest.writeParcelable(this.data, flags)
         val bundle = Bundle()
         bundle.putParcelable(KEY_DATA, this.data)
         dest.writeBundle(bundle)

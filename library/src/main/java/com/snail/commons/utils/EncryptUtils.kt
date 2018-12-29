@@ -42,7 +42,6 @@ object EncryptUtils {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-
         return null
     }
 
@@ -57,8 +56,8 @@ object EncryptUtils {
         if (iters > 0) {
             iters--
             var result = getMD5Code(plainText)
-            if (iters > 0) {
-                result = getMD5Code(result!!, iters)
+            if (iters > 0 && result != null) {
+                result = getMD5Code(result, iters)
             }
             return result
         }
@@ -76,8 +75,8 @@ object EncryptUtils {
         if (iters > 0) {
             iters--
             var result = getSHA1Code(plainText)
-            if (iters > 0) {
-                result = getSHA1Code(result!!, iters)
+            if (iters > 0 && result != null) {
+                result = getSHA1Code(result, iters)
             }
             return result
         }
@@ -131,7 +130,6 @@ object EncryptUtils {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-
         return null
     }
 
@@ -147,7 +145,6 @@ object EncryptUtils {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-
         return null
     }
 
@@ -163,7 +160,6 @@ object EncryptUtils {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-
         return null
     }
 
@@ -179,16 +175,15 @@ object EncryptUtils {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-
         return null
     }
 
     /**
      * 从输入流获取MD5值
-     * @param in 输入流
+     * @param inputStream 输入流
      */
-    fun getMD5Code(`in`: InputStream): String? {
-        return encryptByMessageDigest(`in`, MD5)
+    fun getMD5Code(inputStream: InputStream): String? {
+        return encryptByMessageDigest(inputStream, MD5)
     }
 
     /**

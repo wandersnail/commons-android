@@ -36,7 +36,6 @@ class MyTimer {
                 val task = object : TimerTask() {
                     override fun run() {
                         callback?.runTimerTask()
-
                     }
                 }
                 timer!!.schedule(task, delay, period)
@@ -68,10 +67,8 @@ class MyTimer {
 
     fun stopTimer() {
         synchronized(lock) {
-            if (timer != null) {
-                timer!!.cancel()
-                timer = null
-            }
+            timer?.cancel()
+            timer = null
         }
     }
 }

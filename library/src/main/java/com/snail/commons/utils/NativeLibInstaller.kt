@@ -56,7 +56,6 @@ object NativeLibInstaller {
                 // install fail, try to treat it as v14
                 V14.install(classLoader, folder)
             }
-
         }
     }
 

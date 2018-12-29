@@ -26,7 +26,6 @@ object CharacterParser {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-
         return asc
     }
 

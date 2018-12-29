@@ -14,7 +14,6 @@ import com.snail.commons.utils.UiUtils
  */
 abstract class BaseFragment : Fragment() {
     protected var rootView: View? = null
-    protected var isOnViewCreated: Boolean = false
 
     protected abstract val layoutId: Int
 
@@ -23,9 +22,5 @@ abstract class BaseFragment : Fragment() {
             rootView = inflater.inflate(layoutId, container, false)
         UiUtils.removeFromContainer(rootView!!)
         return rootView
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        isOnViewCreated = true
     }
 }

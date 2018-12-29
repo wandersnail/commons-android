@@ -14,20 +14,20 @@ import java.util.*
 class AnyDurationToast(context: Context) {
     private var loopTimer: Timer? = null
     private var taskTimer: Timer? = null
-    private var toast: Toast? = null
-    private val handler: Handler
+    private var toast = Toast.makeText(context, "", Toast.LENGTH_SHORT)
+    private val handler = Handler(Looper.getMainLooper())
 
     /**
      * Return the horizontal margin.
      */
     val horizontalMargin: Float
-        get() = toast!!.horizontalMargin
+        get() = toast.horizontalMargin
 
     /**
      * Return the vertical margin.
      */
     val verticalMargin: Float
-        get() = toast!!.verticalMargin
+        get() = toast.verticalMargin
 
     /**
      * Get the location at which the notification should appear on the screen.
@@ -36,24 +36,19 @@ class AnyDurationToast(context: Context) {
      * @see .getGravity
      */
     val gravity: Int
-        get() = toast!!.gravity
+        get() = toast.gravity
 
     /**
      * Return the X offset in pixels to apply to the gravity's location.
      */
     val xOffset: Int
-        get() = toast!!.xOffset
+        get() = toast.xOffset
 
     /**
      * Return the Y offset in pixels to apply to the gravity's location.
      */
     val yOffset: Int
-        get() = toast!!.yOffset
-
-    init {
-        toast = Toast.makeText(context, "", Toast.LENGTH_SHORT)
-        handler = Handler(Looper.getMainLooper())
-    }
+        get() = toast.yOffset
 
     private fun cancelTask() {
         if (loopTimer != null) {
@@ -67,10 +62,10 @@ class AnyDurationToast(context: Context) {
     }
 
     private fun updateToast(text: CharSequence, duration: Int): Toast {
-        val toast = Toast.makeText(this.toast!!.view.context, text, duration)
-        toast.setMargin(this.toast!!.horizontalMargin, this.toast!!.verticalMargin)
-        toast.setGravity(this.toast!!.gravity, this.toast!!.xOffset, this.toast!!.yOffset)
-        this.toast!!.cancel()
+        val toast = Toast.makeText(this.toast.view.context, text, duration)
+        toast.setMargin(this.toast.horizontalMargin, this.toast.verticalMargin)
+        toast.setGravity(this.toast.gravity, this.toast.xOffset, this.toast.yOffset)
+        this.toast.cancel()
         this.toast = toast
         return toast
     }
@@ -100,7 +95,7 @@ class AnyDurationToast(context: Context) {
      * @param duration 毫秒
      */
     fun show(@StringRes resId: Int, duration: Int) {
-        show(toast!!.view.context.getText(resId), duration)
+        show(toast.view.context.getText(resId), duration)
     }
 
     /**
@@ -117,7 +112,7 @@ class AnyDurationToast(context: Context) {
      * 显示时长为[Toast.LENGTH_SHORT]的Toast
      */
     fun showShort(@StringRes resId: Int) {
-        showShort(toast!!.view.context.getText(resId))
+        showShort(toast.view.context.getText(resId))
     }
 
     /**
@@ -134,11 +129,11 @@ class AnyDurationToast(context: Context) {
      * 显示时长为[Toast.LENGTH_LONG]的Toast
      */
     fun showLong(@StringRes resId: Int) {
-        showLong(toast!!.view.context.getText(resId))
+        showLong(toast.view.context.getText(resId))
     }
 
     fun cancel() {
-        toast!!.cancel()
+        toast.cancel()
         cancelTask()
     }
 
@@ -153,7 +148,7 @@ class AnyDurationToast(context: Context) {
      * notification
      */
     fun setMargin(horizontalMargin: Float, verticalMargin: Float) {
-        toast!!.setMargin(horizontalMargin, verticalMargin)
+        toast.setMargin(horizontalMargin, verticalMargin)
     }
 
     /**
@@ -163,6 +158,6 @@ class AnyDurationToast(context: Context) {
      * @see .getGravity
      */
     fun setGravity(gravity: Int, xOffset: Int, yOffset: Int) {
-        toast!!.setGravity(gravity, xOffset, yOffset)
+        toast.setGravity(gravity, xOffset, yOffset)
     }
 }

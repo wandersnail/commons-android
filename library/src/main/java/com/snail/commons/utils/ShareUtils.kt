@@ -46,11 +46,10 @@ object ShareUtils {
     fun shareImage(context: Context, title: String, file: File) {
         val intent = Intent(Intent.ACTION_SEND)
         intent.type = "image/*"
-        val uri: Uri?
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            uri = MediaUtils.getImageContentUri(context, file)
+        val uri: Uri? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            MediaUtils.getImageContentUri(context, file)
         } else {
-            uri = Uri.fromFile(file)
+            Uri.fromFile(file)
         }
         intent.putExtra(Intent.EXTRA_STREAM, uri)
         startShare(context, intent, title, true)

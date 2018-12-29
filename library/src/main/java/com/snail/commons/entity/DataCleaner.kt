@@ -52,7 +52,10 @@ object DataCleaner {
      */
     fun cleanExternalCache(context: Context) {
         if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) {
-            FileUtils.deleteDir(context.externalCacheDir!!, false)
+            val cacheDir = context.externalCacheDir
+            if (cacheDir != null) {
+                FileUtils.deleteDir(cacheDir, false)
+            }
         }
     }
 

@@ -9,233 +9,226 @@ import com.snail.commons.AppHolder
 /**
  * Created by zengfs on 2015/10/30.
  */
-class PreferencesUtils private constructor() {
+object PreferencesUtils {
 
-    init {
-        throw AssertionError()
+    private fun getSharedPreferences(name: String?): SharedPreferences {
+        return if (TextUtils.isEmpty(name)) {
+            PreferenceManager.getDefaultSharedPreferences(AppHolder.context)
+        } else {
+            AppHolder.context.getSharedPreferences(name, 0)
+        }
     }
 
-    companion object {
+    fun putString(key: String, value: String) {
+        getSharedPreferences(null).edit().putString(key, value).apply()
+    }
 
-        private fun getSharedPreferences(name: String?): SharedPreferences {
-            return if (TextUtils.isEmpty(name)) {
-                PreferenceManager.getDefaultSharedPreferences(AppHolder.getContext())
-            } else {
-                AppHolder.getContext().getSharedPreferences(name, 0)
-            }
-        }
+    fun putStringImmediately(key: String, value: String) {
+        getSharedPreferences(null).edit().putString(key, value).commit()
+    }
 
-        fun putString(key: String, value: String) {
-            getSharedPreferences(null).edit().putString(key, value).apply()
-        }
+    @JvmOverloads
+    fun getString(key: String, defaultValue: String? = null): String? {
+        return getSharedPreferences(null).getString(key, defaultValue)
+    }
 
-        fun putStringImmediately(key: String, value: String) {
-            getSharedPreferences(null).edit().putString(key, value).commit()
-        }
+    fun putInt(key: String, value: Int) {
+        getSharedPreferences(null).edit().putInt(key, value).apply()
+    }
 
-        @JvmOverloads
-        fun getString(key: String, defaultValue: String? = null): String? {
-            return getSharedPreferences(null).getString(key, defaultValue)
-        }
+    fun putIntImmediately(key: String, value: Int) {
+        getSharedPreferences(null).edit().putInt(key, value).commit()
+    }
 
-        fun putInt(key: String, value: Int) {
-            getSharedPreferences(null).edit().putInt(key, value).apply()
-        }
+    @JvmOverloads
+    fun getInt(key: String, defaultValue: Int = -1): Int {
+        return getSharedPreferences(null).getInt(key, defaultValue)
+    }
 
-        fun putIntImmediately(key: String, value: Int) {
-            getSharedPreferences(null).edit().putInt(key, value).commit()
-        }
+    fun putLong(key: String, value: Long) {
+        getSharedPreferences(null).edit().putLong(key, value).apply()
+    }
 
-        @JvmOverloads
-        fun getInt(key: String, defaultValue: Int = -1): Int {
-            return getSharedPreferences(null).getInt(key, defaultValue)
-        }
+    fun putLongImmediately(key: String, value: Long) {
+        getSharedPreferences(null).edit().putLong(key, value).commit()
+    }
 
-        fun putLong(key: String, value: Long) {
-            getSharedPreferences(null).edit().putLong(key, value).apply()
-        }
+    @JvmOverloads
+    fun getLong(key: String, defaultValue: Long = -1L): Long {
+        return getSharedPreferences(null).getLong(key, defaultValue)
+    }
 
-        fun putLongImmediately(key: String, value: Long) {
-            getSharedPreferences(null).edit().putLong(key, value).commit()
-        }
+    fun putFloat(key: String, value: Float) {
+        getSharedPreferences(null).edit().putFloat(key, value).apply()
+    }
 
-        @JvmOverloads
-        fun getLong(key: String, defaultValue: Long = -1L): Long {
-            return getSharedPreferences(null).getLong(key, defaultValue)
-        }
+    fun putFloatImmediately(key: String, value: Float) {
+        getSharedPreferences(null).edit().putFloat(key, value).commit()
+    }
 
-        fun putFloat(key: String, value: Float) {
-            getSharedPreferences(null).edit().putFloat(key, value).apply()
-        }
+    @JvmOverloads
+    fun getFloat(key: String, defaultValue: Float = -1f): Float {
+        return getSharedPreferences(null).getFloat(key, defaultValue)
+    }
 
-        fun putFloatImmediately(key: String, value: Float) {
-            getSharedPreferences(null).edit().putFloat(key, value).commit()
-        }
+    fun putBoolean(key: String, value: Boolean) {
+        getSharedPreferences(null).edit().putBoolean(key, value).apply()
+    }
 
-        @JvmOverloads
-        fun getFloat(key: String, defaultValue: Float = -1f): Float {
-            return getSharedPreferences(null).getFloat(key, defaultValue)
-        }
+    fun putBooleanImmediately(key: String, value: Boolean) {
+        getSharedPreferences(null).edit().putBoolean(key, value).commit()
+    }
 
-        fun putBoolean(key: String, value: Boolean) {
-            getSharedPreferences(null).edit().putBoolean(key, value).apply()
-        }
+    @JvmOverloads
+    fun getBoolean(key: String, defaultValue: Boolean = false): Boolean {
+        return getSharedPreferences(null).getBoolean(key, defaultValue)
+    }
 
-        fun putBooleanImmediately(key: String, value: Boolean) {
-            getSharedPreferences(null).edit().putBoolean(key, value).commit()
-        }
+    fun removeKey(key: String) {
+        getSharedPreferences(null).edit().remove(key).apply()
+    }
 
-        @JvmOverloads
-        fun getBoolean(key: String, defaultValue: Boolean = false): Boolean {
-            return getSharedPreferences(null).getBoolean(key, defaultValue)
-        }
+    fun removeKeyImmediately(key: String) {
+        getSharedPreferences(null).edit().remove(key).commit()
+    }
 
-        fun removeKey(key: String) {
-            getSharedPreferences(null).edit().remove(key).apply()
-        }
+    /**
+     * 使用指定的SharedPreferences
+     * @param name SharedPreferences的名
+     */
+    fun putString(name: String, key: String, value: String) {
+        getSharedPreferences(name).edit().putString(key, value).apply()
+    }
 
-        fun removeKeyImmediately(key: String) {
-            getSharedPreferences(null).edit().remove(key).commit()
-        }
+    /**
+     * 使用指定的SharedPreferences
+     * @param name SharedPreferences的名
+     */
+    fun putStringImmediately(name: String, key: String, value: String) {
+        getSharedPreferences(name).edit().putString(key, value).commit()
+    }
 
-        /**
-         * 使用指定的SharedPreferences
-         * @param name SharedPreferences的名
-         */
-        fun putString(name: String, key: String, value: String) {
-            getSharedPreferences(name).edit().putString(key, value).apply()
-        }
+    /**
+     * 使用指定的SharedPreferences
+     * @param name SharedPreferences的名
+     */
+    fun getString(name: String, key: String, defaultValue: String): String? {
+        return getSharedPreferences(name).getString(key, defaultValue)
+    }
 
-        /**
-         * 使用指定的SharedPreferences
-         * @param name SharedPreferences的名
-         */
-        fun putStringImmediately(name: String, key: String, value: String) {
-            getSharedPreferences(name).edit().putString(key, value).commit()
-        }
+    /**
+     * 使用指定的SharedPreferences
+     * @param name SharedPreferences的名
+     */
+    fun putInt(name: String, key: String, value: Int) {
+        getSharedPreferences(name).edit().putInt(key, value).apply()
+    }
 
-        /**
-         * 使用指定的SharedPreferences
-         * @param name SharedPreferences的名
-         */
-        fun getString(name: String, key: String, defaultValue: String): String? {
-            return getSharedPreferences(name).getString(key, defaultValue)
-        }
+    /**
+     * 使用指定的SharedPreferences
+     * @param name SharedPreferences的名
+     */
+    fun putIntImmediately(name: String, key: String, value: Int) {
+        getSharedPreferences(name).edit().putInt(key, value).commit()
+    }
 
-        /**
-         * 使用指定的SharedPreferences
-         * @param name SharedPreferences的名
-         */
-        fun putInt(name: String, key: String, value: Int) {
-            getSharedPreferences(name).edit().putInt(key, value).apply()
-        }
+    /**
+     * 使用指定的SharedPreferences
+     * @param name SharedPreferences的名
+     */
+    @JvmOverloads
+    fun getInt(name: String, key: String, defaultValue: Int = -1): Int {
+        return getSharedPreferences(name).getInt(key, defaultValue)
+    }
 
-        /**
-         * 使用指定的SharedPreferences
-         * @param name SharedPreferences的名
-         */
-        fun putIntImmediately(name: String, key: String, value: Int) {
-            getSharedPreferences(name).edit().putInt(key, value).commit()
-        }
+    /**
+     * 使用指定的SharedPreferences
+     * @param name SharedPreferences的名
+     */
+    fun putLong(name: String, key: String, value: Long) {
+        getSharedPreferences(name).edit().putLong(key, value).apply()
+    }
 
-        /**
-         * 使用指定的SharedPreferences
-         * @param name SharedPreferences的名
-         */
-        @JvmOverloads
-        fun getInt(name: String, key: String, defaultValue: Int = -1): Int {
-            return getSharedPreferences(name).getInt(key, defaultValue)
-        }
+    /**
+     * 使用指定的SharedPreferences
+     * @param name SharedPreferences的名
+     */
+    fun putLongImmediately(name: String, key: String, value: Long) {
+        getSharedPreferences(name).edit().putLong(key, value).commit()
+    }
 
-        /**
-         * 使用指定的SharedPreferences
-         * @param name SharedPreferences的名
-         */
-        fun putLong(name: String, key: String, value: Long) {
-            getSharedPreferences(name).edit().putLong(key, value).apply()
-        }
+    /**
+     * 使用指定的SharedPreferences
+     * @param name SharedPreferences的名
+     */
+    @JvmOverloads
+    fun getLong(name: String, key: String, defaultValue: Long = -1L): Long {
+        return getSharedPreferences(name).getLong(key, defaultValue)
+    }
 
-        /**
-         * 使用指定的SharedPreferences
-         * @param name SharedPreferences的名
-         */
-        fun putLongImmediately(name: String, key: String, value: Long) {
-            getSharedPreferences(name).edit().putLong(key, value).commit()
-        }
+    /**
+     * 使用指定的SharedPreferences
+     * @param name SharedPreferences的名
+     */
+    fun putFloat(name: String, key: String, value: Float) {
+        getSharedPreferences(name).edit().putFloat(key, value).apply()
+    }
 
-        /**
-         * 使用指定的SharedPreferences
-         * @param name SharedPreferences的名
-         */
-        @JvmOverloads
-        fun getLong(name: String, key: String, defaultValue: Long = -1L): Long {
-            return getSharedPreferences(name).getLong(key, defaultValue)
-        }
+    /**
+     * 使用指定的SharedPreferences
+     * @param name SharedPreferences的名
+     */
+    fun putFloatImmediately(name: String, key: String, value: Float) {
+        getSharedPreferences(name).edit().putFloat(key, value).commit()
+    }
 
-        /**
-         * 使用指定的SharedPreferences
-         * @param name SharedPreferences的名
-         */
-        fun putFloat(name: String, key: String, value: Float) {
-            getSharedPreferences(name).edit().putFloat(key, value).apply()
-        }
+    /**
+     * 使用指定的SharedPreferences
+     * @param name SharedPreferences的名
+     */
+    @JvmOverloads
+    fun getFloat(name: String, key: String, defaultValue: Float = -1f): Float {
+        return getSharedPreferences(name).getFloat(key, defaultValue)
+    }
 
-        /**
-         * 使用指定的SharedPreferences
-         * @param name SharedPreferences的名
-         */
-        fun putFloatImmediately(name: String, key: String, value: Float) {
-            getSharedPreferences(name).edit().putFloat(key, value).commit()
-        }
+    /**
+     * 使用指定的SharedPreferences
+     * @param name SharedPreferences的名
+     */
+    fun putBoolean(name: String, key: String, value: Boolean) {
+        getSharedPreferences(name).edit().putBoolean(key, value).apply()
+    }
 
-        /**
-         * 使用指定的SharedPreferences
-         * @param name SharedPreferences的名
-         */
-        @JvmOverloads
-        fun getFloat(name: String, key: String, defaultValue: Float = -1f): Float {
-            return getSharedPreferences(name).getFloat(key, defaultValue)
-        }
+    /**
+     * 使用指定的SharedPreferences
+     * @param name SharedPreferences的名
+     */
+    fun putBooleanImmediately(name: String, key: String, value: Boolean) {
+        getSharedPreferences(name).edit().putBoolean(key, value).commit()
+    }
 
-        /**
-         * 使用指定的SharedPreferences
-         * @param name SharedPreferences的名
-         */
-        fun putBoolean(name: String, key: String, value: Boolean) {
-            getSharedPreferences(name).edit().putBoolean(key, value).apply()
-        }
+    /**
+     * 使用指定的SharedPreferences
+     * @param name SharedPreferences的名
+     */
+    @JvmOverloads
+    fun getBoolean(name: String, key: String, defaultValue: Boolean = false): Boolean {
+        return getSharedPreferences(name).getBoolean(key, defaultValue)
+    }
 
-        /**
-         * 使用指定的SharedPreferences
-         * @param name SharedPreferences的名
-         */
-        fun putBooleanImmediately(name: String, key: String, value: Boolean) {
-            getSharedPreferences(name).edit().putBoolean(key, value).commit()
-        }
+    /**
+     * 使用指定的SharedPreferences
+     * @param name SharedPreferences的名
+     */
+    fun removeKey(name: String, key: String) {
+        getSharedPreferences(name).edit().remove(key).apply()
+    }
 
-        /**
-         * 使用指定的SharedPreferences
-         * @param name SharedPreferences的名
-         */
-        @JvmOverloads
-        fun getBoolean(name: String, key: String, defaultValue: Boolean = false): Boolean {
-            return getSharedPreferences(name).getBoolean(key, defaultValue)
-        }
-
-        /**
-         * 使用指定的SharedPreferences
-         * @param name SharedPreferences的名
-         */
-        fun removeKey(name: String, key: String) {
-            getSharedPreferences(name).edit().remove(key).apply()
-        }
-
-        /**
-         * 使用指定的SharedPreferences
-         * @param name SharedPreferences的名
-         */
-        fun removeKeyImmediately(name: String, key: String) {
-            getSharedPreferences(name).edit().remove(key).commit()
-        }
+    /**
+     * 使用指定的SharedPreferences
+     * @param name SharedPreferences的名
+     */
+    fun removeKeyImmediately(name: String, key: String) {
+        getSharedPreferences(name).edit().remove(key).commit()
     }
 }

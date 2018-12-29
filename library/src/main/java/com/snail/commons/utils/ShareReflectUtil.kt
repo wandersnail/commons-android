@@ -11,7 +11,7 @@ import java.util.*
  * 时间: 2018/12/10 11:21
  * 作者: zengfansheng
  */
-object ShareReflectUtil {
+internal object ShareReflectUtil {
 
     /**
      * Locates a given field anywhere in the class inheritance hierarchy.
@@ -27,11 +27,9 @@ object ShareReflectUtil {
         while (clazz != null) {
             try {
                 val field = clazz.getDeclaredField(name)
-
                 if (!field.isAccessible) {
                     field.isAccessible = true
                 }
-
                 return field
             } catch (e: NoSuchFieldException) {
                 // ignore and search next
@@ -47,11 +45,9 @@ object ShareReflectUtil {
         while (clazz != null) {
             try {
                 val field = clazz.getDeclaredField(name)
-
                 if (!field.isAccessible) {
                     field.isAccessible = true
                 }
-
                 return field
             } catch (e: NoSuchFieldException) {
                 // ignore and search next
@@ -76,16 +72,13 @@ object ShareReflectUtil {
         while (clazz != null) {
             try {
                 val method = clazz.getDeclaredMethod(name, *parameterTypes)
-
                 if (!method.isAccessible) {
                     method.isAccessible = true
                 }
-
                 return method
             } catch (e: NoSuchMethodException) {
                 // ignore and search next
             }
-
             clazz = clazz.superclass
         }
 

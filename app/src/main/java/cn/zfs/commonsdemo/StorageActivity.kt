@@ -23,7 +23,9 @@ class StorageActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_storage)
         val storages = SystemUtils.getStorages(this)
-        lv.adapter = ListAdapter(this, storages)
+        if (storages != null) {
+            lv.adapter = ListAdapter(this, storages)
+        }
     }
 
     private inner class ListAdapter(context: Context, data: MutableList<Storage>) : BaseListAdapter<Storage>(context, data) {

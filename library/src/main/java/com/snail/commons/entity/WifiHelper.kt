@@ -13,35 +13,35 @@ import com.snail.commons.utils.NetworkUtils
 import java.util.*
 
 class WifiHelper(context: Context) {
-    val wifiManager = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as? WifiManager
+    val wifiManager = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
     var isScanning: Boolean = false
         private set
     var isConnecting: Boolean = false
         private set
-    private val context: Context = context.applicationContext
+    private val context = context.applicationContext
     private val handler = Handler(Looper.getMainLooper())
 
     /**
      * 判断wifi是否开启的状态
      */
     val isWifiEnable: Boolean
-        get() = wifiManager != null && wifiManager.isWifiEnabled
+        get() = wifiManager.isWifiEnabled
 
     val wifiConfigurations: List<WifiConfiguration>
-        get() = wifiManager!!.configuredNetworks
+        get() = wifiManager.configuredNetworks
 
     /**
      * 获取当前WifiInfo
      */
     val wifiInfo: WifiInfo
-        get() = wifiManager!!.connectionInfo
+        get() = wifiManager.connectionInfo
 
     /**
      * 获取当前Wifi所分配的Ip地址
      */
     val currentIpAddress: String
         get() {
-            val address = wifiManager!!.dhcpInfo.ipAddress
+            val address = wifiManager.dhcpInfo.ipAddress
             return (address and 0xFF).toString() + "." + (address shr 8 and 0xFF) + "." + (address shr 16 and 0xFF) + "." + (address shr 24 and 0xFF)
         }
 
@@ -50,7 +50,7 @@ class WifiHelper(context: Context) {
      */
     val ipAddressFromHotspot: String
         get() {
-            val dhcpInfo = wifiManager!!.dhcpInfo
+            val dhcpInfo = wifiManager.dhcpInfo
             val address = dhcpInfo.gateway
             return (address and 0xFF).toString() + "." + (address shr 8 and 0xFF) + "." + (address shr 16 and 0xFF) + "." + (address shr 24 and 0xFF)
         }
@@ -60,7 +60,7 @@ class WifiHelper(context: Context) {
      */
     val hotspotLocalIpAddress: String
         get() {
-            val dhcpInfo = wifiManager!!.dhcpInfo
+            val dhcpInfo = wifiManager.dhcpInfo
             val address = dhcpInfo.serverAddress
             return (address and 0xFF).toString() + "." + (address shr 8 and 0xFF) + "." + (address shr 16 and 0xFF) + "." + (address shr 24 and 0xFF)
         }
@@ -81,7 +81,7 @@ class WifiHelper(context: Context) {
      * 打开wifi
      */
     fun openWifi() {
-        if (!wifiManager!!.isWifiEnabled) {
+        if (!wifiManager.isWifiEnabled) {
             wifiManager.isWifiEnabled = true
         }
     }
@@ -96,7 +96,7 @@ class WifiHelper(context: Context) {
             }
             isScanning = true
         }
-        wifiManager!!.startScan()
+        wifiManager.startScan()
         val list = ArrayList<ScanResult>()
         val startTime = System.currentTimeMillis()
         Thread(Runnable {
@@ -149,7 +149,7 @@ class WifiHelper(context: Context) {
      * @param timeoutMillis 超时时间
      * @param callback      连接回调
      */
-    fun addNetwork(wf: WifiConfiguration, timeoutMillis: Int, callback: OnConnectCallback) {
+    fun addNetwork(wf: WifiConfiguration, timeoutMillis: Int, callback: OnConnectCallback?) {
         synchronized(this) {
             if (isConnecting) {
                 return
@@ -162,7 +162,7 @@ class WifiHelper(context: Context) {
             val ssid = wf.SSID
             //判断是否已保存
             var savedCfg: WifiConfiguration? = null
-            val networks = wifiManager!!.configuredNetworks
+            val networks = wifiManager.configuredNetworks
             if (networks != null) {
                 for (network in networks) {
                     if (wf.SSID == network.SSID) {
@@ -208,7 +208,7 @@ class WifiHelper(context: Context) {
      * 关闭当前的Wifi网络
      */
     fun disconnectCurrentNetwork(): Boolean {
-        return if (wifiManager != null && wifiManager.isWifiEnabled) {
+        return if (wifiManager.isWifiEnabled) {
             wifiManager.disconnect()
         } else false
     }
@@ -217,7 +217,7 @@ class WifiHelper(context: Context) {
      * 清除当前wifi
      */
     fun clearCurrentNetwork() {
-        if (wifiManager != null && wifiManager.isWifiEnabled) {
+        if (wifiManager.isWifiEnabled) {
             val netId = wifiManager.connectionInfo.networkId
             wifiManager.removeNetwork(netId)
             wifiManager.saveConfiguration()
@@ -228,19 +228,15 @@ class WifiHelper(context: Context) {
      * 清除指定wifi
      */
     fun clearNetwork(conf: WifiConfiguration) {
-        if (wifiManager != null) {
-            wifiManager.removeNetwork(conf.networkId)
-            wifiManager.saveConfiguration()
-        }
+        wifiManager.removeNetwork(conf.networkId)
+        wifiManager.saveConfiguration()
     }
 
     /**
      * 关闭Wifi
      */
     fun disableWifi() {
-        if (wifiManager != null) {
-            wifiManager.isWifiEnabled = false
-        }
+        wifiManager.isWifiEnabled = false
     }
 
     companion object {

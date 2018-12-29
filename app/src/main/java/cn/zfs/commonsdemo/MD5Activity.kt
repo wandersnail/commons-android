@@ -30,11 +30,11 @@ class MD5Activity : BaseActivity() {
                 val md5 = EncryptUtils.getFileMD5Code(it[0])
                 val sha1 = EncryptUtils.getFileSHA1Code(it[0])
                 val separator = etSeparator.text.toString()
-                tvMd5.text = if (separator.isEmpty()) md5 else EncryptUtils.addSeparator(md5, separator)
-                tvSha1.text = if (separator.isEmpty()) sha1 else EncryptUtils.addSeparator(sha1, separator)
+                tvMd5.text = if (separator.isEmpty()) md5 else EncryptUtils.addSeparator(md5 ?: "", separator)
+                tvSha1.text = if (separator.isEmpty()) sha1 else EncryptUtils.addSeparator(sha1 ?: "", separator)
             } else if (selectType == 1) {
                 val signInfo = SignUtils.getSignatureFromApk(this, it[0])
-                tvSignInfo.text = "hashCode: ${signInfo.hashCode}\nmd5: ${signInfo.md5}\nsha1: ${signInfo.addSeparator(signInfo.sha1, ":")}"
+                tvSignInfo.text = "hashCode: ${signInfo?.hashCode}\nmd5: ${signInfo?.md5}\nsha1: ${signInfo?.addSeparator(signInfo!!.sha1 ?: "", ":")}"
             }
         }
         btnCalcFile.setOnClickListener {
@@ -47,8 +47,8 @@ class MD5Activity : BaseActivity() {
                 val code = EncryptUtils.getMD5Code(text)
                 val sha1 = EncryptUtils.getSHA1Code(text)
                 val separator = etSeparator.text.toString()
-                tvMd5.text = if (separator.isEmpty()) code else EncryptUtils.addSeparator(code, separator)
-                tvSha1.text = if (separator.isEmpty()) sha1 else EncryptUtils.addSeparator(sha1, separator)
+                tvMd5.text = if (separator.isEmpty()) code else EncryptUtils.addSeparator(code ?: "", separator)
+                tvSha1.text = if (separator.isEmpty()) sha1 else EncryptUtils.addSeparator(sha1 ?: "", separator)
             }
         }
         btnApk.setOnClickListener { 
@@ -57,7 +57,7 @@ class MD5Activity : BaseActivity() {
         }
         btnApp.setOnClickListener {
             val signInfo = SignUtils.getSignatureInstalled(this)
-            tvSignInfo.text = "hashCode: ${signInfo.hashCode}\nmd5: ${signInfo.md5}\nsha1: ${signInfo.addSeparator(signInfo.sha1, ":")}"
+            tvSignInfo.text = "hashCode: ${signInfo?.hashCode}\nmd5: ${signInfo?.md5}\nsha1: ${signInfo?.addSeparator(signInfo!!.sha1 ?: "", ":")}"
         }
     }
 

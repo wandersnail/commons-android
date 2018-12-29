@@ -338,7 +338,7 @@ object FileUtils {
      * @param source 源文件
      * @param target 目标文件
      */
-    private fun nioCopyFile(source: File, target: File?) {
+    private fun nioCopyFile(source: File, target: File) {
         var fileChannel: FileChannel? = null
         var out: FileChannel? = null
         var inStream: FileInputStream? = null
@@ -397,11 +397,11 @@ object FileUtils {
      * @param src    源文件或文件夹
      * @param target 目标文件或文件夹。类型需与源相同，如源为文件，则目标也必须是文件
      */
-    fun copy(src: File, target: File?) {
+    fun copy(src: File, target: File) {
         if (src.isFile) {
             nioCopyFile(src, target)
         } else {
-            copyDir(src, target!!)
+            copyDir(src, target)
         }
     }
 
@@ -411,7 +411,7 @@ object FileUtils {
      * @param inputStream 输入流
      * @param targetFile  目标文件
      */
-    fun saveToFile(inputStream: InputStream, targetFile: File?) {
+    fun saveToFile(inputStream: InputStream, targetFile: File) {
         var out: BufferedOutputStream? = null
         var bufferedInputStream: BufferedInputStream? = null
         try {
@@ -440,7 +440,7 @@ object FileUtils {
     /**
      * 复制文件，适合Android平台
      */
-    fun copyFile(srcFile: File, targetFile: File?) {
+    fun copyFile(srcFile: File, targetFile: File) {
         try {
             saveToFile(FileInputStream(srcFile), targetFile)
         } catch (e: FileNotFoundException) {
@@ -454,11 +454,11 @@ object FileUtils {
      * @param src    源文件或文件夹
      * @param target 目标文件或文件夹
      */
-    fun copyFit(src: File, target: File?) {
+    fun copyFit(src: File, target: File) {
         if (src.isFile) {
             copyFile(src, target)
         } else {
-            copyDir(src, target!!)
+            copyDir(src, target)
         }
     }
 

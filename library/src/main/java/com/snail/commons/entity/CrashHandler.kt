@@ -64,7 +64,6 @@ class CrashHandler private constructor() : UncaughtExceptionHandler {
         } catch (e: PackageManager.NameNotFoundException) {
             e.printStackTrace()
         }
-
     }
 
     override fun uncaughtException(t: Thread, e: Throwable) {
@@ -102,7 +101,7 @@ class CrashHandler private constructor() : UncaughtExceptionHandler {
         } catch (ex: Exception) {
             ex.printStackTrace()
         } finally {
-            IOUtils.closeQuietly(fos, pw, sw)
+            IOUtils.close(sw, pw, fos)
         }
         return false
     }

@@ -14,7 +14,7 @@ class BasePagerAdapter(val pagers: List<BasePager>) : PagerAdapter() {
         return pagers.size
     }
 
-    override fun getItemPosition(`object`: Any): Int {
+    override fun getItemPosition(any: Any): Int {
         return PagerAdapter.POSITION_NONE
     }
 

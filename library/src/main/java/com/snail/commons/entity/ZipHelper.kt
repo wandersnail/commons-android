@@ -39,7 +39,7 @@ object ZipHelper {
                 }
                 val annotation = method.getAnnotation(RunThread::class.java)
                 if (annotation != null && annotation.value === ThreadType.MAIN) {
-                    AppHolder.postToMainThread { callback.onCallback(obj) }
+                    AppHolder.postToMainThread(Runnable { callback.onCallback(obj) })
                 } else {
                     callback.onCallback(obj)
                 }

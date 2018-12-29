@@ -36,16 +36,12 @@ class DatabaseContext
             } catch (e: IOException) {
                 e.printStackTrace()
             }
-
         } else {
             isFileCreateSuccess = true
         }
 
         //返回数据库文件对象
-        return if (isFileCreateSuccess)
-            dbFile
-        else
-            null
+        return if (isFileCreateSuccess) dbFile else null
     }
 
     /**

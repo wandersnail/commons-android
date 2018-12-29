@@ -294,8 +294,8 @@ object ImageUtils {
     /**
      * @param cornerRadii 圆角大小，dp
      */
-    fun createDrawableSelecor(normal: Int, pressed: Int, cornerRadii: Float,
-                              leftTop: Boolean, rightTop: Boolean, leftBottom: Boolean, rightBottom: Boolean): StateListDrawable {
+    fun createDrawableSelecor(normal: Int, pressed: Int, cornerRadii: Float, leftTop: Boolean, rightTop: Boolean, 
+                              leftBottom: Boolean, rightBottom: Boolean): StateListDrawable {
         val drawable = StateListDrawable()
         drawable.addState(intArrayOf(android.R.attr.state_pressed), createDrawable(pressed, cornerRadii, leftTop, rightTop, leftBottom, rightBottom))
         drawable.addState(intArrayOf(), createDrawable(normal, cornerRadii, leftTop, rightTop, leftBottom, rightBottom))

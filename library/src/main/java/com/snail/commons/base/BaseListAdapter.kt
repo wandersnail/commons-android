@@ -9,7 +9,7 @@ import java.util.*
 abstract class BaseListAdapter<T> : BaseAdapter {
     var context: Context? = null
         private set
-    private var data: List<T>? = null
+    private var data: List<T>
 
     constructor(context: Context) {
         data = ArrayList()
@@ -31,11 +31,11 @@ abstract class BaseListAdapter<T> : BaseAdapter {
     }
 
     override fun getCount(): Int {
-        return data!!.size
+        return data.size
     }
 
     override fun getItem(position: Int): T {
-        return data!![position]
+        return data[position]
     }
 
     override fun getItemId(position: Int): Long {
@@ -49,7 +49,7 @@ abstract class BaseListAdapter<T> : BaseAdapter {
         } else {
             convertView.tag as BaseHolder<T>
         }
-        holder.setData(data!![position], position)
+        holder.setData(data[position], position)
         return holder.convertView
     }
 

@@ -24,7 +24,7 @@ class PermissionsRequester(private val activity: Activity) {
     /**
      * 设置请求结果监听回调
      */
-    fun setOnRequestResultListener(listener: OnRequestResultListener) {
+    fun setOnRequestResultListener(listener: OnRequestResultListener?) {
         requestResultListener = listener
     }
 
@@ -57,15 +57,15 @@ class PermissionsRequester(private val activity: Activity) {
         val needRequestPermissonList = findDeniedPermissions(permissions)
         if (needRequestPermissonList.isNotEmpty()) {
             ActivityCompat.requestPermissions(activity, needRequestPermissonList.toTypedArray(), PERMISSON_REQUESTCODE)
-        } else if (requestResultListener != null) {
-            requestResultListener!!.onRequestResult(refusedPermissions)
+        } else {
+            requestResultListener?.onRequestResult(refusedPermissions)
         }
     }
 
     //获取权限集中需要申请权限的列表
     private fun findDeniedPermissions(permissions: List<String>): List<String> {
         val needRequestPermissonList = ArrayList<String>()
-        for (perm in permissions) {
+        permissions.forEach { perm ->
             if (ContextCompat.checkSelfPermission(activity, perm) != PackageManager.PERMISSION_GRANTED || ActivityCompat.shouldShowRequestPermissionRationale(activity, perm)) {
                 needRequestPermissonList.add(perm)
             }
@@ -73,7 +73,7 @@ class PermissionsRequester(private val activity: Activity) {
         return needRequestPermissonList
     }
 
-    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_CODE_WRITE_SETTINGS && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!Settings.System.canWrite(activity)) {
                 refusedPermissions.add(Manifest.permission.WRITE_SETTINGS)
@@ -88,17 +88,14 @@ class PermissionsRequester(private val activity: Activity) {
         }
     }
 
-    fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, paramArrayOfInt: IntArray) {
-        if (requestCode == PERMISSON_REQUESTCODE) {
-            for (i in permissions.indices) {
-                val permission = permissions[i]
+    fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>?, paramArrayOfInt: IntArray?) {
+        if (requestCode == PERMISSON_REQUESTCODE && paramArrayOfInt != null) {
+            permissions?.forEachIndexed { i, permission ->
                 if (allPermissions.remove(permission) && paramArrayOfInt[i] != PackageManager.PERMISSION_GRANTED) {
                     refusedPermissions.add(permission)
                 }
             }
-            if (requestResultListener != null) {
-                requestResultListener!!.onRequestResult(refusedPermissions)
-            }
+            requestResultListener?.onRequestResult(refusedPermissions)
         }
     }
 
