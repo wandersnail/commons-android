@@ -95,9 +95,9 @@ class ConnectWifiActivity : BaseActivity() {
 
                 override fun createConvertView(): View {
                     val view = LinearLayout(context)
-                    view.layoutParams = AbsListView.LayoutParams(-1, UiUtils.dip2px(50f))
+                    view.layoutParams = AbsListView.LayoutParams(-1, UiUtils.dp2px(50f).toInt())
                     view.gravity = Gravity.CENTER_VERTICAL
-                    view.setPadding(UiUtils.dip2px(20f), 0, 0, 0)
+                    view.setPadding(UiUtils.dp2px(20f).toInt(), 0, 0, 0)
                     tv = TextView(context)
                     view.addView(tv)
                     return view

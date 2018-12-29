@@ -285,15 +285,15 @@ public class SystemUtils {
                     availaleSize = getStorageFreeSpace(path);
                 }
                 Storage storage = new Storage();
-                storage.availaleSize = availaleSize;
-                storage.totalSize = totalSize;
-                storage.state = state;
-                storage.path = path;
-                storage.isRemovable = removable;
-                storage.description = desc;
-                storage.isAllowMassStorage = isAllowMassStorage;
-                storage.isPrimary = isPrimary;
-                storage.isUsb = desc != null && desc.toLowerCase(Locale.ENGLISH).contains("usb");
+                storage.setAvailaleSize(availaleSize);
+                storage.setTotalSize(totalSize);
+                storage.setState(state);
+                storage.setPath(path);
+                storage.setIsRemovable(removable);
+                storage.setDescription(desc);
+                storage.setIsAllowMassStorage(isAllowMassStorage);
+                storage.setIsPrimary(isPrimary);
+                storage.setIsUsb(desc != null && desc.toLowerCase(Locale.ENGLISH).contains("usb"));
                 list.add(storage);
             }
             return list;

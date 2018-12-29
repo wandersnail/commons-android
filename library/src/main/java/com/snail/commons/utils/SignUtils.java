@@ -27,18 +27,18 @@ public class SignUtils {
          * @param separator 分隔符
          */
         public String addSeparator(@NonNull String code, String separator) {
-            return EncryptUtils.addSeparator(code, separator);
+            return EncryptUtils.INSTANCE.addSeparator(code, separator);
         }
     }
     
     private static SignInfo getSignature(Signature signature) {
         SignInfo info = new SignInfo();
         info.hashCode = signature.hashCode();
-        info.md5 = EncryptUtils.encryptByMessageDigest(signature.toByteArray(), EncryptUtils.MD5);
+        info.md5 = EncryptUtils.INSTANCE.encryptByMessageDigest(signature.toByteArray(), EncryptUtils.INSTANCE.getMD5());
         if (info.md5 == null) {
             return null;
         }
-        info.sha1 = EncryptUtils.encryptByMessageDigest(signature.toByteArray(), EncryptUtils.SHA1);
+        info.sha1 = EncryptUtils.INSTANCE.encryptByMessageDigest(signature.toByteArray(), EncryptUtils.INSTANCE.getSHA1());
         if (info.sha1 == null) {
             return null;
         }
