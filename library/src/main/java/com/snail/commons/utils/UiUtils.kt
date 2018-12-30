@@ -237,18 +237,18 @@ object UiUtils {
      * @param offset 取值范围：0 ~ 1
      */
     fun getColor(startColor: Int, endColor: Int, offset: Float): Int {
-        val Aa = startColor shr 24 and 0xff
-        val Ra = startColor shr 16 and 0xff
-        val Ga = startColor shr 8 and 0xff
-        val Ba = startColor and 0xff
-        val Ab = endColor shr 24 and 0xff
-        val Rb = endColor shr 16 and 0xff
-        val Gb = endColor shr 8 and 0xff
-        val Bb = endColor and 0xff
-        val a = (Aa + (Ab - Aa) * offset).toInt()
-        val r = (Ra + (Rb - Ra) * offset).toInt()
-        val g = (Ga + (Gb - Ga) * offset).toInt()
-        val b = (Ba + (Bb - Ba) * offset).toInt()
+        val aa = startColor shr 24 and 0xff
+        val ra = startColor shr 16 and 0xff
+        val ga = startColor shr 8 and 0xff
+        val ba = startColor and 0xff
+        val ab = endColor shr 24 and 0xff
+        val rb = endColor shr 16 and 0xff
+        val gb = endColor shr 8 and 0xff
+        val bb = endColor and 0xff
+        val a = (aa + (ab - aa) * offset).toInt()
+        val r = (ra + (rb - ra) * offset).toInt()
+        val g = (ga + (gb - ga) * offset).toInt()
+        val b = (ba + (bb - ba) * offset).toInt()
         return Color.argb(a, r, g, b)
     }
 

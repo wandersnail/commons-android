@@ -2,17 +2,16 @@ package com.snail.commons.utils
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.graphics.*
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
-import android.graphics.drawable.GradientDrawable
-import android.graphics.drawable.StateListDrawable
+import android.graphics.drawable.*
 import android.net.Uri
 import android.os.Build
 import android.renderscript.Allocation
 import android.renderscript.Element
 import android.renderscript.RenderScript
 import android.renderscript.ScriptIntrinsicBlur
+import android.support.annotation.RequiresApi
 import android.support.media.ExifInterface
 import android.support.v4.content.FileProvider
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable
@@ -512,6 +511,52 @@ object ImageUtils {
             }
         } else if (root is ImageView) {
             root.setImageBitmap(null)
+        }
+    }
+
+    /**
+     * 给view添加点击波纹
+     * 
+     * @param view 需要波纹的view
+     * @param color 水波颜色
+     * @param allBackground true: 即使是ImageView，也设置到background。false: 如果是ImageView，则优先设置到src，如果drawable不存在才设置到background
+     * @param recursive 如果第一个参数是ViewGroup类型，是否让子view也添加波纹
+     * @param onlyClickable 只设置给可点击的view
+     */
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    fun enableRipple(view: View, color: Int, allBackground: Boolean = false, recursive: Boolean = false, onlyClickable: Boolean = true) {
+        enableRipple(view, ColorStateList.valueOf(color), allBackground, recursive, onlyClickable)
+    }
+
+    /**
+     * 给view添加波纹效果
+     *
+     * @param view 需要波纹的view
+     * @param color 水波颜色
+     * @param allBackground true: 即使是ImageView，也设置到background。false: 如果是ImageView，则优先设置到src，如果drawable不存在才设置到background
+     * @param recursive 如果第一个参数是ViewGroup类型，是否让子view也添加波纹
+     * @param onlyClickable 只设置给可点击的view
+     */
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    fun enableRipple(view: View, color: ColorStateList, allBackground: Boolean = false, recursive: Boolean = false, onlyClickable: Boolean = true) {
+        enableRipple(view, color, allBackground, onlyClickable)
+        if (recursive && view is ViewGroup) {
+            for (i in 0 until view.childCount) {
+                enableRipple(view.getChildAt(i), color, allBackground, true, onlyClickable)
+            }
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    private fun enableRipple(view: View, color: ColorStateList, background: Boolean, onlyClickable: Boolean = true) {
+        if (!onlyClickable || view.isClickable || view.isLongClickable) {
+            if (background || view !is ImageView || view.drawable == null) {
+                if (view.background != null) {
+                    view.background = RippleDrawable(color, view.background, view.background)
+                }
+            } else {
+                view.setImageDrawable(RippleDrawable(color, view.drawable, view.drawable))
+            }
         }
     }
 }

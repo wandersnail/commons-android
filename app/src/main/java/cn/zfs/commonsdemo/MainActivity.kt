@@ -20,9 +20,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val data = arrayListOf("储存信息获取", "设置静态IP", "md5和sha1算法", "系统分享", "网络及位置服务状态", "解压缩")
+        val data = arrayListOf("储存信息获取", "md5和sha1算法", "系统分享", "网络及位置服务状态", "解压缩", "点击波纹")
         val clsArr = arrayListOf(StorageActivity::class.java, MD5Activity::class.java, ShareActivity::class.java,
-            NetStateActivity::class.java, ZipActivity::class.java)
+            NetStateActivity::class.java, ZipActivity::class.java, ClickRippleActivity::class.java)
         lv.adapter = object : BaseListAdapter<String>(this, data) {
             override fun getHolder(position: Int): BaseHolder<String> {
                 return object : BaseHolder<String>() {

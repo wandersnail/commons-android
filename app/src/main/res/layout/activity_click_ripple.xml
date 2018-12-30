@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/root"
+              android:background="#dedede"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_marginTop="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/tvInner"
+                android:gravity="center"
+                android:text="里面的可点击"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </LinearLayout>
+        <Space
+            android:layout_width="8dp"
+            android:layout_height="match_parent"/>
+        <Button
+            android:id="@+id/btnOutSec"
+            android:text="第二层"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+    
+    <ImageView
+        android:id="@+id/ivOutBg"
+        android:layout_marginTop="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"/>
+    
+    <TextView
+        android:id="@+id/tvOutUnclickable"
+        android:layout_marginTop="8dp"
+        android:text="外面的不可点击"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"/>
+    
+    <ImageView
+        android:id="@+id/ivOutSrc"
+        android:layout_marginTop="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"/>
+    
+    <TextView
+        android:id="@+id/view"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="这里有个view"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"/>
+</LinearLayout>

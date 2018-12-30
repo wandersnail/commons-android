@@ -35,7 +35,7 @@
             android:configChanges="keyboardHidden|orientation|navigation|screenSize|keyboard"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".StaticIpActivity"
+            android:name=".ClickRippleActivity"
             android:configChanges="keyboardHidden|orientation|navigation|screenSize|keyboard"
             android:screenOrientation="portrait"/>
         <activity
