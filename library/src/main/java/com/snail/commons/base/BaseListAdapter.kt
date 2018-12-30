@@ -6,8 +6,8 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import java.util.*
 
-abstract class BaseListAdapter<T> @JvmOverloads constructor(val context: Context, data: List<T> = ArrayList()) : BaseAdapter() {
-    var data: List<T> = ArrayList()
+abstract class BaseListAdapter<T> @JvmOverloads constructor(val context: Context, data: MutableList<T> = ArrayList()) : BaseAdapter() {
+    var data: MutableList<T> = ArrayList()
         set(value) {
             field = value
             notifyDataSetChanged()

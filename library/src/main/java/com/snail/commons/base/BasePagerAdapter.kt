@@ -8,7 +8,7 @@ import android.view.ViewGroup
  * Created by zengfs on 2016/2/21.
  * 基本ViewPager的基类
  */
-class BasePagerAdapter(val pagers: List<BasePager>) : PagerAdapter() {
+class BasePagerAdapter(val pagers: MutableList<BasePager>) : PagerAdapter() {
 
     override fun getCount(): Int {
         return pagers.size
