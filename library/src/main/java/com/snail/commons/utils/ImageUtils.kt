@@ -521,11 +521,10 @@ object ImageUtils {
      * @param color 水波颜色
      * @param allBackground true: 即使是ImageView，也设置到background。false: 如果是ImageView，则优先设置到src，如果drawable不存在才设置到background
      * @param recursive 如果第一个参数是ViewGroup类型，是否让子view也添加波纹
-     * @param onlyClickable 只设置给可点击的view
      */
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    fun enableRipple(view: View, color: Int, allBackground: Boolean = false, recursive: Boolean = false, onlyClickable: Boolean = true) {
-        enableRipple(view, ColorStateList.valueOf(color), allBackground, recursive, onlyClickable)
+    fun enableRipple(view: View, color: Int, allBackground: Boolean = false, recursive: Boolean = false) {
+        enableRipple(view, ColorStateList.valueOf(color), allBackground, recursive)
     }
 
     /**
@@ -535,28 +534,25 @@ object ImageUtils {
      * @param color 水波颜色
      * @param allBackground true: 即使是ImageView，也设置到background。false: 如果是ImageView，则优先设置到src，如果drawable不存在才设置到background
      * @param recursive 如果第一个参数是ViewGroup类型，是否让子view也添加波纹
-     * @param onlyClickable 只设置给可点击的view
      */
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    fun enableRipple(view: View, color: ColorStateList, allBackground: Boolean = false, recursive: Boolean = false, onlyClickable: Boolean = true) {
-        enableRipple(view, color, allBackground, onlyClickable)
+    fun enableRipple(view: View, color: ColorStateList, allBackground: Boolean = false, recursive: Boolean = false) {
+        enableRipple(view, color, allBackground)
         if (recursive && view is ViewGroup) {
             for (i in 0 until view.childCount) {
-                enableRipple(view.getChildAt(i), color, allBackground, true, onlyClickable)
+                enableRipple(view.getChildAt(i), color, allBackground, true)
             }
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    private fun enableRipple(view: View, color: ColorStateList, background: Boolean, onlyClickable: Boolean = true) {
-        if (!onlyClickable || view.isClickable || view.isLongClickable) {
-            if (background || view !is ImageView || view.drawable == null) {
-                if (view.background != null) {
-                    view.background = RippleDrawable(color, view.background, view.background)
-                }
-            } else {
-                view.setImageDrawable(RippleDrawable(color, view.drawable, view.drawable))
+    private fun enableRipple(view: View, color: ColorStateList, background: Boolean) {
+        if (background || view !is ImageView || view.drawable == null) {
+            if (view.background != null) {
+                view.background = RippleDrawable(color, view.background, view.background)
             }
+        } else {
+            view.setImageDrawable(RippleDrawable(color, view.drawable, view.drawable))
         }
     }
 }
