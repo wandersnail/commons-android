@@ -35,7 +35,7 @@ class CrashHandler private constructor() : UncaughtExceptionHandler {
      * 初始化
      * @param logSaveDir 崩溃日志保存目录
      */
-    fun init(context: Context, logSaveDir: File?, callback: HandleCallback) {
+    fun init(context: Context, logSaveDir: File?, callback: HandleCallback?) {
         var saveDir = logSaveDir
         var appName = "CrashLogs"
         try {

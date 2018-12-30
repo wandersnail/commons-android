@@ -89,7 +89,7 @@ class WifiHelper(context: Context) {
     /**
      * wifi扫描
      */
-    fun startScan(scanPeriod: Int, callback: OnScanCallback) {
+    fun startScan(scanPeriod: Int, callback: OnScanCallback?) {
         synchronized(this) {
             if (isScanning) {
                 return

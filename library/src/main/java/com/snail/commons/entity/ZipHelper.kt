@@ -46,7 +46,6 @@ object ZipHelper {
             } catch (e: Exception) {
                 callback.onCallback(obj)
             }
-
         }
     }
 
@@ -193,7 +192,7 @@ object ZipHelper {
         /**
          * 执行压缩，异步的
          */
-        fun execute(callback: Callback<File>) {
+        fun execute(callback: Callback<File>?) {
             Thread(Runnable { 
                 val file = execute()
                 handleCallback(callback, file?.javaClass, file) }
@@ -319,7 +318,7 @@ object ZipHelper {
         /**
          * 执行解压，异步的
          */
-        fun execute(callback: Callback<Boolean>) {
+        fun execute(callback: Callback<Boolean>?) {
             Thread(Runnable { 
                 val result = execute()
                 handleCallback(callback, result.javaClass, result) 

@@ -19,7 +19,7 @@ class BasePagerAdapter(val pagers: List<BasePager>) : PagerAdapter() {
     }
 
     override fun isViewFromObject(view: View, o: Any): Boolean {
-        return view === o
+        return view == o
     }
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {

@@ -6,30 +6,17 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import java.util.*
 
-abstract class BaseListAdapter<T> : BaseAdapter {
-    var context: Context? = null
-        private set
-    private var data: List<T>
+abstract class BaseListAdapter<T> @JvmOverloads constructor(val context: Context, data: List<T> = ArrayList()) : BaseAdapter() {
+    var data: List<T> = ArrayList()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
-    constructor(context: Context) {
-        data = ArrayList()
-        this.context = context
-    }
-
-    constructor(context: Context, data: List<T>) {
-        this.context = context
+    init {
         this.data = data
     }
-
-    fun getData(): List<T>? {
-        return data
-    }
-
-    fun setData(data: List<T>) {
-        this.data = data
-        notifyDataSetChanged()
-    }
-
+    
     override fun getCount(): Int {
         return data.size
     }

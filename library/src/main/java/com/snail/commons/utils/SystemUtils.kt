@@ -47,8 +47,7 @@ object SystemUtils {
      */
     fun isLocationEnabled(context: Context): Boolean {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            val locationManager =
-                context.applicationContext.getSystemService(Context.LOCATION_SERVICE) as? LocationManager
+            val locationManager = context.applicationContext.getSystemService(Context.LOCATION_SERVICE) as? LocationManager
             if (locationManager != null) {
                 return locationManager.isLocationEnabled
             }
@@ -67,26 +66,8 @@ object SystemUtils {
      * 判断GPS是否打开
      */
     fun isGPSEnabled(context: Context): Boolean {
-        val locationManager =
-            context.applicationContext.getSystemService(Context.LOCATION_SERVICE) as? LocationManager
+        val locationManager = context.applicationContext.getSystemService(Context.LOCATION_SERVICE) as? LocationManager
         return locationManager != null && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
-    }
-
-    /**
-     * 判断服务是否正在运行
-     *
-     * @param context   上下文
-     * @param className 服务的完整类名
-     */
-    fun isServiceRunning(context: Context, className: String): Boolean {
-        val am = context.applicationContext.getSystemService(Context.ACTIVITY_SERVICE) as? ActivityManager ?: return false
-        val services = am.getRunningServices(200)
-        for (serviceInfo in services) {
-            if (serviceInfo.service.className == className) {
-                return true
-            }
-        }
-        return false
     }
 
     /**
@@ -122,7 +103,6 @@ object SystemUtils {
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-
             return 0
         }
 

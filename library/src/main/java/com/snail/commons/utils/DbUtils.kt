@@ -337,7 +337,7 @@ object DbUtils {
             for (i in values.indices) {
                 args[i] = values[i].toString()
             }
-            return db.rawQuery(sql, if (args.size == 0) null else args)
+            return db.rawQuery(sql, if (args.isEmpty()) null else args)
         }
     }
 
@@ -359,16 +359,14 @@ object DbUtils {
         }
 
         fun execute() {
-            val sql = String.format("update %s%s%s%s%s", table, sets, where, and, or)
-            db.execSQL(sql, values.toTypedArray())
+            db.execSQL("update $table$sets$where$and$or", values.toTypedArray())
         }
     }
 
     class DeleteBuilder(db: SQLiteDatabase, table: String) : Builder<DeleteBuilder>(db, table) {
 
         fun execute() {
-            val sql = String.format("delete from %s%s%s%s", table, where, and, or)
-            db.execSQL(sql, values.toTypedArray())
+            db.execSQL("delete from $table$where$and$or", values.toTypedArray())
         }
     }
 
@@ -507,7 +505,6 @@ object DbUtils {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-
         return defaultValue
     }
 
@@ -523,7 +520,6 @@ object DbUtils {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-
         return defaultValue
     }
 
