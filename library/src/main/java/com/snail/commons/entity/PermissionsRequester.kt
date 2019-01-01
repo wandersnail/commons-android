@@ -64,7 +64,7 @@ class PermissionsRequester(private val activity: Activity) {
         }
         val needRequestPermissonList = findDeniedPermissions(permissions)
         return when {
-            onlyCheck -> needRequestPermissonList.isNotEmpty()
+            onlyCheck -> needRequestPermissonList.isEmpty()
             needRequestPermissonList.isNotEmpty() -> {
                 ActivityCompat.requestPermissions(activity, needRequestPermissonList.toTypedArray(), PERMISSON_REQUESTCODE)
                 false
