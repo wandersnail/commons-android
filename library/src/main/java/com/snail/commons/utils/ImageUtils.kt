@@ -153,12 +153,12 @@ object ImageUtils {
     }
 
     //通过反射获取imageview的某个属性值
-    private fun getImageViewFieldValue(`object`: Any, fieldName: String): Int {
+    private fun getImageViewFieldValue(any: Any, fieldName: String): Int {
         var value = 0
         try {
             val field = ImageView::class.java.getDeclaredField(fieldName)
             field.isAccessible = true
-            val fieldValue = field.getInt(`object`)
+            val fieldValue = field.getInt(any)
             if (fieldValue > 0 && fieldValue < Integer.MAX_VALUE) {
                 value = fieldValue
             }
@@ -238,45 +238,17 @@ object ImageUtils {
     }
 
     /**
-     * 保存bitmap到文件，保存成JPG格式
-     *
-     * @param photoFile 文件
-     */
-    fun saveBitmapToFile(bitmap: Bitmap?, photoFile: File, quality: Int) {
-        var fileOutputStream: FileOutputStream? = null
-        try {
-            fileOutputStream = FileOutputStream(photoFile)
-            if (bitmap != null) {
-                if (bitmap.compress(Bitmap.CompressFormat.JPEG, quality, fileOutputStream)) {
-                    fileOutputStream.flush()
-                }
-            }
-        } catch (e: Exception) {
-            photoFile.delete()
-            e.printStackTrace()
-        } finally {
-            try {
-                fileOutputStream?.close()
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
-        }
-    }
-
-    /**
      * 保存bitmap到文件
      *
      * @param photoFile 文件
      * @param format    保存的图片格式
      */
-    fun saveBitmapToFile(bitmap: Bitmap?, photoFile: File, format: Bitmap.CompressFormat, quality: Int) {
+    @JvmOverloads fun saveBitmapToFile(bitmap: Bitmap, photoFile: File, quality: Int = 100, format: Bitmap.CompressFormat = Bitmap.CompressFormat.JPEG) {
         var fileOutputStream: FileOutputStream? = null
         try {
             fileOutputStream = FileOutputStream(photoFile)
-            if (bitmap != null) {
-                if (bitmap.compress(format, quality, fileOutputStream)) {
-                    fileOutputStream.flush()
-                }
+            if (bitmap.compress(format, quality, fileOutputStream)) {
+                fileOutputStream.flush()
             }
         } catch (e: Exception) {
             photoFile.delete()
@@ -293,8 +265,8 @@ object ImageUtils {
     /**
      * @param cornerRadii 圆角大小，dp
      */
-    fun createDrawableSelecor(normal: Int, pressed: Int, cornerRadii: Float, leftTop: Boolean, rightTop: Boolean, 
-                              leftBottom: Boolean, rightBottom: Boolean): StateListDrawable {
+    @JvmOverloads fun createDrawableSelecor(normal: Int, pressed: Int, cornerRadii: Float, leftTop: Boolean = true, rightTop: Boolean = true, 
+                              leftBottom: Boolean = true, rightBottom: Boolean = true): StateListDrawable {
         val drawable = StateListDrawable()
         drawable.addState(intArrayOf(android.R.attr.state_pressed), createDrawable(pressed, cornerRadii, leftTop, rightTop, leftBottom, rightBottom))
         drawable.addState(intArrayOf(), createDrawable(normal, cornerRadii, leftTop, rightTop, leftBottom, rightBottom))
@@ -309,7 +281,8 @@ object ImageUtils {
      * @param leftBottom  左下是否圆角
      * @param rightBottom 右下是否圆角
      */
-    fun createDrawable(color: Int, cornerRadii: Float, leftTop: Boolean, rightTop: Boolean, leftBottom: Boolean, rightBottom: Boolean): Drawable {
+    @JvmOverloads fun createDrawable(color: Int, cornerRadii: Float, leftTop: Boolean = true, rightTop: Boolean = true, 
+                                     leftBottom: Boolean = true, rightBottom: Boolean = true): Drawable {
         val drawable = GradientDrawable()
         drawable.cornerRadii = floatArrayOf(if (leftTop) cornerRadii else 0f, if (leftTop) cornerRadii else 0f, if (rightTop) cornerRadii else 0f, 
                 if (rightTop) cornerRadii else 0f, if (rightBottom) cornerRadii else 0f, if (rightBottom) cornerRadii else 0f, 
@@ -334,29 +307,20 @@ object ImageUtils {
     }
 
     /**
-     * @param normal  正常时的Drawable
-     * @param pressed 按压时的Drawable
-     * @param disable 不可用时的Drawable
-     */
-    fun createStateListDrawable(normal: Drawable, pressed: Drawable, disable: Drawable): StateListDrawable {
-        val drawable = StateListDrawable()
-        drawable.addState(intArrayOf(-android.R.attr.state_enabled), disable)
-        drawable.addState(intArrayOf(android.R.attr.state_pressed), pressed)
-        drawable.addState(intArrayOf(), normal) //normal一定要最后
-        return drawable
-    }
-
-    /**
      * @param normal   正常时的Drawable
      * @param pressed  按压时的Drawable
      * @param selected 被选中时的Drawable
      * @param disabled 不可用时的Drawable
      */
-    fun createStateListDrawable(normal: Drawable, pressed: Drawable, selected: Drawable, disabled: Drawable): StateListDrawable {
+    @JvmOverloads fun createStateListDrawable(normal: Drawable, pressed: Drawable, selected: Drawable? = null, disabled: Drawable? = null): StateListDrawable {
         val drawable = StateListDrawable()
-        drawable.addState(intArrayOf(-android.R.attr.state_enabled), disabled)
+        if (disabled != null) {
+            drawable.addState(intArrayOf(-android.R.attr.state_enabled), disabled)
+        }
         drawable.addState(intArrayOf(android.R.attr.state_pressed), pressed)
-        drawable.addState(intArrayOf(android.R.attr.state_selected), selected)
+        if (selected != null) {
+            drawable.addState(intArrayOf(android.R.attr.state_selected), selected)
+        }
         drawable.addState(intArrayOf(), normal) //normal一定要最后
         return drawable
     }

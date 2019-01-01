@@ -137,18 +137,17 @@ object UiUtils {
     /**
      * 设置TextView的字体，字体为外部文件，目录在assets
      *
-     * @param context  上下文
      * @param root     根布局
      * @param fontName 字体名
      */
-    fun setFont(context: Context, root: View, fontName: String) {
+    fun setFont(root: View, fontName: String) {
         try {
             if (root is ViewGroup) {
                 for (i in 0 until root.childCount) {
-                    setFont(context, root.getChildAt(i), fontName)
+                    setFont(root.getChildAt(i), fontName)
                 }
             } else if (root is TextView) {
-                root.typeface = Typeface.createFromAsset(context.assets, fontName)
+                root.typeface = Typeface.createFromAsset(root.context.assets, fontName)
             }
         } catch (e: Exception) {
             e.printStackTrace()
