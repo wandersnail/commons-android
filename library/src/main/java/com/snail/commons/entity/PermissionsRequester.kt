@@ -32,38 +32,52 @@ class PermissionsRequester(private val activity: Activity) {
      * 开始检查并申请权限
      * @param permissions 需要申请的权限
      */
-    fun check(permissions: List<String>) {
+    fun checkAndRequest(permissions: MutableList<String>) {
         refusedPermissions.clear()
         allPermissions.clear()
         allPermissions.addAll(permissions)
-        checkPermissions(allPermissions)
+        checkPermissions(allPermissions, false)
+    }
+    
+    fun hasPermissions(permissions: MutableList<String>): Boolean {
+        return checkPermissions(permissions, true)
     }
 
-    private fun checkPermissions(permissions: MutableList<String>) {
+    private fun checkPermissions(permissions: MutableList<String>, onlyCheck: Boolean): Boolean {
         if (permissions.remove(Manifest.permission.WRITE_SETTINGS) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!Settings.System.canWrite(activity)) {
-                val intent = Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS, Uri.parse("package:" + activity.packageName))
-                activity.startActivityForResult(intent, REQUEST_CODE_WRITE_SETTINGS)
-                return
+                if (!onlyCheck) {
+                    val intent = Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS, Uri.parse("package:" + activity.packageName))
+                    activity.startActivityForResult(intent, REQUEST_CODE_WRITE_SETTINGS)
+                }
+                return false
             }
         }
         if (permissions.remove(Manifest.permission.REQUEST_INSTALL_PACKAGES) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             if (!activity.packageManager.canRequestPackageInstalls()) {
-                val intent = Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, Uri.parse("package:" + activity.packageName))
-                activity.startActivityForResult(intent, REQUEST_CODE_UNKNOWN_APP_SOURCES)
-                return
+                if (!onlyCheck) {
+                    val intent = Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, Uri.parse("package:" + activity.packageName))
+                    activity.startActivityForResult(intent, REQUEST_CODE_UNKNOWN_APP_SOURCES)
+                }
+                return false
             }
         }
         val needRequestPermissonList = findDeniedPermissions(permissions)
-        if (needRequestPermissonList.isNotEmpty()) {
-            ActivityCompat.requestPermissions(activity, needRequestPermissonList.toTypedArray(), PERMISSON_REQUESTCODE)
-        } else {
-            requestResultListener?.onRequestResult(refusedPermissions)
+        return when {
+            onlyCheck -> needRequestPermissonList.isNotEmpty()
+            needRequestPermissonList.isNotEmpty() -> {
+                ActivityCompat.requestPermissions(activity, needRequestPermissonList.toTypedArray(), PERMISSON_REQUESTCODE)
+                false
+            }
+            else -> {
+                requestResultListener?.onRequestResult(refusedPermissions)
+                true
+            }
         }
     }
 
     //获取权限集中需要申请权限的列表
-    private fun findDeniedPermissions(permissions: List<String>): List<String> {
+    private fun findDeniedPermissions(permissions: MutableList<String>): MutableList<String> {
         val needRequestPermissonList = ArrayList<String>()
         permissions.forEach { perm ->
             if (ContextCompat.checkSelfPermission(activity, perm) != PackageManager.PERMISSION_GRANTED || ActivityCompat.shouldShowRequestPermissionRationale(activity, perm)) {
@@ -78,13 +92,13 @@ class PermissionsRequester(private val activity: Activity) {
             if (!Settings.System.canWrite(activity)) {
                 refusedPermissions.add(Manifest.permission.WRITE_SETTINGS)
             }
-            checkPermissions(allPermissions)
+            checkPermissions(allPermissions, false)
         }
         if (requestCode == REQUEST_CODE_UNKNOWN_APP_SOURCES && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             if (!activity.packageManager.canRequestPackageInstalls()) {
                 refusedPermissions.add(Manifest.permission.REQUEST_INSTALL_PACKAGES)
             }
-            checkPermissions(allPermissions)
+            checkPermissions(allPermissions, false)
         }
     }
 

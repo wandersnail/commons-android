@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity() {
         list.add(Manifest.permission.ACCESS_COARSE_LOCATION)
         list.add(Manifest.permission.ACCESS_FINE_LOCATION)
         list.add(Manifest.permission.ACCESS_NETWORK_STATE)
-        requester?.check(list)
+        requester?.checkAndRequest(list)
         requester?.setOnRequestResultListener(object : PermissionsRequester.OnRequestResultListener {
             override fun onRequestResult(refusedPermissions: List<String>) {
                 if (!refusedPermissions.isEmpty()) {
