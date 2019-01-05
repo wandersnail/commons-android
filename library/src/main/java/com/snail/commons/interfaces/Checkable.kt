@@ -6,7 +6,6 @@ package com.snail.commons.interfaces
  * 作者: zengfansheng
  */
 interface Checkable<T> {
-
     val isChecked: Boolean
     fun setChecked(isChecked: Boolean): T
 }
