@@ -27,9 +27,12 @@ object PreferencesUtils {
         getSharedPreferences(null).edit().putString(key, value).commit()
     }
 
-    @JvmOverloads
-    fun getString(key: String, defaultValue: String? = null): String? {
+    fun getString(key: String, defaultValue: String): String {
         return getSharedPreferences(null).getString(key, defaultValue)
+    }
+    
+    fun getString(key: String): String? {
+        return getSharedPreferences(null).getString(key, null)
     }
 
     fun putInt(key: String, value: Int) {
