@@ -2,6 +2,7 @@ package com.snail.commons.utils
 
 import android.content.ContentUris
 import android.content.Context
+import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.os.Environment
 import android.provider.BaseColumns
@@ -633,5 +634,20 @@ object FileUtils {
      */
     private fun isGooglePhotosUri(uri: Uri): Boolean {
         return "com.google.android.apps.photos.content" == uri.authority
+    }
+
+    /**
+     * 根据路径获取MimeType
+     */
+    fun getMimeType(filePath: String): String {
+        val mmr = MediaMetadataRetriever()
+        var mime = "*/*"
+        try {
+            mmr.setDataSource(filePath)
+            mime = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_MIMETYPE)
+        } catch (e: Exception) {
+            return mime
+        }
+        return mime
     }
 }

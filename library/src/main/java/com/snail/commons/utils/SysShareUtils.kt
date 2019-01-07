@@ -13,7 +13,7 @@ import java.util.*
  * 时间: 2018/9/27 23:54
  * 作者: zengfansheng
  */
-object ShareUtils {
+object SysShareUtils {
     private fun startShare(context: Context, intent: Intent, title: String, isFile: Boolean) {
         if (isFile && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
@@ -51,8 +51,10 @@ object ShareUtils {
         } else {
             Uri.fromFile(file)
         }
-        intent.putExtra(Intent.EXTRA_STREAM, uri)
-        startShare(context, intent, title, true)
+        if (uri != null) {
+            intent.putExtra(Intent.EXTRA_STREAM, uri)
+            startShare(context, intent, title, true)
+        }
     }
 
     /**
@@ -71,10 +73,14 @@ object ShareUtils {
             } else {
                 Uri.fromFile(file)
             }
-            imageUris.add(uri!!)
+            if (uri != null) {
+                imageUris.add(uri)
+            }
         }
-        intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, imageUris)
-        startShare(context, intent, title, true)
+        if (imageUris.isNotEmpty()) {
+            intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, imageUris)
+            startShare(context, intent, title, true)
+        }
     }
 
     /**
@@ -91,7 +97,22 @@ object ShareUtils {
         } else {
             Uri.fromFile(file)
         }
-        intent.putExtra(Intent.EXTRA_STREAM, uri)
+        if (uri != null) {
+            intent.putExtra(Intent.EXTRA_STREAM, uri)
+            startShare(context, intent, title, true)
+        }
+    }
+
+    /**
+     * 分享文件
+     * @param context 上下文
+     * @param title 系统分享对话框的标题
+     * @param file 文件
+     */
+    fun shareFile(context: Context, title: String, file: File) {
+        val intent = Intent(Intent.ACTION_SEND)
+        intent.type = FileUtils.getMimeType(file.absolutePath)
+        intent.putExtra(Intent.EXTRA_STREAM, FileProviderUtils.getUriForFile(context, file))
         startShare(context, intent, title, true)
     }
 }

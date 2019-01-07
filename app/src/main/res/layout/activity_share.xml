@@ -145,6 +145,44 @@
                 android:layout_height="40dp"
                 android:text="分享"/>
         </LinearLayout>
+
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_margin="10dp"
+                android:background="@color/fsDivider"/>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="分享文件"
+                android:textColor="#000"
+                android:textSize="20dp"
+                android:textStyle="bold"/>
+
+        <TextView
+                android:id="@+id/tvFilePath"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal">
+
+            <Button
+                    android:id="@+id/btnSelectFile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:text="选择"/>
+
+            <Button
+                    android:id="@+id/btnShareFile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:text="分享"/>
+        </LinearLayout>
     </LinearLayout>
 
 </ScrollView>

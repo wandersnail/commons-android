@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
 import cn.zfs.fileselector.FileSelector
-import com.snail.commons.utils.ShareUtils
+import com.snail.commons.utils.SysShareUtils
 import kotlinx.android.synthetic.main.activity_share.*
 import java.io.File
 
@@ -42,6 +42,12 @@ class ShareActivity : BaseActivity() {
             }
             fileSelector.select(this)
         }
+        btnSelectFile.setOnClickListener { _ ->
+            fileSelector.setOnFileSelectListener {
+                tvFilePath.text = it[0]
+            }
+            fileSelector.select(this)
+        }
         btnSelectVideo.setOnClickListener { _ ->
             fileSelector.setOnFileSelectListener {
                 tvVideoPath.text = it[0]
@@ -51,17 +57,20 @@ class ShareActivity : BaseActivity() {
         btnShareText.setOnClickListener { 
             val text = etText.text.toString().trim()
             if (!text.isEmpty()) {
-                ShareUtils.shareText(this, "分享到", text)
+                SysShareUtils.shareText(this, "分享到", text)
             }
         }
         btnShareImage.setOnClickListener { 
-            ShareUtils.shareImage(this, "分享到", File(tvImagePath.text.toString()))
+            SysShareUtils.shareImage(this, "分享到", File(tvImagePath.text.toString()))
         }
         btnShareImages.setOnClickListener {
-            ShareUtils.shareImages(this, "分享到", imageFiles)
+            SysShareUtils.shareImages(this, "分享到", imageFiles)
         }
         btnShareVideo.setOnClickListener {
-            ShareUtils.shareVideo(this, "分享到", File(tvVideoPath.text.toString()))
+            SysShareUtils.shareVideo(this, "分享到", File(tvVideoPath.text.toString()))
+        }
+        btnShareFile.setOnClickListener { 
+            SysShareUtils.shareFile(this, "分享到", File(tvFilePath.text.toString()))
         }
     }
 
