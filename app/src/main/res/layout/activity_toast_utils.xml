@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <Button
+        android:text="默认"
+        android:id="@+id/btnDefault"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    
+    <Button
+        android:id="@+id/btnGravity"
+        android:text="显示位置及偏移"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/btnMargin"
+        android:text="带Margin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/btnCustomView"
+        android:text="自定义View"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>
