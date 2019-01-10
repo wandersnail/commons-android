@@ -87,16 +87,30 @@ object UiUtils {
     /**
      * 根据手机的分辨率从 dp 的单位 转成为 px(像素)
      */
-    fun dp2px(dpValue: Float): Float {
+    fun dp2pxF(dpValue: Float): Float {
         return dpValue * AppHolder.context.resources.displayMetrics.density + 0.5f
     }
 
     /**
      * 根据手机的分辨率从 px(像素) 的单位 转成为 dp
      */
-    fun px2dp(pxValue: Float): Float {
+    fun px2dpF(pxValue: Float): Float {
         return pxValue / AppHolder.context.resources.displayMetrics.density + 0.5f
     }
+
+    /**
+     * 根据手机的分辨率从 dp 的单位 转成为 px(像素)
+     */
+    fun dp2px(dpValue: Float): Int {
+        return (dpValue * AppHolder.context.resources.displayMetrics.density + 0.5f).toInt()
+    }
+
+    /**
+     * 根据手机的分辨率从 px(像素) 的单位 转成为 dp
+     */
+    fun px2dp(pxValue: Float): Int {
+        return (pxValue / AppHolder.context.resources.displayMetrics.density + 0.5f).toInt()
+    } 
 
     /**
      * Color转换为字符串

@@ -10,7 +10,7 @@ import android.support.v4.view.PagerAdapter
  * 时间: 2018/8/26 22:57
  * 作者: zengfansheng
  */
-open class BaseFragmentPagerAdapter(fm: FragmentManager, private val fragments: List<Fragment>) : FragmentPagerAdapter(fm) {
+open class BaseFragmentPagerAdapter(fm: FragmentManager, private val fragments: MutableList<Fragment>) : FragmentPagerAdapter(fm) {
 
     override fun getItem(position: Int): Fragment {
         return fragments[position]
