@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity() {
         list.add(Manifest.permission.ACCESS_NETWORK_STATE)
         requester?.checkAndRequest(list)
         requester?.setOnRequestResultListener(object : PermissionsRequester.OnRequestResultListener {
-            override fun onRequestResult(refusedPermissions: List<String>) {
+            override fun onRequestResult(refusedPermissions: MutableList<String>) {
                 if (!refusedPermissions.isEmpty()) {
                     ToastUtils.showShort("部分权限被拒绝，可能造成某些功能无法使用")
                 }
