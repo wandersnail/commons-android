@@ -118,7 +118,7 @@ class PermissionsRequester(private val activity: Activity) {
          * 请求结果
          * @param refusedPermissions 被拒绝的权限集合。size==0时，表明申请的权限全部允许了
          */
-        fun onRequestResult(refusedPermissions: List<String>)
+        fun onRequestResult(refusedPermissions: MutableList<String>)
     }
 
     companion object {
