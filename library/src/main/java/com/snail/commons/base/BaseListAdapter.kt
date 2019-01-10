@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import java.util.*
 
-abstract class BaseListAdapter<T> @JvmOverloads constructor(val context: Context, data: MutableList<T> = ArrayList()) : BaseAdapter() {
+abstract class BaseListAdapter<T> @JvmOverloads constructor(val context: Context, list: MutableList<T> = ArrayList()) : BaseAdapter() {
     var data: MutableList<T> = ArrayList()
         set(value) {
             field = value
@@ -14,9 +14,9 @@ abstract class BaseListAdapter<T> @JvmOverloads constructor(val context: Context
         }
 
     init {
-        this.data = data
+        this.data = list
     }
-    
+        
     override fun getCount(): Int {
         return data.size
     }
