@@ -58,5 +58,9 @@
             android:name=".ZipActivity"
             android:configChanges="keyboardHidden|orientation|navigation|screenSize|keyboard"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ToastUtilsActivity"
+            android:configChanges="keyboardHidden|orientation|navigation|screenSize|keyboard"
+            android:screenOrientation="portrait"/>
     </application>
 </manifest>
