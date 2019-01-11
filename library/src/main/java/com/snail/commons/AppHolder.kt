@@ -155,11 +155,11 @@ class AppHolder private constructor() : Application.ActivityLifecycleCallbacks {
         }
 
         /**
-         * finish掉除参数外的所以Activity
+         * finish掉除参数外的所有Activity
          *
          * @param classNames 此Activity的类名，如果是null将finish所有Activity
          */
-        fun finishAllWithout(className: String, vararg classNames: String) {
+        fun finishAllWithout(className: String?, vararg classNames: String) {
             val iterator = Holder.APP_HOLDER.activities.entries.iterator()
             while (iterator.hasNext()) {
                 val entry = iterator.next()
@@ -170,6 +170,13 @@ class AppHolder private constructor() : Application.ActivityLifecycleCallbacks {
                     value.get()!!.finish()
                 }
             }
+        }
+
+        /**
+         * finish掉所有Activity
+         */
+        fun finishAll() {
+            finishAllWithout(null)
         }
 
         /**
