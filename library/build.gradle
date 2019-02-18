@@ -9,7 +9,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        versionName "$lib_version"
+        versionName '1.2.0'
     }
 
     buildTypes {
@@ -25,8 +25,8 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    compileOnly "com.android.support:appcompat-v7:$support_lib_version"
-    compileOnly "com.android.support:exifinterface:$support_lib_version"
+    compileOnly "androidx.appcompat:appcompat:$appcompat_version"
+    compileOnly "androidx.exifinterface:exifinterface:$exifinterface_version"
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
 
@@ -45,7 +45,7 @@ publish {
     userOrg = 'wandersnail' //bintray.com用户名  
     groupId = 'com.github.wandersnail' //jcenter上的路径  
     artifactId = 'commons' //项目名称  
-    publishVersion = "$lib_version" //版本号  
+    publishVersion = '1.2.0' //版本号  
     desc = 'widely used tools'
     website = 'https://github.com/wandersnail'
 }

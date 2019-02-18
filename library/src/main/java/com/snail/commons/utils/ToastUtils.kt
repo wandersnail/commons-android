@@ -1,6 +1,6 @@
 package com.snail.commons.utils
 
-import android.support.annotation.StringRes
+import androidx.annotation.StringRes
 import android.view.View
 import android.widget.Toast
 import com.snail.commons.AppHolder

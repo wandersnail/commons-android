@@ -6,7 +6,7 @@ import android.graphics.drawable.Drawable
 import android.graphics.drawable.StateListDrawable
 import android.os.Build
 import android.os.Bundle
-import android.support.annotation.RequiresApi
+import androidx.annotation.RequiresApi
 import com.snail.commons.utils.ImageUtils
 import com.snail.commons.utils.UiUtils
 import kotlinx.android.synthetic.main.activity_click_ripple.*

@@ -1,18 +1,18 @@
 package com.snail.commons.base
 
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentPagerAdapter
-import android.support.v4.view.PagerAdapter
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
+import androidx.viewpager.widget.PagerAdapter
 
 /**
  * 描述: 基本ViewPager的基类
  * 时间: 2018/8/26 22:57
  * 作者: zengfansheng
  */
-open class BaseFragmentPagerAdapter(fm: FragmentManager, private val fragments: MutableList<out Fragment>) : FragmentPagerAdapter(fm) {
+open class BaseFragmentPagerAdapter(fm: androidx.fragment.app.FragmentManager, private val fragments: MutableList<out androidx.fragment.app.Fragment>) : androidx.fragment.app.FragmentPagerAdapter(fm) {
 
-    override fun getItem(position: Int): Fragment {
+    override fun getItem(position: Int): androidx.fragment.app.Fragment {
         return fragments[position]
     }
 
@@ -21,6 +21,6 @@ open class BaseFragmentPagerAdapter(fm: FragmentManager, private val fragments: 
     }
 
     override fun getItemPosition(any: Any): Int {
-        return PagerAdapter.POSITION_NONE
+        return androidx.viewpager.widget.PagerAdapter.POSITION_NONE
     }
 }

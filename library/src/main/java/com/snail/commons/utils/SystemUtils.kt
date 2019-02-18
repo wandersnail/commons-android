@@ -11,7 +11,7 @@ import android.os.PowerManager
 import android.os.StatFs
 import android.os.storage.StorageManager
 import android.provider.Settings
-import android.support.v4.os.EnvironmentCompat
+import androidx.core.os.EnvironmentCompat
 import com.snail.commons.entity.Storage
 import java.io.*
 import java.lang.reflect.Method

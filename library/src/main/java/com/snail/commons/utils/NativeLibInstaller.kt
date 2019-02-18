@@ -1,7 +1,7 @@
 package com.snail.commons.utils
 
 import android.os.Build
-import android.support.annotation.RequiresApi
+import androidx.annotation.RequiresApi
 import java.io.File
 import java.io.IOException
 

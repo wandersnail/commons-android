@@ -1,6 +1,6 @@
 package com.snail.commons.base
 
-import android.support.v4.view.PagerAdapter
+import androidx.viewpager.widget.PagerAdapter
 import android.view.View
 import android.view.ViewGroup
 
@@ -8,14 +8,14 @@ import android.view.ViewGroup
  * Created by zengfs on 2016/2/21.
  * 基本ViewPager的基类
  */
-class BasePagerAdapter(private val pagers: MutableList<out BasePager>) : PagerAdapter() {
+class BasePagerAdapter(private val pagers: MutableList<out BasePager>) : androidx.viewpager.widget.PagerAdapter() {
 
     override fun getCount(): Int {
         return pagers.size
     }
 
     override fun getItemPosition(any: Any): Int {
-        return PagerAdapter.POSITION_NONE
+        return androidx.viewpager.widget.PagerAdapter.POSITION_NONE
     }
 
     override fun isViewFromObject(view: View, o: Any): Boolean {

@@ -3,7 +3,7 @@ package com.snail.commons.utils
 import android.content.ContentValues
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
-import android.support.annotation.StringDef
+import androidx.annotation.StringDef
 import android.text.TextUtils
 import java.util.*
 

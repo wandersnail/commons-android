@@ -9,7 +9,7 @@ import android.graphics.ColorMatrix
 import android.graphics.ColorMatrixColorFilter
 import android.graphics.Typeface
 import android.os.Looper
-import android.support.annotation.StringDef
+import androidx.annotation.StringDef
 import android.util.DisplayMetrics
 import android.view.View
 import android.view.ViewGroup

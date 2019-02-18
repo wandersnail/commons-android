@@ -11,11 +11,11 @@ import android.renderscript.Allocation
 import android.renderscript.Element
 import android.renderscript.RenderScript
 import android.renderscript.ScriptIntrinsicBlur
-import android.support.annotation.RequiresApi
-import android.support.media.ExifInterface
-import android.support.v4.content.FileProvider
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory
+import androidx.annotation.RequiresApi
+import androidx.exifinterface.media.ExifInterface
+import androidx.core.content.FileProvider
+import androidx.core.graphics.drawable.RoundedBitmapDrawable
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -334,12 +334,12 @@ object ImageUtils {
     fun readPictureDegree(path: String): Int {
         var degree = 0
         try {
-            val exifInterface = ExifInterface(path)
-            val orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
+            val exifInterface = androidx.exifinterface.media.ExifInterface(path)
+            val orientation = exifInterface.getAttributeInt(androidx.exifinterface.media.ExifInterface.TAG_ORIENTATION, androidx.exifinterface.media.ExifInterface.ORIENTATION_NORMAL)
             when (orientation) {
-                ExifInterface.ORIENTATION_ROTATE_90 -> degree = 90
-                ExifInterface.ORIENTATION_ROTATE_180 -> degree = 180
-                ExifInterface.ORIENTATION_ROTATE_270 -> degree = 270
+                androidx.exifinterface.media.ExifInterface.ORIENTATION_ROTATE_90 -> degree = 90
+                androidx.exifinterface.media.ExifInterface.ORIENTATION_ROTATE_180 -> degree = 180
+                androidx.exifinterface.media.ExifInterface.ORIENTATION_ROTATE_270 -> degree = 270
             }
         } catch (e: IOException) {
             e.printStackTrace()
