@@ -37,7 +37,7 @@ object VersionUtils {
             val b = Integer.valueOf(ver2!![index])
             return if (a == b) {
                 if (ver1.size - 1 == index || ver2.size - 1 == index) {
-                    0
+                    if (ver1.size > ver2.size) 1 else if (ver1.size < ver2.size) -1 else 0
                 } else {
                     compare(ver1, ver2, index + 1)
                 }
@@ -55,6 +55,12 @@ object VersionUtils {
      * @return 相等，则返回值0；小于，则返回负数；大于，则返回正数。
      */
     fun compareVersion(ver1: String, ver2: String): Int {
-        return compare(splitVer(ver1), splitVer(ver2), 0)
+        return try {
+            //如果是纯数字，则转换成Long型直接比较
+            ver1.toLong().compareTo(ver2.toLong())
+        } catch (e: Exception) {
+            //转换失败，则进行字符串比较
+            compare(splitVer(ver1), splitVer(ver2), 0)
+        }        
     }
 }
