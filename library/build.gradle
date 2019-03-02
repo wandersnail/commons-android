@@ -28,7 +28,6 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     compileOnly "androidx.appcompat:appcompat:$appcompat_version"
-    compileOnly "androidx.exifinterface:exifinterface:$exifinterface_version"
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
 

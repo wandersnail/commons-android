@@ -5,20 +5,20 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.*
 import android.graphics.drawable.*
+import android.media.ExifInterface
 import android.net.Uri
 import android.os.Build
 import android.renderscript.Allocation
 import android.renderscript.Element
 import android.renderscript.RenderScript
 import android.renderscript.ScriptIntrinsicBlur
-import androidx.annotation.RequiresApi
-import androidx.exifinterface.media.ExifInterface
-import androidx.core.content.FileProvider
-import androidx.core.graphics.drawable.RoundedBitmapDrawable
-import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.annotation.RequiresApi
+import androidx.core.content.FileProvider
+import androidx.core.graphics.drawable.RoundedBitmapDrawable
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -334,12 +334,12 @@ object ImageUtils {
     fun readPictureDegree(path: String): Int {
         var degree = 0
         try {
-            val exifInterface = androidx.exifinterface.media.ExifInterface(path)
-            val orientation = exifInterface.getAttributeInt(androidx.exifinterface.media.ExifInterface.TAG_ORIENTATION, androidx.exifinterface.media.ExifInterface.ORIENTATION_NORMAL)
+            val exifInterface = ExifInterface(path)
+            val orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
             when (orientation) {
-                androidx.exifinterface.media.ExifInterface.ORIENTATION_ROTATE_90 -> degree = 90
-                androidx.exifinterface.media.ExifInterface.ORIENTATION_ROTATE_180 -> degree = 180
-                androidx.exifinterface.media.ExifInterface.ORIENTATION_ROTATE_270 -> degree = 270
+                ExifInterface.ORIENTATION_ROTATE_90 -> degree = 90
+                ExifInterface.ORIENTATION_ROTATE_180 -> degree = 180
+                ExifInterface.ORIENTATION_ROTATE_270 -> degree = 270
             }
         } catch (e: IOException) {
             e.printStackTrace()
