@@ -3,9 +3,9 @@ package cn.zfs.commonsdemo
 import android.Manifest
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import android.view.View
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import com.snail.commons.base.BaseHolder
 import com.snail.commons.base.BaseListAdapter
 import com.snail.commons.entity.PermissionsRequester
@@ -20,9 +20,10 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val data = arrayListOf("储存信息获取", "md5和sha1算法", "系统分享", "网络及位置服务状态", "解压缩", "点击波纹", "Toast")
+        val data = arrayListOf("储存信息获取", "md5和sha1算法", "系统分享", "网络及位置服务状态", "解压缩", "点击波纹", "Toast", "系统文件管理器")
         val clsArr = arrayListOf(StorageActivity::class.java, MD5Activity::class.java, ShareActivity::class.java,
-            NetStateActivity::class.java, ZipActivity::class.java, ClickRippleActivity::class.java, ToastUtilsActivity::class.java)
+            NetStateActivity::class.java, ZipActivity::class.java, ClickRippleActivity::class.java, ToastUtilsActivity::class.java,
+            SysFilesActivity::class.java)
         lv.adapter = object : BaseListAdapter<String>(this, data) {
             override fun getHolder(position: Int): BaseHolder<String> {
                 return object : BaseHolder<String>() {
