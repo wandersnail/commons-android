@@ -7,7 +7,7 @@ import android.os.Environment
 import cn.zfs.fileselector.FileSelector
 import com.snail.commons.annotation.RunThread
 import com.snail.commons.annotation.ThreadType
-import com.snail.commons.entity.ZipHelper
+import com.snail.commons.helper.ZipHelper
 import com.snail.commons.interfaces.Callback
 import com.snail.commons.utils.ToastUtils
 import kotlinx.android.synthetic.main.activity_zip.*

@@ -1,4 +1,4 @@
-package com.snail.commons.entity
+package com.snail.commons.helper
 
 import android.text.TextUtils
 import com.snail.commons.AppHolder
@@ -195,7 +195,8 @@ object ZipHelper {
         fun execute(callback: Callback<File>?) {
             Thread(Runnable { 
                 val file = execute()
-                handleCallback(callback, file?.javaClass, file) }
+                handleCallback(callback, file?.javaClass, file)
+            }
             ).start()
         }
 

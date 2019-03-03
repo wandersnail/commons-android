@@ -4,7 +4,7 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
-import com.snail.commons.entity.WifiHelper
+import com.snail.commons.helper.WifiHelper
 import java.net.NetworkInterface
 import java.util.*
 

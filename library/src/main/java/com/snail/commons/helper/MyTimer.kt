@@ -1,4 +1,4 @@
-package com.snail.commons.entity
+package com.snail.commons.helper
 
 import android.os.Handler
 import android.os.Looper

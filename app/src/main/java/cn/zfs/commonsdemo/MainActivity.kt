@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.snail.commons.base.BaseHolder
 import com.snail.commons.base.BaseListAdapter
-import com.snail.commons.entity.PermissionsRequester
+import com.snail.commons.helper.PermissionsRequester
 import com.snail.commons.utils.Logger
 import com.snail.commons.utils.ToastUtils
 import kotlinx.android.synthetic.main.activity_main.*

@@ -1,9 +1,7 @@
-package com.snail.commons.entity
+package com.snail.commons.utils
 
 import android.content.Context
 import android.os.Environment
-
-import com.snail.commons.utils.FileUtils
 
 import java.io.File
 

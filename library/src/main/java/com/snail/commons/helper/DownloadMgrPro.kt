@@ -1,10 +1,10 @@
-package com.snail.commons.entity
+package com.snail.commons.helper
 
 import android.app.DownloadManager
 import android.app.DownloadManager.Request
 import android.database.Cursor
 import android.net.Uri
-import com.snail.commons.entity.DownloadMgrPro.RequestPro
+import com.snail.commons.helper.DownloadMgrPro.RequestPro
 import java.lang.reflect.Method
 
 /**

@@ -3,7 +3,7 @@ package cn.zfs.commonsdemo
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
-import com.snail.commons.entity.WifiHelper
+import com.snail.commons.helper.WifiHelper
 import com.snail.commons.utils.NetworkUtils
 import com.snail.commons.utils.SystemUtils
 import kotlinx.android.synthetic.main.activity_net_state.*

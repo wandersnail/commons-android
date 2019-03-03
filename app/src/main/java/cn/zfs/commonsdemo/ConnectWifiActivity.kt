@@ -15,7 +15,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.snail.commons.base.BaseHolder
 import com.snail.commons.base.BaseListAdapter
-import com.snail.commons.entity.WifiHelper
+import com.snail.commons.helper.WifiHelper
 import com.snail.commons.utils.ToastUtils
 import com.snail.commons.utils.UiUtils
 import kotlinx.android.synthetic.main.activity_connect_wifi.*
