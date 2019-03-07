@@ -17,6 +17,12 @@ abstract class BaseListAdapter<T> @JvmOverloads constructor(val context: Context
         this.data = list
     }
         
+    fun refresh(list: List<T>) {
+        data.clear()
+        data.addAll(list)
+        notifyDataSetChanged()
+    }
+    
     override fun getCount(): Int {
         return data.size
     }
