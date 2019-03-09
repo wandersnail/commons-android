@@ -40,7 +40,7 @@ class SysFilesActivity : BaseActivity() {
             tvPaths.append("$it\n")
         }
         if (requestCode == 200 && resultCode == Activity.RESULT_OK) {
-//            val clipData = data!!.clipData
+//            val clipData = items!!.clipData
 //            Log.e("onActivityResult", "$clipData")
 //            if (clipData != null) {
 //                val count = clipData.itemCount
@@ -48,12 +48,12 @@ class SysFilesActivity : BaseActivity() {
 //                    val item = clipData.getItemAt(i)
 //                    Log.e("onActivityResult", FileUtils.getFileRealPath(this, item.uri))
 //                }
-//            } else if (data.data != null) {
-//                Log.e("onActivityResult", FileUtils.getFileRealPath(this, data.data!!))
+//            } else if (items.items != null) {
+//                Log.e("onActivityResult", FileUtils.getFileRealPath(this, items.items!!))
 //            }
-//            tvPaths.text = "uri = ${data!!.data}\n"
-//            tvPaths.append("真实 = ${FileUtils.getFileRealPath(this, data.data!!)}\n")
-//            tvPaths.append("文件是否存在 = ${File(FileUtils.getFileRealPath(this, data.data!!)).exists()}\n")
+//            tvPaths.text = "uri = ${items!!.items}\n"
+//            tvPaths.append("真实 = ${FileUtils.getFileRealPath(this, items.items!!)}\n")
+//            tvPaths.append("文件是否存在 = ${File(FileUtils.getFileRealPath(this, items.items!!)).exists()}\n")
         }
     }
 }

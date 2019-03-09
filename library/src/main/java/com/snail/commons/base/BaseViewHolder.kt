@@ -6,18 +6,13 @@ import android.view.View
  * 主要用于ListView的item布局创建及数据设置
  */
 @Suppress("LeakingThis")
-abstract class BaseHolder<T> {
-    val convertView: View
-
-    init {
-        convertView = createConvertView()
-        convertView.tag = this
-    }
+abstract class BaseViewHolder<T> {
+    val convertView = createConvertView()
 
     /**
-     * 设置数据
+     * 和Adapter绑定了，可在此设置View的数据，更新View
      */
-    abstract fun setData(data: T, position: Int)
+    abstract fun onBind(item: T, position: Int)
 
     /**
      * 创建界面

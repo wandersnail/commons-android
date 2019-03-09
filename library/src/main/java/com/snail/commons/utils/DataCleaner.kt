@@ -11,21 +11,21 @@ import java.io.File
  */
 object DataCleaner {
     /**
-     * 清除本应用内部缓存(/data/data/com.xxx.xxx/cache)
+     * 清除本应用内部缓存(/items/items/com.xxx.xxx/cache)
      */
     fun cleanInternalCache(context: Context) {
         FileUtils.deleteDir(context.cacheDir, false)
     }
 
     /**
-     * 清除本应用所有数据库(/data/data/com.xxx.xxx/databases)
+     * 清除本应用所有数据库(/items/items/com.xxx.xxx/databases)
      */
     fun cleanDatabases(context: Context) {
         FileUtils.deleteDir(File(context.filesDir.parent, "databases"), false)
     }
 
     /**
-     * 清除本应用SharedPreference(/data/data/com.xxx.xxx/shared_prefs)
+     * 清除本应用SharedPreference(/items/items/com.xxx.xxx/shared_prefs)
      */
     fun cleanSharedPreference(context: Context) {
         FileUtils.deleteDir(File(context.filesDir.parent, "shared_prefs"), false)
@@ -39,14 +39,14 @@ object DataCleaner {
     }
 
     /**
-     * 清除/data/data/com.xxx.xxx/files下的内容
+     * 清除/items/items/com.xxx.xxx/files下的内容
      */
     fun cleanFiles(context: Context) {
         FileUtils.deleteDir(context.filesDir, false)
     }
 
     /**
-     * 清除外部cache下的内容(/mnt/sdcard/android/data/com.xxx.xxx/cache)
+     * 清除外部cache下的内容(/mnt/sdcard/android/items/com.xxx.xxx/cache)
      */
     fun cleanExternalCache(context: Context) {
         if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) {

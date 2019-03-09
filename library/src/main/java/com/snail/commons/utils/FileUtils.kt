@@ -229,8 +229,9 @@ object FileUtils {
                 }
             }
         }
-        if (includeSelf)
+        if (includeSelf) {
             dir.delete()
+        }
     }
 
 
@@ -584,12 +585,12 @@ object FileUtils {
     }
 
     /**
-     * Gets data column.
+     * Gets items column.
      *
      * @param uri           the uri
      * @param selection     the selection
      * @param selectionArgs the selection args
-     * @return the data column
+     * @return the items column
      */
     private fun getDataColumn(context: Context, uri: Uri?, selection: String?, selectionArgs: Array<String>?): String? {
         val projection = arrayOf(MediaStore.MediaColumns.DATA)

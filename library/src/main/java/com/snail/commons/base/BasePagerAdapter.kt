@@ -1,6 +1,5 @@
 package com.snail.commons.base
 
-import androidx.viewpager.widget.PagerAdapter
 import android.view.View
 import android.view.ViewGroup
 

@@ -26,7 +26,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "androidx.appcompat:appcompat:$appcompat_version"
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'com.github.fszeng2011:fileselector:1.1.12'
-    implementation 'com.github.fszeng2011:widgets:1.0.1'
+    implementation 'com.github.wandersnail:fileselector:1.1.5'
+    implementation 'com.github.wandersnail:widgets:1.1.0'
     implementation project(':library')
 }

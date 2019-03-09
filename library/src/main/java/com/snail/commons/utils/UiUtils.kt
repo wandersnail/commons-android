@@ -9,12 +9,12 @@ import android.graphics.ColorMatrix
 import android.graphics.ColorMatrixColorFilter
 import android.graphics.Typeface
 import android.os.Looper
-import androidx.annotation.StringDef
 import android.util.DisplayMetrics
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.StringDef
 import com.snail.commons.AppHolder
 
 /**

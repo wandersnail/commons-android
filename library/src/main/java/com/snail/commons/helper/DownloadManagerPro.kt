@@ -4,7 +4,7 @@ import android.app.DownloadManager
 import android.app.DownloadManager.Request
 import android.database.Cursor
 import android.net.Uri
-import com.snail.commons.helper.DownloadMgrPro.RequestPro
+import com.snail.commons.helper.DownloadManagerPro.RequestPro
 import java.lang.reflect.Method
 
 /**
@@ -30,7 +30,7 @@ import java.lang.reflect.Method
  *  * [RequestPro.setNotiClass] set noti class
  *  * [RequestPro.setNotiExtras] set noti extras
  */
-class DownloadMgrPro(private val downloadManager: DownloadManager) {
+class DownloadManagerPro(private val downloadManager: DownloadManager) {
 
     /**
      * get download status

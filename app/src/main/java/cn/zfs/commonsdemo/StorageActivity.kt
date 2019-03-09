@@ -4,7 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
-import com.snail.commons.base.BaseHolder
+import com.snail.commons.base.BaseViewHolder
 import com.snail.commons.base.BaseListAdapter
 import com.snail.commons.entity.Storage
 import com.snail.commons.utils.FileUtils
@@ -29,8 +29,8 @@ class StorageActivity : BaseActivity() {
     }
 
     private inner class ListAdapter(context: Context, data: MutableList<Storage>) : BaseListAdapter<Storage>(context, data) {
-        override fun getHolder(position: Int): BaseHolder<Storage> {
-            return object : BaseHolder<Storage>() {
+        override fun createViewHolder(position: Int): BaseViewHolder<Storage> {
+            return object : BaseViewHolder<Storage>() {
                 private var tvPath: TextView? = null
                 private var tvAvailaleSize: TextView? = null
                 private var tvTotalSize: TextView? = null
@@ -55,16 +55,16 @@ class StorageActivity : BaseActivity() {
                     return view
                 }
 
-                override fun setData(data: Storage, position: Int) {
-                    tvPath!!.text = data.path
-                    tvDesc!!.text = data.description
-                    tvAvailaleSize!!.text = FileUtils.formatFileSize(data.availaleSize)
-                    tvTotalSize!!.text = FileUtils.formatFileSize(data.totalSize)
-                    tvRemovable!!.text = data.isRemovable.toString()
-                    tvPrimary!!.text = data.isPrimary.toString()
-                    tvAllowMassStorage!!.text = data.isAllowMassStorage.toString()
-                    tvUsb!!.text = data.isUsb.toString()
-                    tvState!!.text = data.state
+                override fun onBind(item: Storage, position: Int) {
+                    tvPath!!.text = item.path
+                    tvDesc!!.text = item.description
+                    tvAvailaleSize!!.text = FileUtils.formatFileSize(item.availaleSize)
+                    tvTotalSize!!.text = FileUtils.formatFileSize(item.totalSize)
+                    tvRemovable!!.text = item.isRemovable.toString()
+                    tvPrimary!!.text = item.isPrimary.toString()
+                    tvAllowMassStorage!!.text = item.isAllowMassStorage.toString()
+                    tvUsb!!.text = item.isUsb.toString()
+                    tvState!!.text = item.state
                 }
             }
         }

@@ -404,7 +404,7 @@ object ImageUtils {
         intent.putExtra("outputX", outX) //图片输出大小
         intent.putExtra("outputY", outY)
         intent.putExtra("output", Uri.fromFile(outFile))
-        intent.putExtra("return-data", false) //若为false则表示不返回数据
+        intent.putExtra("return-items", false) //若为false则表示不返回数据
         intent.putExtra("noFaceDetection", true)
         intent.putExtra("outputFormat", outFormat.toString()) // 返回格式
         return intent

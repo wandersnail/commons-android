@@ -13,7 +13,7 @@ import android.widget.AbsListView
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
-import com.snail.commons.base.BaseHolder
+import com.snail.commons.base.BaseViewHolder
 import com.snail.commons.base.BaseListAdapter
 import com.snail.commons.helper.WifiHelper
 import com.snail.commons.utils.ToastUtils
@@ -85,12 +85,12 @@ class ConnectWifiActivity : BaseActivity() {
 
     private inner class ListAdapter(context: Context, data: MutableList<ScanResult>) :
         BaseListAdapter<ScanResult>(context, data) {
-        override fun getHolder(position: Int): BaseHolder<ScanResult> {
-            return object : BaseHolder<ScanResult>() {
+        override fun createViewHolder(position: Int): BaseViewHolder<ScanResult> {
+            return object : BaseViewHolder<ScanResult>() {
                 private var tv: TextView? = null
 
-                override fun setData(data: ScanResult, position: Int) {
-                    tv!!.text = data.SSID
+                override fun onBind(item: ScanResult, position: Int) {
+                    tv!!.text = item.SSID
                 }
 
                 override fun createConvertView(): View {

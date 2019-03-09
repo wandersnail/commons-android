@@ -3,9 +3,10 @@ package cn.zfs.commonsdemo
 import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
-import cn.zfs.fileselector.FileSelector
 import com.snail.commons.utils.EncryptUtils
 import com.snail.commons.utils.SignUtils
+import com.snail.fileselector.FileSelector
+import com.snail.fileselector.OnFileSelectListener
 import kotlinx.android.synthetic.main.activity_md5.*
 
 /**
@@ -21,22 +22,21 @@ class MD5Activity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_md5)
         fileSelector.setRoot(Environment.getExternalStorageDirectory())
-        fileSelector.setSelectFile(true)
-        fileSelector.setFilenameFilter { _, name ->
-            !name.startsWith(".")
-        }
-        fileSelector.setOnFileSelectListener {            
-            if (selectType == 0) {
-                val md5 = EncryptUtils.getFileMD5Code(it[0])
-                val sha1 = EncryptUtils.getFileSHA1Code(it[0])
-                val separator = etSeparator.text.toString()
-                tvMd5.text = if (separator.isEmpty()) md5 else EncryptUtils.addSeparator(md5 ?: "", separator)
-                tvSha1.text = if (separator.isEmpty()) sha1 else EncryptUtils.addSeparator(sha1 ?: "", separator)
-            } else if (selectType == 1) {
-                val signInfo = SignUtils.getSignatureFromApk(this, it[0])
-                tvSignInfo.text = "hashCode: ${signInfo?.hashCode}\nmd5: ${signInfo?.md5}\nsha1: ${signInfo?.addSeparator(signInfo!!.sha1 ?: "", ":")}"
+        fileSelector.setSelectionMode(FileSelector.FILES_ONLY)
+        fileSelector.setOnFileSelectListener(object : OnFileSelectListener {
+            override fun onFileSelect(paths: List<String>) {
+                if (selectType == 0) {
+                    val md5 = EncryptUtils.getFileMD5Code(paths[0])
+                    val sha1 = EncryptUtils.getFileSHA1Code(paths[0])
+                    val separator = etSeparator.text.toString()
+                    tvMd5.text = if (separator.isEmpty()) md5 else EncryptUtils.addSeparator(md5 ?: "", separator)
+                    tvSha1.text = if (separator.isEmpty()) sha1 else EncryptUtils.addSeparator(sha1 ?: "", separator)
+                } else if (selectType == 1) {
+                    val signInfo = SignUtils.getSignatureFromApk(this@MD5Activity, paths[0])
+                    tvSignInfo.text = "hashCode: ${signInfo?.hashCode}\nmd5: ${signInfo?.md5}\nsha1: ${signInfo?.addSeparator(signInfo!!.sha1 ?: "", ":")}"
+                }
             }
-        }
+        })
         btnCalcFile.setOnClickListener {
             selectType = 0
             fileSelector.select(this)

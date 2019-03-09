@@ -5,46 +5,51 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import java.util.*
+import kotlin.collections.HashMap
 
 abstract class BaseListAdapter<T> @JvmOverloads constructor(val context: Context, list: MutableList<T> = ArrayList()) : BaseAdapter() {
-    var data: MutableList<T> = ArrayList()
+    private val holders = HashMap<View, BaseViewHolder<T>>()
+    
+    var items: MutableList<T> = list
         set(value) {
             field = value
             notifyDataSetChanged()
         }
-
-    init {
-        this.data = list
-    }
         
     fun refresh(list: List<T>) {
-        data.clear()
-        data.addAll(list)
+        items.clear()
+        items.addAll(list)
         notifyDataSetChanged()
+    }
+
+    override fun notifyDataSetChanged() {
+        holders.clear()
+        super.notifyDataSetChanged()
     }
     
     override fun getCount(): Int {
-        return data.size
+        return items.size
     }
 
     override fun getItem(position: Int): T {
-        return data[position]
+        return items[position]
     }
 
     override fun getItemId(position: Int): Long {
         return position.toLong()
     }
 
-    @Suppress("unchecked_cast")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val holder: BaseHolder<T> = if (convertView == null) {
-            getHolder(position)
+        val viewHolder: BaseViewHolder<T> = if (convertView == null) {
+            val h = createViewHolder(position)
+            holders[h.convertView] = h
+            h
         } else {
-            convertView.tag as BaseHolder<T>
+            holders[convertView]!!
         }
-        holder.setData(data[position], position)
-        return holder.convertView
+        viewHolder.onBind(items[position], position)
+        return viewHolder.convertView
     }
 
-    protected abstract fun getHolder(position: Int): BaseHolder<T>
+    protected abstract fun createViewHolder(position: Int): BaseViewHolder<T>
 }

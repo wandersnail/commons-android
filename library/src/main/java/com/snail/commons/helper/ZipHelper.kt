@@ -8,7 +8,6 @@ import com.snail.commons.interfaces.Callback
 import com.snail.commons.utils.FileUtils
 import com.snail.commons.utils.IOUtils
 import java.io.*
-import java.lang.reflect.Method
 import java.util.*
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
@@ -29,16 +28,17 @@ object ZipHelper {
         return UnzipExecutor()
     }
 
-    private fun <T> handleCallback(callback: Callback<T>?, cls: Class<T>?, obj: T?) {
+    private fun <T> handleCallback(callback: Callback<T>?, obj: T?) {
         if (callback != null) {
             try {
-                val method: Method = if (obj == null) {
-                    callback.javaClass.getMethod("onCallback", Any::class.java)
-                } else {
-                    callback.javaClass.getMethod("onCallback", cls)
+                var needMain = false
+                callback.javaClass.methods.forEach {
+                    val annotation = it.getAnnotation(RunThread::class.java)
+                    if (annotation != null && annotation.value === ThreadType.MAIN) {
+                        needMain = true
+                    }                    
                 }
-                val annotation = method.getAnnotation(RunThread::class.java)
-                if (annotation != null && annotation.value === ThreadType.MAIN) {
+                if (needMain) {
                     AppHolder.postToMainThread(Runnable { callback.onCallback(obj) })
                 } else {
                     callback.onCallback(obj)
@@ -195,7 +195,7 @@ object ZipHelper {
         fun execute(callback: Callback<File>?) {
             Thread(Runnable { 
                 val file = execute()
-                handleCallback(callback, file?.javaClass, file)
+                handleCallback(callback, file)
             }
             ).start()
         }
@@ -322,7 +322,7 @@ object ZipHelper {
         fun execute(callback: Callback<Boolean>?) {
             Thread(Runnable { 
                 val result = execute()
-                handleCallback(callback, result.javaClass, result) 
+                handleCallback(callback, result) 
             }).start()
         }
     }

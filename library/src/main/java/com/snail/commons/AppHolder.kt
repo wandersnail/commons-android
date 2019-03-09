@@ -51,7 +51,7 @@ class AppHolder private constructor() : Application.ActivityLifecycleCallbacks {
     }
 
     private object Holder {
-        internal val APP_HOLDER = AppHolder()
+        internal val appHolder = AppHolder()
     }
 
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
@@ -93,25 +93,25 @@ class AppHolder private constructor() : Application.ActivityLifecycleCallbacks {
     companion object {
 
         fun init(app: Application) {
-            synchronized(Holder.APP_HOLDER) {
-                if (Holder.APP_HOLDER.app != null) {
-                    Holder.APP_HOLDER.app!!.unregisterActivityLifecycleCallbacks(Holder.APP_HOLDER)
+            synchronized(Holder.appHolder) {
+                if (Holder.appHolder.app != null) {
+                    Holder.appHolder.app!!.unregisterActivityLifecycleCallbacks(Holder.appHolder)
                 }
-                Holder.APP_HOLDER.app = app
-                app.registerActivityLifecycleCallbacks(Holder.APP_HOLDER)
+                Holder.appHolder.app = app
+                app.registerActivityLifecycleCallbacks(Holder.appHolder)
             }
         }
 
         val context: Context
-            get() = if (Holder.APP_HOLDER.app == null) {
-                Holder.APP_HOLDER.tryGetApplication() ?: throw RuntimeException("The AppHolder has not been initialized, make sure to call AppHolder.init(app) first.")
-            } else Holder.APP_HOLDER.app!!
+            get() = if (Holder.appHolder.app == null) {
+                Holder.appHolder.tryGetApplication() ?: throw RuntimeException("The AppHolder has not been initialized, make sure to call AppHolder.init(app) first.")
+            } else Holder.appHolder.app!!
 
         fun postToMainThread(runnable: Runnable) {
             if (Looper.myLooper() == Looper.getMainLooper()) { //判断是否在主线程
                 runnable.run()
             } else {
-                Holder.APP_HOLDER.mainHandler.post { runnable.run() }
+                Holder.appHolder.mainHandler.post { runnable.run() }
             }
         }
 
@@ -142,7 +142,7 @@ class AppHolder private constructor() : Application.ActivityLifecycleCallbacks {
          */
         @JvmStatic
         fun finish(className: String, vararg classNames: String) {
-            val iterator = Holder.APP_HOLDER.activities.entries.iterator()
+            val iterator = Holder.appHolder.activities.entries.iterator()
             while (iterator.hasNext()) {
                 val entry = iterator.next()
                 val value = entry.value
@@ -160,7 +160,7 @@ class AppHolder private constructor() : Application.ActivityLifecycleCallbacks {
          * @param classNames 此Activity的类名，如果是null将finish所有Activity
          */
         fun finishAllWithout(className: String?, vararg classNames: String) {
-            val iterator = Holder.APP_HOLDER.activities.entries.iterator()
+            val iterator = Holder.appHolder.activities.entries.iterator()
             while (iterator.hasNext()) {
                 val entry = iterator.next()
                 val value = entry.value
@@ -185,7 +185,7 @@ class AppHolder private constructor() : Application.ActivityLifecycleCallbacks {
          * @param className 完成类名
          */
         fun backTo(className: String) {
-            val list = ArrayList(Holder.APP_HOLDER.activities.values)
+            val list = ArrayList(Holder.appHolder.activities.values)
             val index = list.size - 1
             for (i in index downTo 0) {
                 val ref = list[i]
@@ -197,17 +197,17 @@ class AppHolder private constructor() : Application.ActivityLifecycleCallbacks {
         }
 
         fun getActivity(className: String): Activity? {
-            val reference = Holder.APP_HOLDER.activities[className]
+            val reference = Holder.appHolder.activities[className]
             return reference?.get()
         }
 
         val isAllActivitiesFinished: Boolean
-            get() = Holder.APP_HOLDER.activities.isEmpty()
+            get() = Holder.appHolder.activities.isEmpty()
 
         val allActivities: List<Activity>
             get() {
                 val list = ArrayList<Activity>()
-                for (reference in Holder.APP_HOLDER.activities.values) {
+                for (reference in Holder.appHolder.activities.values) {
                     if (reference.get() != null) {
                         list.add(reference.get()!!)
                     }
@@ -219,8 +219,8 @@ class AppHolder private constructor() : Application.ActivityLifecycleCallbacks {
          * 完全退出，杀死进程
          */
         fun completeExit() {
-            Holder.APP_HOLDER.isCompleteExit = true
-            val iterator = Holder.APP_HOLDER.activities.entries.iterator()
+            Holder.appHolder.isCompleteExit = true
+            val iterator = Holder.appHolder.activities.entries.iterator()
             while (iterator.hasNext()) {
                 val entry = iterator.next()
                 val value = entry.value

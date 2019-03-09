@@ -35,7 +35,7 @@ class CheckableParcelable<T : Parcelable> : CheckableItem<T>, Parcelable {
     }
 
     companion object {
-        private const val KEY_DATA = "data"
+        private const val KEY_DATA = "items"
 
         @JvmField
         val CREATOR: Parcelable.Creator<CheckableParcelable<*>> = object : Parcelable.Creator<CheckableParcelable<*>> {
