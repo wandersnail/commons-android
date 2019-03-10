@@ -6,11 +6,11 @@ import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.snail.commons.base.BaseListAdapter
-import com.snail.commons.base.BaseViewHolder
 import com.snail.commons.helper.PermissionsRequester
 import com.snail.commons.utils.Logger
 import com.snail.commons.utils.ToastUtils
+import com.snail.widget.listview.BaseListAdapter
+import com.snail.widget.listview.BaseViewHolder
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 

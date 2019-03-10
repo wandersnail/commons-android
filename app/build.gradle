@@ -27,6 +27,6 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$appcompat_version"
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'com.github.wandersnail:fileselector:1.1.5'
-    implementation 'com.github.wandersnail:widgets:1.1.0'
+    implementation 'com.github.wandersnail:widgets:1.1.2'
     implementation project(':library')
 }

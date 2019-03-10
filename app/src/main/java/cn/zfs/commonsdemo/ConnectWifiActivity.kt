@@ -13,11 +13,11 @@ import android.widget.AbsListView
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
-import com.snail.commons.base.BaseViewHolder
-import com.snail.commons.base.BaseListAdapter
 import com.snail.commons.helper.WifiHelper
 import com.snail.commons.utils.ToastUtils
 import com.snail.commons.utils.UiUtils
+import com.snail.widget.listview.BaseListAdapter
+import com.snail.widget.listview.BaseViewHolder
 import kotlinx.android.synthetic.main.activity_connect_wifi.*
 
 /**
