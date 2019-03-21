@@ -18,7 +18,7 @@ object Logger {
     private var filter: Filter? = null
 
     interface Filter {
-        fun accept(log: String): Boolean
+        fun accept(tag: String, log: String): Boolean
     }
 
     /**
@@ -39,9 +39,9 @@ object Logger {
         Logger.isSaveEnabled = isSaveEnabled
     }
 
-    private fun accept(priority: Int, msg: String): Boolean {
+    private fun accept(priority: Int, tag: String, msg: String): Boolean {
         val level = getLevel(priority)
-        return printLevel and NONE != NONE && printLevel and level == level && (filter == null || filter!!.accept(msg))
+        return printLevel and NONE != NONE && printLevel and level == level && (filter == null || filter!!.accept(tag, msg))
     }
 
     private fun getLevel(priority: Int): Int {
@@ -56,61 +56,61 @@ object Logger {
     }
 
     fun v(tag: String, msg: String) {
-        if (accept(Log.VERBOSE, msg)) {
+        if (accept(Log.VERBOSE, tag, msg)) {
             Log.v(tag, msg)
         }
     }
 
     fun v(tag: String, msg: String, t: Throwable) {
-        if (accept(Log.VERBOSE, msg)) {
+        if (accept(Log.VERBOSE, tag, msg)) {
             Log.v(tag, msg, t)
         }
     }
 
     fun d(tag: String, msg: String) {
-        if (accept(Log.DEBUG, msg)) {
+        if (accept(Log.DEBUG, tag, msg)) {
             Log.d(tag, msg)
         }
     }
 
     fun d(tag: String, msg: String, t: Throwable) {
-        if (accept(Log.DEBUG, msg)) {
+        if (accept(Log.DEBUG, tag, msg)) {
             Log.d(tag, msg, t)
         }
     }
 
     fun i(tag: String, msg: String) {
-        if (accept(Log.INFO, msg)) {
+        if (accept(Log.INFO, tag, msg)) {
             Log.i(tag, msg)
         }
     }
 
     fun i(tag: String, msg: String, t: Throwable) {
-        if (accept(Log.INFO, msg)) {
+        if (accept(Log.INFO, tag, msg)) {
             Log.i(tag, msg, t)
         }
     }
 
     fun w(tag: String, msg: String) {
-        if (accept(Log.WARN, msg)) {
+        if (accept(Log.WARN, tag, msg)) {
             Log.w(tag, msg)
         }
     }
 
     fun w(tag: String, msg: String, t: Throwable) {
-        if (accept(Log.WARN, msg)) {
+        if (accept(Log.WARN, tag, msg)) {
             Log.w(tag, msg, t)
         }
     }
 
     fun e(tag: String, msg: String) {
-        if (accept(Log.ERROR, msg)) {
+        if (accept(Log.ERROR, tag, msg)) {
             Log.e(tag, msg)
         }
     }
 
     fun e(tag: String, msg: String, t: Throwable) {
-        if (accept(Log.ERROR, msg)) {
+        if (accept(Log.ERROR, tag, msg)) {
             Log.e(tag, msg, t)
         }
     }
