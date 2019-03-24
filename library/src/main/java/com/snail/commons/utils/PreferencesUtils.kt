@@ -9,6 +9,7 @@ import com.snail.commons.AppHolder
 /**
  * Created by zengfs on 2015/10/30.
  */
+@Deprecated(message = "建议使用MMKV，详情：https://github.com/Tencent/MMKV")
 object PreferencesUtils {
 
     private fun getSharedPreferences(name: String?): SharedPreferences {
