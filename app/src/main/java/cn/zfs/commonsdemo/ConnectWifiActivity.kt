@@ -93,7 +93,7 @@ class ConnectWifiActivity : BaseActivity() {
                     tv!!.text = item.SSID
                 }
 
-                override fun createConvertView(): View {
+                override fun createView(): View {
                     val view = LinearLayout(context)
                     view.layoutParams = AbsListView.LayoutParams(-1, UiUtils.dp2px(50f).toInt())
                     view.gravity = Gravity.CENTER_VERTICAL

@@ -41,7 +41,7 @@ class StorageActivity : BaseActivity() {
                 private var tvDesc: TextView? = null
                 private var tvState: TextView? = null
 
-                override fun createConvertView(): View {
+                override fun createView(): View {
                     val view = View.inflate(context, R.layout.item_storage, null)
                     tvPath = view.findViewById(R.id.tvPath)
                     tvAvailaleSize = view.findViewById(R.id.tvAvailaleSize)
