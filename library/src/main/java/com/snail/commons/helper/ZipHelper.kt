@@ -20,10 +20,12 @@ import java.util.zip.ZipOutputStream
  */
 object ZipHelper {
 
+    @JvmStatic
     fun zip(): ZipExecutor {
         return ZipExecutor()
     }
 
+    @JvmStatic
     fun unzip(): UnzipExecutor {
         return UnzipExecutor()
     }

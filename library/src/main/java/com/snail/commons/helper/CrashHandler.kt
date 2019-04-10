@@ -153,6 +153,7 @@ class CrashHandler private constructor() : UncaughtExceptionHandler {
 
     companion object {
 
+        @JvmStatic
         val instance: CrashHandler
             get() = Holder.HANDLER
     }

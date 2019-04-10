@@ -34,6 +34,7 @@ object NativeLibInstaller {
      */
     @Synchronized
     @Throws(Throwable::class)
+    @JvmStatic
     fun installLibrary(classLoader: ClassLoader, folder: File?) {
         if (folder == null || !folder.exists()) {
             return

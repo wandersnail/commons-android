@@ -12,6 +12,7 @@ object MathUtils {
      * @param num   数字
      * @param scale 取几位小数
      */
+    @JvmStatic 
     fun setDoubleAccuracy(num: Double, scale: Int): Double {
         return (num * Math.pow(10.0, scale.toDouble())).toInt() / Math.pow(10.0, scale.toDouble())
     }
@@ -21,6 +22,7 @@ object MathUtils {
      *
      * @param scale 取几位小数。12.3%表示1位小数
      */
+    @JvmStatic 
     fun getPercents(scale: Int, vararg values: Float): FloatArray {
         var total = 0f
         val list = ArrayList<Int>()
@@ -58,6 +60,7 @@ object MathUtils {
      * @param value     整数，short、int、long
      * @param len 结果取几个字节，如是高位在前，从数组后端向前计数；如是低位在前，从数组前端向后计数
      */
+    @JvmStatic 
     fun numberToBytes(bigEndian: Boolean, value: Long, len: Int): ByteArray {
         val bytes = ByteArray(8)
         for (i in 0..7) {
@@ -73,6 +76,7 @@ object MathUtils {
      * @param bigEndian ture表示高位在前，false表示低位在前
      * @param src       待转字节数组
      */
+    @JvmStatic 
     fun bytesToLong(bigEndian: Boolean, vararg src: Byte): Long {
         val len = Math.min(8, src.size)
         val bs = ByteArray(8)
@@ -97,6 +101,7 @@ object MathUtils {
      * @param bigEndian ture表示高位在前，false表示低位在前
      * @param src      待转字节数组
      */
+    @JvmStatic 
     fun bytesToInt(bigEndian: Boolean, vararg src: Byte): Int {
         return bytesToLong(bigEndian, *src).toInt()
     }
@@ -107,6 +112,7 @@ object MathUtils {
      * @param bigEndian ture表示高位在前，false表示低位在前
      * @param src      待转字节数组
      */
+    @JvmStatic 
     fun bytesToShort(bigEndian: Boolean, vararg src: Byte): Short {
         return bytesToLong(bigEndian, *src).toShort()
     }
@@ -114,6 +120,7 @@ object MathUtils {
     /**
      * 翻转整个数组，每个bit。如10000110 00110001转换成10001100 01100001
      */
+    @JvmStatic 
     fun reverseBitAndByte(src: ByteArray): ByteArray {
         if (src.isEmpty()) {
             return src
@@ -140,6 +147,7 @@ object MathUtils {
      * @param size 包大小，字节
      * @return 分好的包的集合
      */
+    @JvmStatic 
     fun splitPackage(src: ByteArray, size: Int): List<ByteArray> {
         val list = ArrayList<ByteArray>()
         val loopCount = src.size / size + if (src.size % size == 0) 0 else 1
@@ -157,6 +165,7 @@ object MathUtils {
      * @param src 源
      * @return 合好的字节数组
      */
+    @JvmStatic 
     fun joinPackage(vararg src: ByteArray): ByteArray {
         var bytes = ByteArray(0)
         for (bs in src) {
@@ -169,6 +178,7 @@ object MathUtils {
     /**
      * CRC16校验，Modbus
      */
+    @JvmStatic 
     fun calcCRC16_Modbus(data: ByteArray): Int {
         var crc = 0xffff //16位  
         for (b in data) {
@@ -192,6 +202,7 @@ object MathUtils {
     /**
      * CRC校验，CRC-CCITT (XModem)
      */
+    @JvmStatic 
     fun calcCRC_CCITT_XModem(bytes: ByteArray): Int {
         var crc = 0x00          // initial value  
         val polynomial = 0x1021
@@ -210,6 +221,7 @@ object MathUtils {
     /**
      * CRC校验，CRC-CCITT (0xFFFF)
      */
+    @JvmStatic 
     fun calcCRC_CCITT_0xFFFF(bytes: ByteArray): Int {
         var crc = 0xffff // initial value
         val polynomial = 0x1021 // poly value

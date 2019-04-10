@@ -23,6 +23,7 @@ object NetworkUtils {
         var mac = ""
     }
 
+    @JvmStatic
     fun getLocalNetInfos(context: Context): List<NetInfo> {
         val list = ArrayList<NetInfo>()
         //获取连接信息
@@ -72,6 +73,7 @@ object NetworkUtils {
     /**
      * 判断网络是否可用，在6.0以上可判断出连通性，否则只判断是否连接，不确定连通性
      */
+    @JvmStatic
     fun isNetworkAvailable(context: Context): Boolean {
         val cm = context.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
         if (cm != null) {
@@ -94,6 +96,7 @@ object NetworkUtils {
     /**
      * 判断是否是当前是否WIFI
      */
+    @JvmStatic
     fun isCurrentNetworkWifi(context: Context): Boolean {
         val cm = context.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
         if (cm != null) {

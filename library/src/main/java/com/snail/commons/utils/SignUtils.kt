@@ -57,6 +57,7 @@ object SignUtils {
     /**
      * 从APK中读取签名
      */
+    @JvmStatic
     fun getSignatureFromApk(context: Context, apkPath: String): SignInfo? {
         try {
             val packageSign: PackageInfo
@@ -79,6 +80,7 @@ object SignUtils {
     /**
      * 从已安装的应用读取签名
      */
+    @JvmStatic
     fun getSignatureInstalled(context: Context): SignInfo? {
         try {
             val infos: List<PackageInfo> = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {

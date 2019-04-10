@@ -3,8 +3,8 @@ package com.snail.commons.utils
 import android.content.ContentValues
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
-import androidx.annotation.StringDef
 import android.text.TextUtils
+import androidx.annotation.StringDef
 import java.util.*
 
 /**
@@ -75,6 +75,7 @@ object DbUtils {
     /**
      * 重命名表
      */
+    @JvmStatic 
     fun renameTable(db: Any, oldName: String, newName: String) {
         execSQL(db, "ALTER TABLE $oldName RENAME TO $newName")
     }
@@ -82,6 +83,7 @@ object DbUtils {
     /**
      * 删除表
      */
+    @JvmStatic 
     fun deleteTable(db: Any, tableName: String) {
         execSQL(db, "DROP TABLE $tableName")
     }
@@ -89,6 +91,7 @@ object DbUtils {
     /**
      * 获取数据表的所有字段名
      */
+    @JvmStatic 
     fun getColumns(db: Any, tableName: String): ArrayList<Column> {
         val columns = ArrayList<Column>()
         var cursor: Cursor? = null
@@ -128,6 +131,7 @@ object DbUtils {
      * 更新数据表，删除列
      * @param columnNames 要删除的列名
      */
+    @JvmStatic 
     fun deleteColumns(db: Any, tableName: String, vararg columnNames: String) {
         try {
             beginTransaction(db)
@@ -167,6 +171,7 @@ object DbUtils {
      * 更新数据表，增加列
      * @param columns 需要增加的列的信息
      */
+    @JvmStatic 
     fun addColumns(db: Any, tableName: String, vararg columns: Column) {
         try {
             beginTransaction(db)
@@ -203,6 +208,7 @@ object DbUtils {
      * 更新列名
      * @param map key为旧列名，value为新列名
      */
+    @JvmStatic 
     fun renameColumns(db: Any, tableName: String, map: Map<String, String>) {
         try {
             beginTransaction(db)
@@ -375,6 +381,7 @@ object DbUtils {
      * @param cursor 数据库游标
      * @return 当前行对应的所有(列名,列值)
      */
+    @JvmStatic 
     fun getRowValues(cursor: Cursor): ContentValues {
         val values = ContentValues()
         for (i in 0 until cursor.columnCount) {
@@ -391,6 +398,7 @@ object DbUtils {
     /**
      * 将查询结果装载成ContentValues集合
      */
+    @JvmStatic 
     fun getValuesList(cursor: Cursor): List<ContentValues> {
         val valuesList = ArrayList<ContentValues>()
         while (cursor.moveToNext()) {
@@ -405,6 +413,7 @@ object DbUtils {
      * @param table 表名
      * @param values 行对应的所有(列名,列值)
      */
+    @JvmStatic 
     fun insertRecord(db: SQLiteDatabase, table: String, values: ContentValues) {
         val keys = values.keySet()
         if (keys.size > 0) {
@@ -437,6 +446,7 @@ object DbUtils {
      * @param table 表名
      * @param values 行对应的所有(列名,列值)
      */
+    @JvmStatic 
     fun deleteRecord(db: SQLiteDatabase, table: String, values: ContentValues) {
         val keys = values.keySet()
         if (keys.size > 0) {
@@ -465,6 +475,7 @@ object DbUtils {
      * @param cursor 数据库游标
      * @param columnIndex 列索引
      */
+    @JvmStatic 
     fun <T> getColumnValue(clazz: Class<T>, cursor: Cursor, columnIndex: Int): T? {
         val o: Any = if (clazz == Int::class.javaPrimitiveType || clazz == Int::class.java) {
             cursor.getInt(columnIndex)
@@ -489,6 +500,7 @@ object DbUtils {
      * @param cursor 数据库游标
      * @param columnName 列名
      */
+    @JvmStatic 
     fun <T> getColumnValue(clazz: Class<T>, cursor: Cursor, columnName: String): T? {
         return getColumnValue(clazz, cursor, cursor.getColumnIndex(columnName))
     }
@@ -499,6 +511,7 @@ object DbUtils {
      * @param columnName 列名
      * @param defaultValue 默认值
      */
+    @JvmStatic 
     fun <T> getColumnValue(clazz: Class<T>, cursor: Cursor, columnName: String, defaultValue: T): T {
         try {
             return getColumnValue(clazz, cursor, columnName) ?: return defaultValue
@@ -514,6 +527,7 @@ object DbUtils {
      * @param columnIndex 列索引
      * @param defaultValue 默认值
      */
+    @JvmStatic 
     fun <T> getColumnValue(clazz: Class<T>, cursor: Cursor, columnIndex: Int, defaultValue: T): T {
         try {
             return getColumnValue(clazz, cursor, columnIndex) ?: return defaultValue
@@ -530,6 +544,7 @@ object DbUtils {
      * @param sql 统计类Sql
      * @param selectionArgs 点位符对应的值
      */
+    @JvmStatic 
     fun <T> execScale(clazz: Class<T>, db: SQLiteDatabase, sql: String, selectionArgs: Array<String>): T? {
         return execScale(clazz, db.rawQuery(sql, selectionArgs))
     }
@@ -539,6 +554,7 @@ object DbUtils {
      * @param clazz 要获取的数据字节码
      * @param cursor 数据库游标
      */
+    @JvmStatic 
     fun <T> execScale(clazz: Class<T>, cursor: Cursor): T? {
         if (cursor.moveToNext()) {
             return getColumnValue(clazz, cursor, 0)
@@ -553,6 +569,7 @@ object DbUtils {
      * @param srcTable 源表
      * @param targetTable 目标表
      */
+    @JvmStatic 
     fun copyData(db: SQLiteDatabase, srcTable: String, targetTable: String, column: String?, vararg columns: String) {
         val select: StringBuilder
         if (column == null) {

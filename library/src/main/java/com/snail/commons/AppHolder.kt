@@ -92,6 +92,7 @@ class AppHolder private constructor() : Application.ActivityLifecycleCallbacks {
 
     companion object {
 
+        @JvmStatic
         fun init(app: Application) {
             synchronized(Holder.appHolder) {
                 if (Holder.appHolder.app != null) {
@@ -102,11 +103,13 @@ class AppHolder private constructor() : Application.ActivityLifecycleCallbacks {
             }
         }
 
+        @JvmStatic
         val context: Context
             get() = if (Holder.appHolder.app == null) {
                 Holder.appHolder.tryGetApplication() ?: throw RuntimeException("The AppHolder has not been initialized, make sure to call AppHolder.init(app) first.")
             } else Holder.appHolder.app!!
 
+        @JvmStatic
         fun postToMainThread(runnable: Runnable) {
             if (Looper.myLooper() == Looper.getMainLooper()) { //判断是否在主线程
                 runnable.run()
@@ -115,6 +118,7 @@ class AppHolder private constructor() : Application.ActivityLifecycleCallbacks {
             }
         }
 
+        @JvmStatic
         val packageInfo: PackageInfo?
             get() {
                 val pm = context.packageManager
@@ -127,6 +131,7 @@ class AppHolder private constructor() : Application.ActivityLifecycleCallbacks {
             }
 
         /** 程序是否在前台运行  */
+        @JvmStatic
         val isAppOnForeground: Boolean
             get() {
                 val activityManager = context.getSystemService(Context.ACTIVITY_SERVICE) as? ActivityManager
@@ -159,6 +164,7 @@ class AppHolder private constructor() : Application.ActivityLifecycleCallbacks {
          *
          * @param classNames 此Activity的类名，如果是null将finish所有Activity
          */
+        @JvmStatic
         fun finishAllWithout(className: String?, vararg classNames: String) {
             val iterator = Holder.appHolder.activities.entries.iterator()
             while (iterator.hasNext()) {
@@ -175,6 +181,7 @@ class AppHolder private constructor() : Application.ActivityLifecycleCallbacks {
         /**
          * finish掉所有Activity
          */
+        @JvmStatic
         fun finishAll() {
             finishAllWithout(null)
         }
@@ -184,6 +191,7 @@ class AppHolder private constructor() : Application.ActivityLifecycleCallbacks {
          *
          * @param className 完成类名
          */
+        @JvmStatic
         fun backTo(className: String) {
             val list = ArrayList(Holder.appHolder.activities.values)
             val index = list.size - 1
@@ -196,14 +204,17 @@ class AppHolder private constructor() : Application.ActivityLifecycleCallbacks {
             }
         }
 
+        @JvmStatic
         fun getActivity(className: String): Activity? {
             val reference = Holder.appHolder.activities[className]
             return reference?.get()
         }
 
+        @JvmStatic
         val isAllActivitiesFinished: Boolean
             get() = Holder.appHolder.activities.isEmpty()
 
+        @JvmStatic
         val allActivities: List<Activity>
             get() {
                 val list = ArrayList<Activity>()
@@ -218,6 +229,7 @@ class AppHolder private constructor() : Application.ActivityLifecycleCallbacks {
         /**
          * 完全退出，杀死进程
          */
+        @JvmStatic
         fun completeExit() {
             Holder.appHolder.isCompleteExit = true
             val iterator = Holder.appHolder.activities.entries.iterator()

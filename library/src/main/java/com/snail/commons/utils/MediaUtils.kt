@@ -43,6 +43,7 @@ object MediaUtils {
      * 获取视频文件的content uri
      * @param file 文件
      */
+    @JvmStatic
     fun getVideoContentUri(context: Context, file: File): Uri? {
         return getContentUri(context, MediaStore.Video.Media.EXTERNAL_CONTENT_URI, file)
     }
@@ -51,6 +52,7 @@ object MediaUtils {
      * 获取图片文件的content uri
      * @param file 文件
      */
+    @JvmStatic
     fun getImageContentUri(context: Context, file: File): Uri? {
         return getContentUri(context, MediaStore.Images.Media.EXTERNAL_CONTENT_URI, file)
     }
@@ -59,6 +61,7 @@ object MediaUtils {
      * 获取音频文件的content uri
      * @param file 文件
      */
+    @JvmStatic
     fun getAudioContentUri(context: Context, file: File): Uri? {
         return getContentUri(context, MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, file)
     }

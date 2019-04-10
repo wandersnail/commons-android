@@ -37,6 +37,7 @@ object ImageUtils {
     /**
      * 将方形bitmap转换为圆形bitmap
      */
+    @JvmStatic 
     fun getCircleBitmap(bitmap: Bitmap): Bitmap {
         val output = Bitmap.createBitmap(bitmap.width, bitmap.height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(output)
@@ -53,14 +54,17 @@ object ImageUtils {
         return output
     }
 
+    @JvmStatic 
     fun setRoundBackground(iv: ImageView, resid: Int, radius: Float) {
         iv.setImageDrawable(getRoundBitmap(iv.context, resid, radius))
     }
 
+    @JvmStatic 
     fun getRoundBitmap(context: Context, resid: Int, radius: Float): RoundedBitmapDrawable {
         return getRoundBitmap(context, BitmapFactory.decodeResource(context.resources, resid), radius)
     }
 
+    @JvmStatic 
     fun getRoundBitmap(context: Context, bitmap: Bitmap, radius: Float): RoundedBitmapDrawable {
         //创建RoundedBitmapDrawable对象
         val roundImg = RoundedBitmapDrawableFactory.create(context.resources, bitmap)
@@ -72,6 +76,7 @@ object ImageUtils {
     /**
      * 对图片模糊处理
      */
+    @JvmStatic 
     fun blurBitmap(context: Context, bitmap: Bitmap, radius: Float): Bitmap {
         val rs = RenderScript.create(context)
         val input = Allocation.createFromBitmap(rs, bitmap)
@@ -87,6 +92,7 @@ object ImageUtils {
     /**
      * drawable转bitmap
      */
+    @JvmStatic 
     fun drawableToBitamp(drawable: Drawable): Bitmap {
         if (drawable is BitmapDrawable) {
             return drawable.bitmap
@@ -103,6 +109,7 @@ object ImageUtils {
     /**
      * 缩放bitmap
      */
+    @JvmStatic 
     fun zoomImage(bgimage: Bitmap, newWidth: Double, newHeight: Double): Bitmap {
         // 获取这个图片的宽和高 
         val width = bgimage.width.toFloat()
@@ -122,6 +129,7 @@ object ImageUtils {
      *
      * @return int[0]为宽，int[1]为高。
      */
+    @JvmStatic 
     fun getImageViewSize(imageView: ImageView): IntArray {
         val wh = IntArray(2)
         val displayMetrics = imageView.context.resources.displayMetrics
@@ -169,8 +177,20 @@ object ImageUtils {
     }
 
     /**
+     * ImageView转黑白
+     */
+    @JvmStatic
+    fun setImageViewSrcToMonochrome(iv: ImageView) {
+        val matrix = ColorMatrix()
+        matrix.setSaturation(0f)
+        val filter = ColorMatrixColorFilter(matrix)
+        iv.colorFilter = filter
+    }
+
+    /**
      * 获取网络bitmap图像
      */
+    @JvmStatic 
     fun getNetBitmap(url: String): Bitmap? {
         var bitmap: Bitmap?
         try {
@@ -193,6 +213,7 @@ object ImageUtils {
      *
      * @param path 文件绝对路径
      */
+    @JvmStatic 
     fun getBitmap(path: String): Bitmap? {
         try {
             val fis = FileInputStream(path)
@@ -210,6 +231,7 @@ object ImageUtils {
      * @param w    宽
      * @param h    高
      */
+    @JvmStatic 
     fun getBitmap(path: String, w: Int, h: Int): Bitmap? {
         try {
             val opts = BitmapFactory.Options()
@@ -243,7 +265,9 @@ object ImageUtils {
      * @param photoFile 文件
      * @param format    保存的图片格式
      */
-    @JvmOverloads fun saveBitmapToFile(bitmap: Bitmap, photoFile: File, quality: Int = 100, format: Bitmap.CompressFormat = Bitmap.CompressFormat.JPEG) {
+    @JvmOverloads 
+    @JvmStatic 
+    fun saveBitmapToFile(bitmap: Bitmap, photoFile: File, quality: Int = 100, format: Bitmap.CompressFormat = Bitmap.CompressFormat.JPEG) {
         var fileOutputStream: FileOutputStream? = null
         try {
             fileOutputStream = FileOutputStream(photoFile)
@@ -265,7 +289,9 @@ object ImageUtils {
     /**
      * @param cornerRadii 圆角大小，dp
      */
-    @JvmOverloads fun createDrawableSelecor(normal: Int, pressed: Int, cornerRadii: Float, leftTop: Boolean = true, rightTop: Boolean = true, 
+    @JvmOverloads 
+    @JvmStatic 
+    fun createDrawableSelecor(normal: Int, pressed: Int, cornerRadii: Float, leftTop: Boolean = true, rightTop: Boolean = true, 
                               leftBottom: Boolean = true, rightBottom: Boolean = true): StateListDrawable {
         val drawable = StateListDrawable()
         drawable.addState(intArrayOf(android.R.attr.state_pressed), createDrawable(pressed, cornerRadii, leftTop, rightTop, leftBottom, rightBottom))
@@ -281,7 +307,9 @@ object ImageUtils {
      * @param leftBottom  左下是否圆角
      * @param rightBottom 右下是否圆角
      */
-    @JvmOverloads fun createDrawable(color: Int, cornerRadii: Float, leftTop: Boolean = true, rightTop: Boolean = true, 
+    @JvmOverloads 
+    @JvmStatic 
+    fun createDrawable(color: Int, cornerRadii: Float, leftTop: Boolean = true, rightTop: Boolean = true, 
                                      leftBottom: Boolean = true, rightBottom: Boolean = true): Drawable {
         val drawable = GradientDrawable()
         drawable.cornerRadii = floatArrayOf(if (leftTop) cornerRadii else 0f, if (leftTop) cornerRadii else 0f, if (rightTop) cornerRadii else 0f, 
@@ -298,6 +326,7 @@ object ImageUtils {
      * @param frameColor   边框颜色
      * @param cornerRadius 圆角
      */
+    @JvmStatic 
     fun createDrawable(fillColor: Int, frameWidth: Int, frameColor: Int, cornerRadius: Int): GradientDrawable {
         val drawable = GradientDrawable()
         drawable.cornerRadius = cornerRadius.toFloat()
@@ -312,7 +341,9 @@ object ImageUtils {
      * @param selected 被选中时的Drawable
      * @param disabled 不可用时的Drawable
      */
-    @JvmOverloads fun createStateListDrawable(normal: Drawable, pressed: Drawable, selected: Drawable? = null, disabled: Drawable? = null): StateListDrawable {
+    @JvmOverloads 
+    @JvmStatic 
+    fun createStateListDrawable(normal: Drawable, pressed: Drawable, selected: Drawable? = null, disabled: Drawable? = null): StateListDrawable {
         val drawable = StateListDrawable()
         if (disabled != null) {
             drawable.addState(intArrayOf(-android.R.attr.state_enabled), disabled)
@@ -331,6 +362,7 @@ object ImageUtils {
      * @param path 图片绝对路径
      * @return degree 旋转的角度
      */
+    @JvmStatic 
     fun readPictureDegree(path: String): Int {
         var degree = 0
         try {
@@ -350,6 +382,7 @@ object ImageUtils {
     /*
      * 旋转图片
      */
+    @JvmStatic 
     fun rotateBitmap(angle: Int, bitmap: Bitmap): Bitmap {
         //旋转图片 动作   
         val matrix = Matrix()
@@ -369,6 +402,7 @@ object ImageUtils {
      * @param outFile   图片保存路径
      * @param outFormat 图片输出格式
      */
+    @JvmStatic 
     fun getCropImageIntent(context: Context, srcFile: File, aspectX: Int, aspectY: Int, outX: Int, outY: Int, outFile: File, outFormat: Bitmap.CompressFormat): Intent {
         val uri: Uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             FileProvider.getUriForFile(context, context.packageName + ".fileprovider", srcFile)
@@ -390,6 +424,7 @@ object ImageUtils {
      * @param outFile   图片保存路径
      * @param outFormat 图片输出格式
      */
+    @JvmStatic 
     fun getCropImageIntent(uri: Uri, aspectX: Int, aspectY: Int, outX: Int, outY: Int, outFile: File, outFormat: Bitmap.CompressFormat): Intent {
         val intent = Intent("com.android.camera.action.CROP")
         intent.setDataAndType(uri, "image/*")
@@ -414,6 +449,7 @@ object ImageUtils {
      * 给view设置新背景，并回收旧的背景图片<br></br>
      * <font color=red>注意：需要确定以前的背景不被使用</font>
      */
+    @JvmStatic 
     fun setAndRecycleBackground(v: View, resID: Int) {
         // 获得ImageView当前显示的图片
         var bitmap1: Bitmap? = null
@@ -439,6 +475,7 @@ object ImageUtils {
      * 给view设置新背景，并回收旧的背景图片<br></br>
      * <font color=red>注意：需要确定以前的背景不被使用</font>
      */
+    @JvmStatic 
     fun setAndRecycleBackground(v: View, imageDrawable: BitmapDrawable) {
         // 获得ImageView当前显示的图片
         var bitmap1: Bitmap? = null
@@ -463,6 +500,7 @@ object ImageUtils {
     /**
      * 释放背景图片资源
      */
+    @JvmStatic 
     fun releaseBitmapAndBg(root: View) {
         root.setBackgroundResource(0)
         if (root is ViewGroup) {
@@ -487,6 +525,7 @@ object ImageUtils {
      * @param recursive 如果第一个参数是ViewGroup类型，是否让子view也添加波纹
      */
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    @JvmStatic 
     fun enableRipple(view: View, color: Int, allBackground: Boolean = false, recursive: Boolean = false) {
         enableRipple(view, ColorStateList.valueOf(color), allBackground, recursive)
     }
@@ -500,6 +539,7 @@ object ImageUtils {
      * @param recursive 如果第一个参数是ViewGroup类型，是否让子view也添加波纹
      */
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    @JvmStatic 
     fun enableRipple(view: View, color: ColorStateList, allBackground: Boolean = false, recursive: Boolean = false) {
         enableRipple(view, color, allBackground)
         if (recursive && view is ViewGroup) {

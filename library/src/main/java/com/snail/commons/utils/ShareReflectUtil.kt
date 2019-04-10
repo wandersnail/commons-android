@@ -22,6 +22,7 @@ internal object ShareReflectUtil {
      * @throws NoSuchFieldException if the field cannot be located
      */
     @Throws(NoSuchFieldException::class)
+    @JvmStatic 
     fun findField(instance: Any, name: String): Field {
         var clazz: Class<*>? = instance.javaClass
         while (clazz != null) {
@@ -40,6 +41,7 @@ internal object ShareReflectUtil {
     }
 
     @Throws(NoSuchFieldException::class)
+    @JvmStatic 
     fun findField(originClazz: Class<*>, name: String): Field {
         var clazz: Class<*>? = originClazz
         while (clazz != null) {
@@ -67,6 +69,7 @@ internal object ShareReflectUtil {
      * @throws NoSuchMethodException if the method cannot be located
      */
     @Throws(NoSuchMethodException::class)
+    @JvmStatic 
     fun findMethod(instance: Any, name: String, vararg parameterTypes: Class<*>): Method {
         var clazz: Class<*>? = instance.javaClass
         while (clazz != null) {
@@ -99,6 +102,7 @@ internal object ShareReflectUtil {
      * @throws NoSuchMethodException if the method cannot be located
      */
     @Throws(NoSuchMethodException::class)
+    @JvmStatic 
     fun findMethod(clazz: Class<*>?, name: String, vararg parameterTypes: Class<*>): Method {
         var cls = clazz
         while (cls != null) {
@@ -129,6 +133,7 @@ internal object ShareReflectUtil {
      * @throws NoSuchMethodException if the constructor cannot be located
      */
     @Throws(NoSuchMethodException::class)
+    @JvmStatic 
     fun findConstructor(instance: Any, vararg parameterTypes: Class<*>): Constructor<*> {
         var clazz: Class<*>? = instance.javaClass
         while (clazz != null) {
@@ -162,6 +167,7 @@ internal object ShareReflectUtil {
      * @param extraElements elements to append at the end of the array.
      */
     @Throws(NoSuchFieldException::class, IllegalArgumentException::class, IllegalAccessException::class)
+    @JvmStatic 
     fun expandFieldArray(instance: Any, fieldName: String, extraElements: Array<Any>) {
         val jlrField = findField(instance, fieldName)
 
@@ -184,6 +190,7 @@ internal object ShareReflectUtil {
      * @param fieldName the field to modify.
      */
     @Throws(NoSuchFieldException::class, IllegalArgumentException::class, IllegalAccessException::class)
+    @JvmStatic 
     fun reduceFieldArray(instance: Any, fieldName: String, reduceSize: Int) {
         if (reduceSize <= 0) {
             return
@@ -205,6 +212,7 @@ internal object ShareReflectUtil {
         jlrField.set(instance, combined)
     }
 
+    @JvmStatic 
     fun getActivityThread(context: Context?, activityThread: Class<*>?): Any? {
         var thread = activityThread
         try {
@@ -238,6 +246,7 @@ internal object ShareReflectUtil {
      * @param fieldName
      * @return
      */
+    @JvmStatic 
     fun getValueOfStaticIntField(clazz: Class<*>, fieldName: String, defVal: Int): Int {
         return try {
             val field = findField(clazz, fieldName)

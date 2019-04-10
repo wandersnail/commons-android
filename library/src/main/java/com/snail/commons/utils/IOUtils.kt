@@ -9,6 +9,7 @@ object IOUtils {
      * @param out 输出流
      */
     @Throws(IOException::class)
+    @JvmStatic 
     fun inToOut(inputStream: InputStream, out: OutputStream) {
         val buf = ByteArray(1024)
         var len = inputStream.read(buf)
@@ -23,6 +24,7 @@ object IOUtils {
      * @param closeables 可关闭的流对象列表
      */
     @Throws(IOException::class)
+    @JvmStatic 
     fun close(vararg closeables: Closeable?) {
         closeables.forEach { it?.close() }
     }
@@ -31,6 +33,7 @@ object IOUtils {
      * 关闭一个或多个流对象，内部捕获IO异常
      * @param closeables 可关闭的流对象列表
      */
+    @JvmStatic 
     fun closeQuietly(vararg closeables: Closeable?) {
         try {
             close(*closeables)
@@ -44,6 +47,7 @@ object IOUtils {
      * @param inputStream 输入流
      * @param enc 返回的字符串采用的字符集, 如果为null则使用平台默认的字符集
      */
+    @JvmStatic 
     fun toString(inputStream: InputStream, enc: String?): String? {
         val out = ByteArrayOutputStream()
         try {

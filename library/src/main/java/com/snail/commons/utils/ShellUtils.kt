@@ -16,6 +16,7 @@ object ShellUtils {
     /**
      * check whether has root permission
      */
+    @JvmStatic 
     fun hasRootPermission(): Boolean {
         return execCommand("echo root", true).result == 0
     }
@@ -28,6 +29,7 @@ object ShellUtils {
      * @param isRoot  whether need to run with root
      * @see ShellUtils.execCommand
      */
+    @JvmStatic 
     fun execCommand(command: String, isRoot: Boolean): CommandResult {
         return execCommand(arrayOf(command), isRoot)
     }
@@ -39,6 +41,7 @@ object ShellUtils {
      * @param isRoot          whether need to run with root
      * @see ShellUtils.execCommand
      */
+    @JvmStatic 
     fun execCommand(commands: List<String>?, isRoot: Boolean): CommandResult {
         return execCommand(commands?.toTypedArray(), isRoot)
     }
@@ -54,6 +57,7 @@ object ShellUtils {
      * <br></br>
      * if [CommandResult.result] is -1, there maybe some excepiton.
      */
+    @JvmStatic 
     fun execCommand(commands: Array<String>?, isRoot: Boolean): CommandResult {
         var result = -1
         if (commands == null || commands.isEmpty()) {

@@ -1,8 +1,8 @@
 package com.snail.commons.utils
 
-import androidx.annotation.StringRes
 import android.view.View
 import android.widget.Toast
+import androidx.annotation.StringRes
 import com.snail.commons.AppHolder
 import java.lang.ref.WeakReference
 
@@ -20,13 +20,15 @@ object ToastUtils {
     private object Holder {
         internal var toast = Toast.makeText(AppHolder.context, "", Toast.LENGTH_SHORT)
     }
-    
+
+    @JvmStatic
     fun reset() {
         weakRef = null
         Holder.toast.cancel()
         Holder.toast = Toast.makeText(AppHolder.context, "", Toast.LENGTH_SHORT)
     }
-    
+
+    @JvmStatic
     fun cancel() {
         Holder.toast.cancel()
     }
@@ -41,6 +43,7 @@ object ToastUtils {
      * container height, between the container's edges and the
      * notification
      */
+    @JvmStatic
     fun setMargin(horizontalMargin: Float, verticalMargin: Float) {
         Holder.toast.setMargin(horizontalMargin, verticalMargin)
     }
@@ -51,6 +54,7 @@ object ToastUtils {
      *
      * @see Toast.getGravity
      */
+    @JvmStatic
     fun setGravity(gravity: Int, xOffset: Int, yOffset: Int) {
         Holder.toast.setGravity(gravity, xOffset, yOffset)
     }
@@ -58,6 +62,7 @@ object ToastUtils {
     /**
      * Set the view to show.
      */
+    @JvmStatic
     fun setView(view: View) {
         weakRef = WeakReference(view)
         Holder.toast.view = view
@@ -66,6 +71,7 @@ object ToastUtils {
     /**
      * 显示时长为[Toast.LENGTH_SHORT]的Toast
      */
+    @JvmStatic
     fun showShort() {
         AppHolder.postToMainThread(Runnable { show("", Toast.LENGTH_SHORT) })
     }
@@ -73,6 +79,7 @@ object ToastUtils {
     /**
      * 显示时长为[Toast.LENGTH_SHORT]的Toast
      */
+    @JvmStatic
     fun showShort(text: CharSequence) {
         AppHolder.postToMainThread(Runnable { show(text, Toast.LENGTH_SHORT) })
     }
@@ -80,6 +87,7 @@ object ToastUtils {
     /**
      * 显示时长为[Toast.LENGTH_SHORT]的Toast
      */
+    @JvmStatic
     fun showShort(@StringRes resId: Int) {
         AppHolder.postToMainThread(Runnable { show(AppHolder.context.getText(resId), Toast.LENGTH_SHORT) })
     }
@@ -87,6 +95,7 @@ object ToastUtils {
     /**
      * 显示时长为[Toast.LENGTH_LONG]的Toast
      */
+    @JvmStatic
     fun showLong() {
         AppHolder.postToMainThread(Runnable { show("", Toast.LENGTH_LONG) })
     }
@@ -94,6 +103,7 @@ object ToastUtils {
     /**
      * 显示时长为[Toast.LENGTH_LONG]的Toast
      */
+    @JvmStatic
     fun showLong(text: CharSequence) {
         AppHolder.postToMainThread(Runnable { show(text, Toast.LENGTH_LONG) })
     }
@@ -101,6 +111,7 @@ object ToastUtils {
     /**
      * 显示时长为[Toast.LENGTH_LONG]的Toast
      */
+    @JvmStatic
     fun showLong(@StringRes resId: Int) {
         AppHolder.postToMainThread(Runnable { show(AppHolder.context.getText(resId), Toast.LENGTH_LONG) })
     }

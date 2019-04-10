@@ -11,6 +11,7 @@ object DateUtils {
      * @param date1 日期
      * @param date2 日期
      */
+    @JvmStatic 
     fun isSame(field: Int, date1: Long, date2: Long): Boolean {
         val cal1 = Calendar.getInstance()
         cal1.timeInMillis = date1
@@ -25,6 +26,7 @@ object DateUtils {
      * @param date1 日期
      * @param date2 日期
      */
+    @JvmStatic 
     fun isSame(field: Int, date1: Date?, date2: Date?): Boolean {
         if (date1 == null || date2 == null) {
             return false
@@ -42,6 +44,7 @@ object DateUtils {
      * @param date1 日期
      * @param date2 日期
      */
+    @JvmStatic 
     fun isSame(field: Int, date1: Calendar?, date2: Calendar?): Boolean {
         if (date1 == null || date2 == null) {
             return false
@@ -62,6 +65,7 @@ object DateUtils {
      * @param date   当前日期
      * @param offset 偏移的天数，负数向前偏移，正数向后偏移
      */
+    @JvmStatic 
     fun getDay(date: Date, offset: Int): Date {
         val calendar = Calendar.getInstance()
         calendar.time = date
@@ -75,6 +79,7 @@ object DateUtils {
      * @param date   当前日期
      * @param offset 偏移的天数，负数向前偏移，正数向后偏移
      */
+    @JvmStatic 
     fun getDay(date: Long, offset: Int): Long {
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = date
@@ -85,6 +90,7 @@ object DateUtils {
     /**
      * 获取基于当前月份的偏移值
      */
+    @JvmStatic 
     fun getMonth(date: Date, offset: Int): Date {
         val calendar = Calendar.getInstance()
         calendar.time = date
@@ -95,6 +101,7 @@ object DateUtils {
     /**
      * 获取前一天日期
      */
+    @JvmStatic 
     fun getPreviousDay(date: Date): Date {
         return getDay(date, -1)
     }
@@ -102,6 +109,7 @@ object DateUtils {
     /**
      * 获取前一天日期
      */
+    @JvmStatic 
     fun getPreviousDay(date: Long): Long {
         return getDay(date, -1)
     }
@@ -109,6 +117,7 @@ object DateUtils {
     /**
      * 获取后一天日期
      */
+    @JvmStatic 
     fun getNextDay(date: Date): Date {
         return getDay(date, 1)
     }
@@ -116,6 +125,7 @@ object DateUtils {
     /**
      * 获取后一天日期
      */
+    @JvmStatic 
     fun getNextDay(date: Long): Long {
         return getDay(date, 1)
     }
@@ -123,6 +133,7 @@ object DateUtils {
     /**
      * 返回指定格式日期
      */
+    @JvmStatic 
     fun formatDate(date: Date, pattern: String): String {
         return SimpleDateFormat(pattern).format(date)
     }
@@ -130,6 +141,7 @@ object DateUtils {
     /**
      * 返回指定格式日期
      */
+    @JvmStatic 
     fun formatDate(time: Long, pattern: String): String {
         return SimpleDateFormat(pattern).format(time)
     }
@@ -140,6 +152,7 @@ object DateUtils {
      * @param date 当前日期
      * @return 与Calendar的星期字段相同，1表示星期天，以此类推
      */
+    @JvmStatic 
     fun getDayOfWeek(date: Date): Int {
         val calendar = Calendar.getInstance()
         calendar.time = date
@@ -149,6 +162,7 @@ object DateUtils {
     /**
      * 获取指定日期的当天毫秒数
      */
+    @JvmStatic 
     fun getMillisInDay(date: Date): Long {
         val c = Calendar.getInstance()
         c.time = date
@@ -159,6 +173,7 @@ object DateUtils {
      * 将字符串日期解析成Date对象
      * @return 解析成功返回Date对象，否则返回null
      */
+    @JvmStatic 
     fun parseStringDate(date: String, pattern: String): Date? {
         return try {
             SimpleDateFormat(pattern).parse(date)
@@ -171,6 +186,7 @@ object DateUtils {
     /**
      * 两个日期相差的天数(B-A)
      */
+    @JvmStatic 
     fun daysBetween(dateA: Date, dateB: Date): Int {
         val a = getStartOfDay(dateA)
         val b = getStartOfDay(dateB)
@@ -180,6 +196,7 @@ object DateUtils {
     /**
      * 两个日期相差的天数(B-A)
      */
+    @JvmStatic 
     fun daysBetween(dateA: Long, dateB: Long): Int {
         var dA = dateA
         var dB = dateB
@@ -191,6 +208,7 @@ object DateUtils {
     /**
      * 将此日期时间设置成0点整
      */
+    @JvmStatic 
     fun getStartOfDay(date: Date): Calendar {
         val calendar = Calendar.getInstance()
         calendar.time = date
@@ -204,6 +222,7 @@ object DateUtils {
     /**
      * 将此日期时间设置成0点整
      */
+    @JvmStatic 
     fun getStartOfDay(date: Long): Long {
         val calendar = Calendar.getInstance()
         calendar.time = Date(date)
@@ -217,6 +236,7 @@ object DateUtils {
     /**
      * 根据条件获取相应最大值，如此日期的月有多少天，Calendar.DATE
      */
+    @JvmStatic 
     fun getActualMaximum(date: Date, field: Int): Int {
         val calendar = Calendar.getInstance()
         calendar.time = date
@@ -226,6 +246,7 @@ object DateUtils {
     /**
      * 获取日期是当月的第几天
      */
+    @JvmStatic 
     fun getDayOfMonth(date: Date): Int {
         val calendar = Calendar.getInstance()
         calendar.time = date
@@ -235,6 +256,7 @@ object DateUtils {
     /**
      * 获取日期是当年的第几月，1月为0
      */
+    @JvmStatic 
     fun getMonthOfYear(date: Date): Int {
         val calendar = Calendar.getInstance()
         calendar.time = date
@@ -244,6 +266,7 @@ object DateUtils {
     /**
      * 获取日期所在月份的的第一天
      */
+    @JvmStatic 
     fun getStartOfMonth(date: Date): Date {
         val calendar = Calendar.getInstance()
         calendar.time = date
@@ -254,6 +277,7 @@ object DateUtils {
     /**
      * 获取日期所在月份的的最后一天
      */
+    @JvmStatic 
     fun getEndOfMonth(date: Date): Date {
         val calendar = Calendar.getInstance()
         calendar.time = date
@@ -264,6 +288,7 @@ object DateUtils {
     /**
      * 获取日期所在年的最后一天
      */
+    @JvmStatic 
     fun getEndOfYear(date: Date): Date {
         val calendar = Calendar.getInstance()
         calendar.time = date
@@ -275,6 +300,7 @@ object DateUtils {
     /**
      * 获取日期所在年的最后一天
      */
+    @JvmStatic 
     fun getStartOfYear(date: Date): Date {
         val calendar = Calendar.getInstance()
         calendar.time = date

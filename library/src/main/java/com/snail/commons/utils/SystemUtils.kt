@@ -30,6 +30,7 @@ object SystemUtils {
      * @param context 上下文
      * @param packageName 要判断的应用包名
      */
+    @JvmStatic
     fun isAppInstalled(context: Context, packageName: String): Boolean {
         val packageManager = context.packageManager
         // 获取所有已安装程序的包信息
@@ -45,6 +46,7 @@ object SystemUtils {
     /**
      * 判断位置服务是否打开
      */
+    @JvmStatic
     fun isLocationEnabled(context: Context): Boolean {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             val locationManager = context.applicationContext.getSystemService(Context.LOCATION_SERVICE) as? LocationManager
@@ -65,6 +67,7 @@ object SystemUtils {
     /**
      * 判断GPS是否打开
      */
+    @JvmStatic
     fun isGPSEnabled(context: Context): Boolean {
         val locationManager = context.applicationContext.getSystemService(Context.LOCATION_SERVICE) as? LocationManager
         return locationManager != null && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
@@ -74,18 +77,15 @@ object SystemUtils {
      * 判断屏幕是否亮着
      * @param context 上下文
      */
+    @JvmStatic
     fun isScreenOn(context: Context): Boolean {
-        val pm = context.applicationContext.getSystemService(Context.POWER_SERVICE) as? PowerManager ?: return false
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
-            pm.isInteractive
-        } else {
-            pm.isScreenOn
-        }
+        return (context.applicationContext.getSystemService(Context.POWER_SERVICE) as? PowerManager)?.isInteractive == true
     }
 
     /**
      * 获取总内存大小，单位是byte
      */
+    @JvmStatic
     val totalMemSize: Long
         get() {
             try {
@@ -109,6 +109,7 @@ object SystemUtils {
     /**
      * 获取可用内存大小，单位byte
      */
+    @JvmStatic
     fun getAvailMemSize(context: Context): Long {
         val am = context.applicationContext.getSystemService(Context.ACTIVITY_SERVICE) as? ActivityManager
         val outInfo = ActivityManager.MemoryInfo()
@@ -122,6 +123,7 @@ object SystemUtils {
     /**
      * 获取正在运行的进程数
      */
+    @JvmStatic
     fun getRunningProcessCount(context: Context): Int {
         val am = context.applicationContext.getSystemService(Context.ACTIVITY_SERVICE) as? ActivityManager ?: return -1
         return am.runningAppProcesses?.size ?: 0
@@ -130,6 +132,7 @@ object SystemUtils {
     /**
      * 扩展卡是否可用
      */
+    @JvmStatic
     val isSdCardAvailable: Boolean
         get() = Environment.MEDIA_MOUNTED == Environment.getExternalStorageState()
 
@@ -138,6 +141,7 @@ object SystemUtils {
      *
      * @return 字节数
      */
+    @JvmStatic
     val internalFreeSpace: Long
         get() {
             val path = Environment.getDataDirectory()
@@ -150,6 +154,7 @@ object SystemUtils {
      *
      * @return 字节数。
      */
+    @JvmStatic
     val externalFreeSpace: Long
         get() {
             return if (isSdCardAvailable) {
@@ -163,6 +168,7 @@ object SystemUtils {
     /**
      * 获取存储卡剩余大小
      */
+    @JvmStatic
     fun getStorageFreeSpace(path: String): Long {
         if (File(path).exists()) {
             val stat = StatFs(path)
@@ -174,6 +180,7 @@ object SystemUtils {
     /**
      * 存储卡总容量
      */
+    @JvmStatic
     fun getStorageTotalSpace(path: String): Long {
         if (File(path).exists()) {
             val stat = StatFs(path)
@@ -185,6 +192,7 @@ object SystemUtils {
     /**
      * 获取所有存储路径
      */
+    @JvmStatic
     fun getStoragePaths(context: Context): List<String>? {
         try {
             val sm = context.applicationContext.getSystemService(Context.STORAGE_SERVICE) as StorageManager
@@ -202,6 +210,7 @@ object SystemUtils {
         return null
     }
 
+    @JvmStatic
     fun getStorages(context: Context): ArrayList<Storage>? {
         try {
             val storageManager = context.applicationContext.getSystemService(Context.STORAGE_SERVICE) as StorageManager
@@ -217,14 +226,10 @@ object SystemUtils {
             val description = storageValumeClazz.getMethod("getDescription", Context::class.java)
 
             var mGetState: Method? = null
-            //getState 方法是在4.4_r1之后的版本加的，之前版本（含4.4_r1）没有
-            // （http://grepcode.com/file/repository.grepcode.com/java/ext/com.google.android/android/4.4_r1/android/os/Environment.java/）
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
-                try {
-                    mGetState = storageValumeClazz.getMethod("getState")
-                } catch (e: NoSuchMethodException) {
-                    e.printStackTrace()
-                }
+            try {
+                mGetState = storageValumeClazz.getMethod("getState")
+            } catch (e: NoSuchMethodException) {
+                e.printStackTrace()
             }
 
             //调用getVolumeList方法，参数为：“谁”中调用这个方法
@@ -271,6 +276,7 @@ object SystemUtils {
     /**
      * 存储器是否被挂载
      */
+    @JvmStatic
     fun isMounted(context: Context, path: String): Boolean {
         try {
             val sm = context.applicationContext.getSystemService(Context.STORAGE_SERVICE) as StorageManager
@@ -282,6 +288,7 @@ object SystemUtils {
         return false
     }
 
+    @JvmStatic
     fun getSystemProperty(propName: String): String? {
         val line: String
         var input: BufferedReader? = null
@@ -311,6 +318,7 @@ object SystemUtils {
      * @param name    meta名
      * @return 没有返回null
      */
+    @JvmStatic
     fun getApplicationMetaValue(context: Context, name: String): String? {
         try {
             val info = context.packageManager.getApplicationInfo(context.packageName, PackageManager.GET_META_DATA)
@@ -330,6 +338,7 @@ object SystemUtils {
      * @param name    meta名
      * @return 没有返回null
      */
+    @JvmStatic
     fun getActivityMetaValue(context: Context, cls: Class<*>, name: String): String? {
         try {
             val info = context.packageManager.getActivityInfo(ComponentName(context, cls.name), PackageManager.GET_META_DATA)
@@ -349,6 +358,7 @@ object SystemUtils {
      * @param name    meta名
      * @return 没有返回null
      */
+    @JvmStatic
     fun getReceiverMetaValue(context: Context, cls: Class<*>, name: String): String? {
         try {
             val info = context.packageManager.getReceiverInfo(ComponentName(context, cls.name), PackageManager.GET_META_DATA)
@@ -368,6 +378,7 @@ object SystemUtils {
      * @param name    meta名
      * @return 没有返回null
      */
+    @JvmStatic
     fun getServiceMetaValue(context: Context, cls: Class<*>, name: String): String? {
         try {
             val info = context.packageManager.getServiceInfo(ComponentName(context, cls.name), PackageManager.GET_META_DATA)

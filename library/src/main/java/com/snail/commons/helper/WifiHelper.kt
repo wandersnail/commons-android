@@ -257,6 +257,7 @@ class WifiHelper(context: Context) {
          *
          * @param type [WIFICIPHER_NOPASS],[WIFICIPHER_WEP],[WIFICIPHER_WPA],[WIFICIPHER_WPA2]
          */
+        @JvmStatic
         fun createWifiConfiguration(ssid: String, password: String, type: Int): WifiConfiguration {
             val config = WifiConfiguration()
             config.allowedAuthAlgorithms.clear()
@@ -304,6 +305,7 @@ class WifiHelper(context: Context) {
             return config
         }
 
+        @JvmStatic
         fun getSecurity(config: WifiConfiguration): Int {
             if (config.allowedKeyManagement.get(KeyMgmt.WPA_PSK) || config.allowedKeyManagement.get(4)) {
                 return SECURITY_PSK
@@ -314,6 +316,7 @@ class WifiHelper(context: Context) {
             return if (config.wepKeys[0] != null) SECURITY_WEP else SECURITY_NONE
         }
 
+        @JvmStatic
         fun getSecurity(result: ScanResult): Int {
             if (result.capabilities != null) {
                 when {
@@ -328,6 +331,7 @@ class WifiHelper(context: Context) {
         /**
          * @return [WIFICIPHER_NOPASS],[WIFICIPHER_WEP],[WIFICIPHER_WPA],[WIFICIPHER_WPA2]
          */
+        @JvmStatic
         fun getWificipher(result: ScanResult): Int {
             if (result.capabilities != null) {
                 when {
@@ -342,6 +346,7 @@ class WifiHelper(context: Context) {
         /**
          * 热点是否开启
          */
+        @JvmStatic
         fun isApOn(context: Context): Boolean {
             try {
                 val manager = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
@@ -358,6 +363,7 @@ class WifiHelper(context: Context) {
         /**
          * 获取热点SSID
          */
+        @JvmStatic
         fun getApSsid(context: Context): String? {
             try {
                 val manager = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
@@ -373,6 +379,7 @@ class WifiHelper(context: Context) {
         /**
          * 关闭热点
          */
+        @JvmStatic
         fun disableAp(context: Context) {
             try {
                 val manager = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
@@ -387,6 +394,7 @@ class WifiHelper(context: Context) {
          * 配置热点
          */
         @JvmOverloads
+        @JvmStatic
         fun configApState(context: Context, ssid: String? = null): Boolean {
             try {
                 val manager = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager

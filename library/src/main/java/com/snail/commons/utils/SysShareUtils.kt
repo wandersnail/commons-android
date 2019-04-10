@@ -30,6 +30,7 @@ object SysShareUtils {
      * @param title 系统分享对话框的标题
      * @param text 分享的内容
      */
+    @JvmStatic
     fun shareText(context: Context, title: String, text: String) {
         val intent = Intent(Intent.ACTION_SEND)
         intent.type = "text/plain"
@@ -43,6 +44,7 @@ object SysShareUtils {
      * @param title 系统分享对话框的标题
      * @param file 文件
      */
+    @JvmStatic
     fun shareImage(context: Context, title: String, file: File) {
         val intent = Intent(Intent.ACTION_SEND)
         intent.type = "image/*"
@@ -63,6 +65,7 @@ object SysShareUtils {
      * @param title 系统分享对话框的标题
      * @param files 文件
      */
+    @JvmStatic
     fun shareImages(context: Context, title: String, files: List<File>) {
         val intent = Intent(Intent.ACTION_SEND_MULTIPLE)
         intent.type = "image/*"
@@ -89,6 +92,7 @@ object SysShareUtils {
      * @param title 系统分享对话框的标题
      * @param file 文件
      */
+    @JvmStatic
     fun shareVideo(context: Context, title: String, file: File) {
         val intent = Intent(Intent.ACTION_SEND)
         intent.type = "video/*"
@@ -109,6 +113,7 @@ object SysShareUtils {
      * @param title 系统分享对话框的标题
      * @param file 文件
      */
+    @JvmStatic
     fun shareFile(context: Context, title: String, file: File) {
         val intent = Intent(Intent.ACTION_SEND)
         intent.type = FileUtils.getMimeType(file.absolutePath)

@@ -13,6 +13,7 @@ object StringUtils {
      * @param src 源
      * @param separator 用来分隔的字符串
      */
+    @JvmStatic
     fun bytesToHexString(src: ByteArray, separator: String = ""): String {
         if (src.isEmpty()) {
             return ""
@@ -39,6 +40,7 @@ object StringUtils {
     /**
      * byte数组转换成2进制字符串
      */
+    @JvmStatic
     fun bytesToBinaryString(src: ByteArray, separator: String = ""): String {
         if (src.isEmpty()) {
             return ""
@@ -65,6 +67,7 @@ object StringUtils {
     /**
      * 使用java正则表达式去掉小数点后多余的0，如最后一位是.则去掉
      */
+    @JvmStatic
     fun subZeroAndDot(s: String): String {
         var s1 = s
         if (s1.indexOf(".") > 0) {
@@ -77,6 +80,7 @@ object StringUtils {
     /**
      * 将异常信息转换成字符串
      */
+    @JvmStatic
     fun getDetailMsg(t: Throwable?): String {
         if (t != null) {
             val sw = StringWriter()
@@ -92,6 +96,7 @@ object StringUtils {
      * 格式00:00:00
      * @param duration 时长，单位：秒
      */
+    @JvmStatic
     fun formatDuration(duration: Int): String {
         return String.format(Locale.US, "%02d:%02d:%02d", duration / 3600, duration % 3600 / 60, duration % 60)
     }

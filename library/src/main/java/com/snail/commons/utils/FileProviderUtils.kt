@@ -18,6 +18,7 @@ object FileProviderUtils {
     /**
      * 兼容Android7.0以上，获取Intent传递的File的Uri
      */
+    @JvmStatic 
     fun getUriForFile(context: Context, file: File): Uri {
         // 判断版本大于等于7.0
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -27,6 +28,7 @@ object FileProviderUtils {
         }
     }
 
+    @JvmStatic 
     fun setIntentDataAndType(context: Context, intent: Intent, type: String, file: File, writeable: Boolean) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             intent.setDataAndType(getUriForFile(context, file), type)

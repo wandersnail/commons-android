@@ -2,6 +2,7 @@ package com.snail.commons.helper
 
 import android.Manifest
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -9,6 +10,7 @@ import android.os.Build
 import android.provider.Settings
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import java.util.*
 
 /**
@@ -16,10 +18,20 @@ import java.util.*
  * 时间: 2018/7/14 15:17
  * 作者: zengfansheng
  */
-class PermissionsRequester(private val activity: Activity) {
+class PermissionsRequester {
     private val allPermissions = ArrayList<String>()
     private val refusedPermissions = ArrayList<String>()
     private var requestResultListener: OnRequestResultListener? = null
+    private var activity: Activity? = null
+    private var fragment: Fragment? = null
+    
+    constructor(activity: Activity) {
+        this.activity = activity
+    }
+    
+    constructor(fragment: Fragment) {
+        this.fragment = fragment
+    }
 
     /**
      * 设置请求结果监听回调
@@ -44,20 +56,29 @@ class PermissionsRequester(private val activity: Activity) {
     }
 
     private fun checkPermissions(permissions: MutableList<String>, onlyCheck: Boolean): Boolean {
+        val context: Context = if (activity != null) activity!! else fragment!!.context!!
         if (permissions.remove(Manifest.permission.WRITE_SETTINGS) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (!Settings.System.canWrite(activity)) {
+            if (!Settings.System.canWrite(context)) {
                 if (!onlyCheck) {
-                    val intent = Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS, Uri.parse("package:" + activity.packageName))
-                    activity.startActivityForResult(intent, REQUEST_CODE_WRITE_SETTINGS)
+                    val intent = Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS, Uri.parse("package:" + context.packageName))
+                    if (activity != null) {
+                        activity!!.startActivityForResult(intent, REQUEST_CODE_WRITE_SETTINGS)
+                    } else {
+                        fragment!!.startActivityForResult(intent, REQUEST_CODE_WRITE_SETTINGS)
+                    }
                 }
                 return false
-            }
+            }            
         }
         if (permissions.remove(Manifest.permission.REQUEST_INSTALL_PACKAGES) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            if (!activity.packageManager.canRequestPackageInstalls()) {
+            if (!context.packageManager.canRequestPackageInstalls()) {
                 if (!onlyCheck) {
-                    val intent = Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, Uri.parse("package:" + activity.packageName))
-                    activity.startActivityForResult(intent, REQUEST_CODE_UNKNOWN_APP_SOURCES)
+                    val intent = Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, Uri.parse("package:" + context.packageName))
+                    if (activity != null) {
+                        activity!!.startActivityForResult(intent, REQUEST_CODE_UNKNOWN_APP_SOURCES)
+                    } else {
+                        fragment!!.startActivityForResult(intent, REQUEST_CODE_UNKNOWN_APP_SOURCES)
+                    }
                 }
                 return false
             }
@@ -66,7 +87,11 @@ class PermissionsRequester(private val activity: Activity) {
         return when {
             onlyCheck -> needRequestPermissonList.isEmpty()
             needRequestPermissonList.isNotEmpty() -> {
-                ActivityCompat.requestPermissions(activity, needRequestPermissonList.toTypedArray(), PERMISSON_REQUESTCODE)
+                if (activity != null) {
+                    ActivityCompat.requestPermissions(activity!!, needRequestPermissonList.toTypedArray(), PERMISSON_REQUESTCODE)
+                } else {
+                    fragment!!.requestPermissions(needRequestPermissonList.toTypedArray(), PERMISSON_REQUESTCODE)
+                }
                 false
             }
             else -> {
@@ -79,6 +104,7 @@ class PermissionsRequester(private val activity: Activity) {
     //获取权限集中需要申请权限的列表
     private fun findDeniedPermissions(permissions: MutableList<String>): MutableList<String> {
         val needRequestPermissonList = ArrayList<String>()
+        val activity = if (this.activity != null) this.activity!! else fragment!!.activity!!
         permissions.forEach { perm ->
             if (ContextCompat.checkSelfPermission(activity, perm) != PackageManager.PERMISSION_GRANTED || ActivityCompat.shouldShowRequestPermissionRationale(activity, perm)) {
                 needRequestPermissonList.add(perm)
@@ -88,14 +114,15 @@ class PermissionsRequester(private val activity: Activity) {
     }
 
     fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        val context: Context = if (activity != null) activity!! else fragment!!.context!!
         if (requestCode == REQUEST_CODE_WRITE_SETTINGS && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (!Settings.System.canWrite(activity)) {
+            if (!Settings.System.canWrite(context)) {
                 refusedPermissions.add(Manifest.permission.WRITE_SETTINGS)
             }
             checkPermissions(allPermissions, false)
         }
         if (requestCode == REQUEST_CODE_UNKNOWN_APP_SOURCES && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            if (!activity.packageManager.canRequestPackageInstalls()) {
+            if (!context.packageManager.canRequestPackageInstalls()) {
                 refusedPermissions.add(Manifest.permission.REQUEST_INSTALL_PACKAGES)
             }
             checkPermissions(allPermissions, false)

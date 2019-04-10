@@ -24,10 +24,12 @@ object Logger {
     /**
      * 控制输出级别.[NONE], [VERBOSE], [DEBUG], [INFO], [WARN], [ERROR]
      */
+    @JvmStatic 
     fun setPrintLevel(printLevel: Int) {
         Logger.printLevel = printLevel
     }
 
+    @JvmStatic 
     fun setFilter(filter: Filter) {
         Logger.filter = filter
     }
@@ -35,6 +37,7 @@ object Logger {
     /**
      * 控制是否执行saveLog方法
      */
+    @JvmStatic 
     fun setSaveEnabled(isSaveEnabled: Boolean) {
         Logger.isSaveEnabled = isSaveEnabled
     }
@@ -55,66 +58,77 @@ object Logger {
         }
     }
 
+    @JvmStatic 
     fun v(tag: String, msg: String) {
         if (accept(Log.VERBOSE, tag, msg)) {
             Log.v(tag, msg)
         }
     }
 
+    @JvmStatic 
     fun v(tag: String, msg: String, t: Throwable) {
         if (accept(Log.VERBOSE, tag, msg)) {
             Log.v(tag, msg, t)
         }
     }
 
+    @JvmStatic 
     fun d(tag: String, msg: String) {
         if (accept(Log.DEBUG, tag, msg)) {
             Log.d(tag, msg)
         }
     }
 
+    @JvmStatic 
     fun d(tag: String, msg: String, t: Throwable) {
         if (accept(Log.DEBUG, tag, msg)) {
             Log.d(tag, msg, t)
         }
     }
 
+    @JvmStatic 
     fun i(tag: String, msg: String) {
         if (accept(Log.INFO, tag, msg)) {
             Log.i(tag, msg)
         }
     }
 
+    @JvmStatic 
     fun i(tag: String, msg: String, t: Throwable) {
         if (accept(Log.INFO, tag, msg)) {
             Log.i(tag, msg, t)
         }
     }
 
+    @JvmStatic 
     fun w(tag: String, msg: String) {
         if (accept(Log.WARN, tag, msg)) {
             Log.w(tag, msg)
         }
     }
 
+    @JvmStatic 
     fun w(tag: String, msg: String, t: Throwable) {
         if (accept(Log.WARN, tag, msg)) {
             Log.w(tag, msg, t)
         }
     }
 
+    @JvmStatic 
     fun e(tag: String, msg: String) {
         if (accept(Log.ERROR, tag, msg)) {
             Log.e(tag, msg)
         }
     }
 
+    @JvmStatic 
     fun e(tag: String, msg: String, t: Throwable) {
         if (accept(Log.ERROR, tag, msg)) {
             Log.e(tag, msg, t)
         }
     }
 
+    @JvmStatic 
     fun saveLog(file: File, log: String) {
         if (isSaveEnabled) {
             try {
@@ -129,6 +143,7 @@ object Logger {
         }
     }
 
+    @JvmStatic 
     fun saveLog(file: File, appVersion: String, t: Throwable) {
         if (isSaveEnabled) {
             try {

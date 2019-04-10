@@ -16,6 +16,7 @@ object CoordConverter {
     /**
      * 84 to 火星坐标系 (GCJ-02) World Geodetic System to Mars Geodetic System
      */
+    @JvmStatic
     fun gps84ToGcj02(lat: Double, lon: Double): Gps? {
         if (outOfChina(lat, lon)) {
             return null
@@ -36,6 +37,7 @@ object CoordConverter {
     /**
      * 火星坐标系 (GCJ-02) to 84
      */
+    @JvmStatic
     fun gcjToGps84(lat: Double, lon: Double): Gps {
         val gps = transform(lat, lon)
         val lontitude = lon * 2 - gps.longitude
@@ -46,6 +48,7 @@ object CoordConverter {
     /**
      * 火星坐标系 (GCJ-02) 与百度坐标系 (BD-09) 的转换算法 将 GCJ-02 坐标转换成 BD-09 坐标
      */
+    @JvmStatic
     fun gcj02ToBd09(gg_lat: Double, gg_lon: Double): Gps {
         val z = Math.sqrt(gg_lon * gg_lon + gg_lat * gg_lat) + 0.00002 * Math.sin(gg_lat * pi)
         val theta = Math.atan2(gg_lat, gg_lon) + 0.000003 * Math.cos(gg_lon * pi)
@@ -57,6 +60,7 @@ object CoordConverter {
     /**
      * 火星坐标系 (GCJ-02) 与百度坐标系 (BD-09) 的转换算法，将 BD-09 坐标转换成GCJ-02 坐标
      */
+    @JvmStatic
     fun bd09ToGcj02(bd_lat: Double, bd_lon: Double): Gps {
         val x = bd_lon - 0.0065
         val y = bd_lat - 0.006
@@ -70,16 +74,19 @@ object CoordConverter {
     /**
      * (BD-09) to 84
      */
+    @JvmStatic
     fun bd09ToGps84(bd_lat: Double, bd_lon: Double): Gps {
         val gcj02 = CoordConverter.bd09ToGcj02(bd_lat, bd_lon)
         return CoordConverter.gcjToGps84(gcj02.latitude, gcj02.longitude)
 
     }
 
+    @JvmStatic
     fun outOfChina(lat: Double, lon: Double): Boolean {
         return lon < 72.004 || lon > 137.8347 || lat < 0.8293 || lat > 55.8271
     }
 
+    @JvmStatic
     fun transform(lat: Double, lon: Double): Gps {
         if (outOfChina(lat, lon)) {
             return Gps(lat, lon)
@@ -97,15 +104,16 @@ object CoordConverter {
         return Gps(mgLat, mgLon)
     }
 
+    @JvmStatic
     fun transformLat(x: Double, y: Double): Double {
-        var ret = (-100.0 + 2.0 * x + 3.0 * y + 0.2 * y * y + 0.1 * x * y
-                + 0.2 * Math.sqrt(Math.abs(x)))
+        var ret = (-100.0 + 2.0 * x + 3.0 * y + 0.2 * y * y + 0.1 * x * y + 0.2 * Math.sqrt(Math.abs(x)))
         ret += (20.0 * Math.sin(6.0 * x * pi) + 20.0 * Math.sin(2.0 * x * pi)) * 2.0 / 3.0
         ret += (20.0 * Math.sin(y * pi) + 40.0 * Math.sin(y / 3.0 * pi)) * 2.0 / 3.0
         ret += (160.0 * Math.sin(y / 12.0 * pi) + 320 * Math.sin(y * pi / 30.0)) * 2.0 / 3.0
         return ret
     }
 
+    @JvmStatic
     fun transformLon(x: Double, y: Double): Double {
         var ret = 300.0 + x + 2.0 * y + 0.1 * x * x + 0.1 * x * y + 0.1 * Math.sqrt(Math.abs(x))
         ret += (20.0 * Math.sin(6.0 * x * pi) + 20.0 * Math.sin(2.0 * x * pi)) * 2.0 / 3.0

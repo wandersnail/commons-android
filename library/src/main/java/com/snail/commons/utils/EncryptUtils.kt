@@ -25,6 +25,7 @@ object EncryptUtils {
      * @param code MD5或SHA1加密过的字符串
      * @param separator 分隔符
      */
+    @JvmStatic 
     fun addSeparator(code: String, separator: String?): String? {
         try {
             val sb = StringBuilder()
@@ -51,6 +52,7 @@ object EncryptUtils {
      * @param iterations 迭代加密的次数，0表示不加密，1表示md5(plainText), 2表示md5(md5(plainText))...
      * @return 经过MD5算法加密的字符串形式的32位16进制,如果参数表示的字符串为空，返回null
      */
+    @JvmStatic 
     fun getMD5Code(plainText: String, iterations: Int): String? {
         var iters = iterations
         if (iters > 0) {
@@ -70,6 +72,7 @@ object EncryptUtils {
      * @param iterations 迭代加密的次数，0表示不加密，1表示md5(plainText), 2表示md5(md5(plainText))...
      * @return 经过SHA1算法加密的字符串形式的32位16进制,如果参数表示的字符串为空，返回null
      */
+    @JvmStatic 
     fun getSHA1Code(plainText: String, iterations: Int): String? {
         var iters = iterations
         if (iters > 0) {
@@ -90,6 +93,7 @@ object EncryptUtils {
      * @param len 要替换的字符数
      * @return 替换后的新字符串，如果参数表示的MD5码为空，则返回null
      */
+    @JvmStatic 
     fun replaceMessageDigestCharacter(code: String, offset: Int, len: Int): String {
         val charArr = "1234567890abcdef".toCharArray()
         val md5Arr = code.toCharArray()
@@ -106,6 +110,7 @@ object EncryptUtils {
      * 获取经过MD5加密后的字符串
      * @param plainText 要加密的字符串
      */
+    @JvmStatic 
     fun getMD5Code(plainText: String): String? {
         return encryptByMessageDigest(plainText.toByteArray(), MD5)
     }
@@ -114,6 +119,7 @@ object EncryptUtils {
      * 获取经过SHA1加密后的字符串
      * @param plainText 要加密的字符串
      */
+    @JvmStatic 
     fun getSHA1Code(plainText: String): String? {
         return encryptByMessageDigest(plainText.toByteArray(), SHA1)
     }
@@ -123,6 +129,7 @@ object EncryptUtils {
      * @param path 文件的路径
      * @return md5值，文件不存在返回null
      */
+    @JvmStatic 
     fun getFileMD5Code(path: String): String? {
         try {
             val fis = FileInputStream(path)
@@ -138,6 +145,7 @@ object EncryptUtils {
      * @param path 文件的路径
      * @return SHA1值，文件不存在返回null
      */
+    @JvmStatic 
     fun getFileSHA1Code(path: String): String? {
         try {
             val fis = FileInputStream(path)
@@ -153,6 +161,7 @@ object EncryptUtils {
      * @param file 文件
      * @return md5值，文件不存在返回null
      */
+    @JvmStatic 
     fun getFileMD5Code(file: File): String? {
         try {
             val fis = FileInputStream(file)
@@ -168,6 +177,7 @@ object EncryptUtils {
      * @param file 文件
      * @return SHA1值，文件不存在返回null
      */
+    @JvmStatic 
     fun getFileSHA1Code(file: File): String? {
         try {
             val fis = FileInputStream(file)
@@ -182,6 +192,7 @@ object EncryptUtils {
      * 从输入流获取MD5值
      * @param inputStream 输入流
      */
+    @JvmStatic 
     fun getMD5Code(inputStream: InputStream): String? {
         return encryptByMessageDigest(inputStream, MD5)
     }
@@ -190,6 +201,7 @@ object EncryptUtils {
      * 从输入流获取SHA1值
      * @param inputStream 输入流
      */
+    @JvmStatic 
     fun getSHA1Code(inputStream: InputStream): String? {
         return encryptByMessageDigest(inputStream, SHA1)
     }
@@ -199,6 +211,7 @@ object EncryptUtils {
      * @param inputStream 输入流
      * @param algorithm 算法。[MD5], [SHA1]
      */
+    @JvmStatic 
     fun encryptByMessageDigest(inputStream: InputStream, algorithm: String): String? {
         try {
             val messageDigest = MessageDigest.getInstance(algorithm)
@@ -221,6 +234,7 @@ object EncryptUtils {
      * @param bytes 需要加密的字节
      * @param algorithm 算法。[MD5], [SHA1]
      */
+    @JvmStatic 
     fun encryptByMessageDigest(bytes: ByteArray, algorithm: String): String? {
         try {
             val md = MessageDigest.getInstance(algorithm)
@@ -252,6 +266,7 @@ object EncryptUtils {
      * @return 密文
      */
     @Throws(Exception::class)
+    @JvmStatic 
     fun encrypt(seed: String, plain: String): String {
         val rawKey = getRawKey(seed.toByteArray())
         val encrypted = encrypt(rawKey, plain.toByteArray())
@@ -265,6 +280,7 @@ object EncryptUtils {
      * @return 原文
      */
     @Throws(Exception::class)
+    @JvmStatic 
     fun decrypt(seed: String, encrypted: String): String {
         val rawKey = getRawKey(seed.toByteArray())
         val enc = Base64.decode(encrypted.toByteArray(), Base64.DEFAULT)

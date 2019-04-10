@@ -8,6 +8,7 @@ object VersionUtils {
     /**
      * 抽取版本号。如果是xxx1.2.3 Rev 456之类的，只对1.2.3进行抽取
      */
+    @JvmStatic
     fun extractVer(version: String): String {
         var ver: String = version
         if (ver.contains(" ")) {
@@ -20,6 +21,7 @@ object VersionUtils {
     /**
      * 将数字抽取出来。如果是xxx1.2.3 Rev 456之类的，只对1.2.3进行抽取
      */
+    @JvmStatic
     fun splitVer(version: String): Array<String> {
         var ver = version
         ver = extractVer(ver)
@@ -54,6 +56,7 @@ object VersionUtils {
      * 比较版本号大小
      * @return 相等，则返回值0；小于，则返回负数；大于，则返回正数。
      */
+    @JvmStatic
     fun compareVersion(ver1: String, ver2: String): Int {
         return try {
             //如果是纯数字，则转换成Long型直接比较
