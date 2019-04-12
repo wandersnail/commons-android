@@ -110,10 +110,10 @@ object ImageUtils {
      * 缩放bitmap
      */
     @JvmStatic 
-    fun zoomImage(bgimage: Bitmap, newWidth: Double, newHeight: Double): Bitmap {
+    fun zoomImage(src: Bitmap, newWidth: Double, newHeight: Double): Bitmap {
         // 获取这个图片的宽和高 
-        val width = bgimage.width.toFloat()
-        val height = bgimage.height.toFloat()
+        val width = src.width.toFloat()
+        val height = src.height.toFloat()
         // 创建操作图片用的matrix对象 
         val matrix = Matrix()
         // 计算宽高缩放率 
@@ -121,7 +121,7 @@ object ImageUtils {
         val scaleHeight = newHeight.toFloat() / height
         // 缩放图片动作 
         matrix.postScale(scaleWidth, scaleHeight)
-        return Bitmap.createBitmap(bgimage, 0, 0, width.toInt(), height.toInt(), matrix, true)
+        return Bitmap.createBitmap(src, 0, 0, width.toInt(), height.toInt(), matrix, true)
     }
 
     /**
@@ -290,9 +290,10 @@ object ImageUtils {
      * @param cornerRadii 圆角大小，dp
      */
     @JvmOverloads 
-    @JvmStatic 
-    fun createDrawableSelecor(normal: Int, pressed: Int, cornerRadii: Float, leftTop: Boolean = true, rightTop: Boolean = true, 
-                              leftBottom: Boolean = true, rightBottom: Boolean = true): StateListDrawable {
+    @JvmStatic
+    @Deprecated(message = "使用SolidDrawableBuilder")
+    fun createDrawable(normal: Int, pressed: Int, cornerRadii: Float, leftTop: Boolean = true, rightTop: Boolean = true,
+                       leftBottom: Boolean = true, rightBottom: Boolean = true): StateListDrawable {
         val drawable = StateListDrawable()
         drawable.addState(intArrayOf(android.R.attr.state_pressed), createDrawable(pressed, cornerRadii, leftTop, rightTop, leftBottom, rightBottom))
         drawable.addState(intArrayOf(), createDrawable(normal, cornerRadii, leftTop, rightTop, leftBottom, rightBottom))
@@ -308,7 +309,8 @@ object ImageUtils {
      * @param rightBottom 右下是否圆角
      */
     @JvmOverloads 
-    @JvmStatic 
+    @JvmStatic
+    @Deprecated(message = "使用SolidDrawableBuilder")
     fun createDrawable(color: Int, cornerRadii: Float, leftTop: Boolean = true, rightTop: Boolean = true, 
                                      leftBottom: Boolean = true, rightBottom: Boolean = true): Drawable {
         val drawable = GradientDrawable()
@@ -326,7 +328,8 @@ object ImageUtils {
      * @param frameColor   边框颜色
      * @param cornerRadius 圆角
      */
-    @JvmStatic 
+    @JvmStatic
+    @Deprecated(message = "使用SolidDrawableBuilder")
     fun createDrawable(fillColor: Int, frameWidth: Int, frameColor: Int, cornerRadius: Int): GradientDrawable {
         val drawable = GradientDrawable()
         drawable.cornerRadius = cornerRadius.toFloat()
@@ -342,7 +345,8 @@ object ImageUtils {
      * @param disabled 不可用时的Drawable
      */
     @JvmOverloads 
-    @JvmStatic 
+    @JvmStatic
+    @Deprecated(message = "使用GradientDrawableBuilder")
     fun createStateListDrawable(normal: Drawable, pressed: Drawable, selected: Drawable? = null, disabled: Drawable? = null): StateListDrawable {
         val drawable = StateListDrawable()
         if (disabled != null) {
@@ -452,11 +456,11 @@ object ImageUtils {
     @JvmStatic 
     fun setAndRecycleBackground(v: View, resID: Int) {
         // 获得ImageView当前显示的图片
-        var bitmap1: Bitmap? = null
+        var bitmap: Bitmap? = null
         if (v.background != null) {
             try {
                 //若是可转成bitmap的背景，手动回收
-                bitmap1 = (v.background as BitmapDrawable).bitmap
+                bitmap = (v.background as BitmapDrawable).bitmap
             } catch (e: ClassCastException) {
                 //若无法转成bitmap，则解除引用，确保能被系统GC回收
                 v.background.callback = null
@@ -466,8 +470,8 @@ object ImageUtils {
         // 根据原始位图和Matrix创建新的图片
         v.setBackgroundResource(resID)
         // bitmap1确认即将不再使用，强制回收，这也是我们经常忽略的地方
-        if (bitmap1 != null && !bitmap1.isRecycled) {
-            bitmap1.recycle()
+        if (bitmap != null && !bitmap.isRecycled) {
+            bitmap.recycle()
         }
     }
 
@@ -478,11 +482,11 @@ object ImageUtils {
     @JvmStatic 
     fun setAndRecycleBackground(v: View, imageDrawable: BitmapDrawable) {
         // 获得ImageView当前显示的图片
-        var bitmap1: Bitmap? = null
+        var bitmap: Bitmap? = null
         if (v.background != null) {
             try {
                 //若是可转成bitmap的背景，手动回收
-                bitmap1 = (v.background as BitmapDrawable).bitmap
+                bitmap = (v.background as BitmapDrawable).bitmap
             } catch (e: ClassCastException) {
                 //若无法转成bitmap，则解除引用，确保能被系统GC回收
                 v.background.callback = null
@@ -492,8 +496,8 @@ object ImageUtils {
         // 根据原始位图和Matrix创建新的图片
         v.background = imageDrawable
         // bitmap1确认即将不再使用，强制回收，这也是我们经常忽略的地方
-        if (bitmap1 != null && !bitmap1.isRecycled) {
-            bitmap1.recycle()
+        if (bitmap != null && !bitmap.isRecycled) {
+            bitmap.recycle()
         }
     }
 

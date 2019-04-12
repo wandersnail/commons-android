@@ -3,10 +3,13 @@ package cn.zfs.commonsdemo
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
+import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.StateListDrawable
 import android.os.Build
 import android.os.Bundle
 import androidx.annotation.RequiresApi
+import com.snail.commons.helper.GradientDrawableBuilder
+import com.snail.commons.helper.SolidDrawableBuilder
 import com.snail.commons.utils.ImageUtils
 import com.snail.commons.utils.UiUtils
 import kotlinx.android.synthetic.main.activity_click_ripple.*
@@ -24,9 +27,19 @@ class ClickRippleActivity : BaseActivity() {
         setContentView(R.layout.activity_click_ripple)        
         tvInner.background = createDrawable()
         btnOutSec.background = createDrawable()
+        val builder = GradientDrawableBuilder()
+        builder.setOrientation(GradientDrawable.Orientation.LEFT_RIGHT)
+        builder.setNormalColors(intArrayOf(0xff00AFEC.toInt(), 0xff00AFEC.toInt(), 0xff00D8F7.toInt()))
+        
+        val builder1 = SolidDrawableBuilder()
+        builder1.setNormalColor(0xff00AFEC.toInt())
+        builder1.round(UiUtils.dp2pxF(8f))
+        builder1.round(UiUtils.dp2pxF(20f), UiUtils.dp2pxF(12f), UiUtils.dp2pxF(4f))
+        builder1.roundLeftTop(UiUtils.dp2pxF(12f), UiUtils.dp2pxF(20f))
+        btnOutSec.background = builder1.build()
         ivOutSrc.setImageDrawable(createDrawable())
         ivOutBg.background = createDrawable()
-        tvOutUnclickable.background = createDrawable()
+        tvOutUnclickable.background = builder.build()
         tvInner.setOnClickListener {  }
         ivOutBg.setOnClickListener {  }
         ivOutSrc.setOnClickListener {  }
