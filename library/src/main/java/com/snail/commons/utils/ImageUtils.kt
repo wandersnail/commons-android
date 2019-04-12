@@ -28,8 +28,7 @@ import java.net.URL
 
 /**
  * 时间: 2017/10/10 15:34
- * 作者: 曾繁盛
- * 邮箱: 43068145@qq.com
+ * 作者: zengfansheng
  * 功能: Bitmap、Drawable、图片背景相关
  */
 

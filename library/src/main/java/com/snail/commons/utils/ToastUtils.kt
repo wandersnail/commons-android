@@ -9,8 +9,7 @@ import java.lang.ref.WeakReference
 
 /**
  * 时间: 2017/10/10 15:10
- * 作者: 曾繁盛
- * 邮箱: 43068145@qq.com
+ * 作者: zengfansheng
  * 功能: 单例Toast工具类
  */
 
