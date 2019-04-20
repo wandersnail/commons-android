@@ -100,4 +100,9 @@ object StringUtils {
     fun formatDuration(duration: Int): String {
         return String.format(Locale.US, "%02d:%02d:%02d", duration / 3600, duration % 3600 / 60, duration % 60)
     }
+    
+    @JvmStatic
+    fun randomUuid(): String {
+        return UUID.randomUUID().toString().replace("-", "")
+    }
 }
