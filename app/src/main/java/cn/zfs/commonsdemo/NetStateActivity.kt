@@ -17,7 +17,6 @@ class NetStateActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_net_state)
-        title = "网络及位置服务状态"
         val helper = WifiHelper(this)
         btnGoConnect.setOnClickListener { 
             if (helper.isWifiEnable) {

@@ -3,6 +3,7 @@ package com.snail.commons.utils
 import android.app.ActivityManager
 import android.content.ComponentName
 import android.content.Context
+import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.location.LocationManager
 import android.os.Build
@@ -32,9 +33,8 @@ object SystemUtils {
      */
     @JvmStatic
     fun isAppInstalled(context: Context, packageName: String): Boolean {
-        val packageManager = context.packageManager
         // 获取所有已安装程序的包信息
-        val pinfo = packageManager.getInstalledPackages(0)
+        val pinfo = context.packageManager.getInstalledPackages(0)
         for (i in pinfo.indices) {
             if (pinfo[i].packageName == packageName) {
                 return true
@@ -388,5 +388,30 @@ object SystemUtils {
             e.printStackTrace()
         }
         return null
+    }
+
+    /**
+     * 判断app是否运行在debug模式下
+     */
+    @JvmStatic
+    fun isRunInDebug(context: Context): Boolean {
+        return try {
+            (context.applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE) != 0
+        } catch (e: Exception) {
+            false
+        }
+    }
+
+    /**
+     * 判断apk是否是debug包
+     */
+    @JvmStatic
+    fun isDebugApk(context: Context, apkPath: String): Boolean {
+        val info = context.packageManager.getPackageArchiveInfo(apkPath, PackageManager.GET_ACTIVITIES)
+        return try {
+            (info.applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE) != 0
+        } catch (e: Exception) {
+            false
+        }
     }
 }

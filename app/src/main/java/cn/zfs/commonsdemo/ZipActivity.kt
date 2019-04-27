@@ -27,15 +27,14 @@ class ZipActivity : BaseActivity() {
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_zip)     
-        title = "解压缩"
+        setContentView(R.layout.activity_zip)
         val loadDialog = ProgressDialog(this)
         loadDialog.setCancelable(false)
         fileSelector.setRoot(Environment.getExternalStorageDirectory())
         btnSelectZip.setOnClickListener { 
             selectType = 0
             fileSelector.setFilenameFilter(FilenameFilter { dir, name -> 
-                dir.isDirectory || name.endsWith(".zip", true)
+                File(dir, name).isDirectory || name.endsWith(".zip", true)
             })
             fileSelector.setMultiSelectionEnabled(true)
             fileSelector.setSelectionMode(FileSelector.FILES_ONLY)

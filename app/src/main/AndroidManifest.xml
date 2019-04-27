@@ -66,5 +66,9 @@
             android:name=".SysFilesActivity"
             android:configChanges="keyboardHidden|orientation|navigation|screenSize|keyboard"
             android:screenOrientation="portrait"/>
+        <activity 
+            android:name=".DebugJudgeActivity"
+            android:configChanges="keyboardHidden|orientation|navigation|screenSize|keyboard"
+            android:screenOrientation="portrait"/>
     </application>
 </manifest>

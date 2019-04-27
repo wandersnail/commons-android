@@ -34,7 +34,6 @@ class ConnectWifiActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_connect_wifi)
-        title = "连接WiFi"
         lv.adapter = adapter
         helper = WifiHelper(this)
         progressDialog = ProgressDialog(this)

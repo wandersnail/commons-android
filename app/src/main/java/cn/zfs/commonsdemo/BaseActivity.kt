@@ -1,8 +1,8 @@
 package cn.zfs.commonsdemo
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 
 
 /**
@@ -13,6 +13,10 @@ open class BaseActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        val t = intent.getStringExtra("title")
+        if (t != null) {
+            title = t
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

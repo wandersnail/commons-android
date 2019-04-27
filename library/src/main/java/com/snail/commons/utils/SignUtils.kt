@@ -62,10 +62,8 @@ object SignUtils {
         try {
             val packageSign: PackageInfo
             return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                val info =
-                    context.packageManager.getPackageArchiveInfo(apkPath, PackageManager.GET_SIGNING_CERTIFICATES)
-                packageSign =
-                        context.packageManager.getPackageInfo(info.packageName, PackageManager.GET_SIGNING_CERTIFICATES)
+                val info = context.packageManager.getPackageArchiveInfo(apkPath, PackageManager.GET_SIGNING_CERTIFICATES)
+                packageSign = context.packageManager.getPackageInfo(info.packageName, PackageManager.GET_SIGNING_CERTIFICATES)
                 getSignature(packageSign)
             } else {
                 packageSign = context.packageManager.getPackageArchiveInfo(apkPath, PackageManager.GET_SIGNATURES)
