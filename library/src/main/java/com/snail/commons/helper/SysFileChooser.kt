@@ -4,7 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.fragment.app.Fragment
-import com.snail.commons.utils.FileUtils
+import com.snail.commons.utils.getFileRealPath
 
 /**
  * 调用系统文件管理选择文件
@@ -48,14 +48,14 @@ class SysFileChooser {
             if (clipData != null) {
                 val count = clipData.itemCount
                 for (i in 0 until count) {
-                    val item = clipData.getItemAt(i)
-                    val path = FileUtils.getFileRealPath(context, item.uri)
+                    val item = clipData.getItemAt(i)                    
+                    val path = context.getFileRealPath(item.uri)
                     if (path != null) {
                         paths.add(path)
                     }
                 }
             } else if (data.data != null) {
-                val path = FileUtils.getFileRealPath(context, data.data!!)
+                val path = context.getFileRealPath(data.data!!)
                 if (path != null) {
                     paths.add(path)
                 }

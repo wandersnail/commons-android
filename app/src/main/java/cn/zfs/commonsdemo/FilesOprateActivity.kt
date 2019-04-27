@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.activity_sys_files.*
  * date: 2019/3/2 23:09
  * author: zengfansheng
  */
-class SysFilesActivity : BaseActivity() {
+class FilesOprateActivity : BaseActivity() {
     private val fileChooser = SysFileChooser()
     
     override fun onCreate(savedInstanceState: Bundle?) {

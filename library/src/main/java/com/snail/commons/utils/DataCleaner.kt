@@ -2,87 +2,51 @@ package com.snail.commons.utils
 
 import android.content.Context
 import android.os.Environment
+import com.snail.commons.AppHolder.Companion.context
 
 import java.io.File
 
 /**
- * Created by zeng on 2016/9/7.
- * 应用数据清理
+ * 清除本应用内部缓存(/items/items/com.xxx.xxx/cache)
  */
-object DataCleaner {
-    /**
-     * 清除本应用内部缓存(/items/items/com.xxx.xxx/cache)
-     */
-    @JvmStatic 
-    fun cleanInternalCache(context: Context) {
-        FileUtils.deleteDir(context.cacheDir, false)
-    }
+fun Context.cleanInternalCache() = cacheDir.clear()
 
-    /**
-     * 清除本应用所有数据库(/items/items/com.xxx.xxx/databases)
-     */
-    @JvmStatic 
-    fun cleanDatabases(context: Context) {
-        FileUtils.deleteDir(File(context.filesDir.parent, "databases"), false)
-    }
+/**
+ * 清除本应用所有数据库(/items/items/com.xxx.xxx/databases)
+ */
+fun Context.cleanDatabases() = File(filesDir.parent, "databases").clear()
 
-    /**
-     * 清除本应用SharedPreference(/items/items/com.xxx.xxx/shared_prefs)
-     */
-    @JvmStatic 
-    fun cleanSharedPreference(context: Context) {
-        FileUtils.deleteDir(File(context.filesDir.parent, "shared_prefs"), false)
-    }
+/**
+ * 清除本应用SharedPreference(/items/items/com.xxx.xxx/shared_prefs)
+ */
+fun Context.cleanSharedPreference() = File(filesDir.parent, "shared_prefs").clear()
 
-    /**
-     * 按名字清除本应用数据库
-     */
-    @JvmStatic 
-    fun cleanDatabaseByName(context: Context, dbName: String) {
-        context.deleteDatabase(dbName)
-    }
+/**
+ * 按名字清除本应用数据库
+ */
+fun Context.cleanDatabaseByName(dbName: String) = deleteDatabase(dbName)
 
-    /**
-     * 清除/items/items/com.xxx.xxx/files下的内容
-     */
-    @JvmStatic 
-    fun cleanFiles(context: Context) {
-        FileUtils.deleteDir(context.filesDir, false)
-    }
+/**
+ * 清除/items/items/com.xxx.xxx/files下的内容
+ */
+fun Context.cleanFiles() = filesDir.clear()
 
-    /**
-     * 清除外部cache下的内容(/mnt/sdcard/android/items/com.xxx.xxx/cache)
-     */
-    @JvmStatic 
-    fun cleanExternalCache(context: Context) {
-        if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) {
-            val cacheDir = context.externalCacheDir
-            if (cacheDir != null) {
-                FileUtils.deleteDir(cacheDir, false)
-            }
-        }
+/**
+ * 清除外部cache下的内容(/mnt/sdcard/android/items/com.xxx.xxx/cache)
+ */
+fun Context.cleanExternalCache() {
+    if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) {
+        context.externalCacheDir?.clear()
     }
+}
 
-    /**
-     * 清除自定义路径下的文件，使用需小心，请不要误删。而且只支持目录下的文件删除
-     */
-    @JvmStatic 
-    fun cleanCustomCache(filePath: String) {
-        FileUtils.deleteDir(File(filePath), false)
-    }
-
-    /**
-     * 清除本应用所有的数据
-     */
-    @JvmStatic 
-    fun cleanApplicationData(context: Context, vararg filepath: String) {
-        cleanInternalCache(context)
-        cleanExternalCache(context)
-        cleanDatabases(context)
-        cleanSharedPreference(context)
-        cleanFiles(context)
-        for (filePath in filepath) {
-            cleanCustomCache(filePath)
-        }
-    }
+/**
+ * 清除本应用所有的数据
+ */
+fun Context.cleanApplicationData() {
+    cleanInternalCache()
+    cleanExternalCache()
+    cleanDatabases()
+    cleanSharedPreference()
+    cleanFiles()
 }

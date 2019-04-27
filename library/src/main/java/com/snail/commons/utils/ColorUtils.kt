@@ -57,26 +57,25 @@ object ColorUtils {
         val states = arrayOf(intArrayOf(-android.R.attr.state_enabled), intArrayOf(android.R.attr.state_pressed, android.R.attr.state_enabled), intArrayOf(android.R.attr.state_selected, android.R.attr.state_enabled), intArrayOf())
         return ColorStateList(states, intArrayOf(disabled, pressed, selected, normal))
     }
+}
 
-    /**
-     * 判断颜色是否深色
-     */
-    @JvmStatic
-    fun isColorDark(color: Int): Boolean {
-        val darkness = 1 - (0.299 * Color.red(color) + 0.587 * Color.green(color) + 0.114 * Color.blue(color)) / 255
-        return darkness >= 0.5
-    }
+/*############################################ 扩展函数 #########################################*/
 
-    /**
-     * Color转换为字符串
-     */
-    @JvmStatic
-    fun toHexWithoutAlpha(color: Int): String {
-        val sb = StringBuilder(Integer.toHexString(color and 0x00FFFFFF))
-        while (sb.length < 6) {
-            sb.insert(0, "0")
-        }
-        sb.insert(0, "#")
-        return sb.toString()
-    }
+/**
+ * Color转换为颜色字符串，格式：#ffffffff
+ */
+fun Int.toHexColor(): String {
+    val bs = ByteArray(4)
+    bs[0] = (this shr 24).toByte()
+    bs[1] = (this shr 16).toByte()
+    bs[2] = (this shr 8).toByte()
+    bs[3] = this.toByte()
+    return "#${bs.toHexString()}"
+}
+
+/**
+ * 判断颜色是否深色
+ */
+fun Int.isColorDark(): Boolean {
+    return 1 - (0.299 * Color.red(this) + 0.587 * Color.green(this) + 0.114 * Color.blue(this)) / 255 >= 0.5
 }

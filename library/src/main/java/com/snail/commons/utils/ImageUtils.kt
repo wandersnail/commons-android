@@ -5,7 +5,6 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.*
 import android.graphics.drawable.*
-import android.media.ExifInterface
 import android.net.Uri
 import android.os.Build
 import android.renderscript.Allocation
@@ -19,6 +18,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.FileProvider
 import androidx.core.graphics.drawable.RoundedBitmapDrawable
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
+import androidx.exifinterface.media.ExifInterface
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream

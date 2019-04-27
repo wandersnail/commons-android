@@ -173,10 +173,11 @@ object DateUtils {
      * 将字符串日期解析成Date对象
      * @return 解析成功返回Date对象，否则返回null
      */
+    @JvmOverloads
     @JvmStatic 
-    fun parseStringDate(date: String, pattern: String): Date? {
+    fun parseStringDate(date: String, pattern: String, locale: Locale = Locale.getDefault()): Date? {
         return try {
-            SimpleDateFormat(pattern).parse(date)
+            SimpleDateFormat(pattern, locale).parse(date)
         } catch (e: ParseException) {
             null
         }

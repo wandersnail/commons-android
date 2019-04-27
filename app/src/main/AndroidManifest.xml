@@ -63,7 +63,7 @@
             android:configChanges="keyboardHidden|orientation|navigation|screenSize|keyboard"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".SysFilesActivity"
+            android:name=".FilesOprateActivity"
             android:configChanges="keyboardHidden|orientation|navigation|screenSize|keyboard"
             android:screenOrientation="portrait"/>
         <activity 
