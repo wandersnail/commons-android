@@ -49,7 +49,7 @@ object SysShareUtils {
         val intent = Intent(Intent.ACTION_SEND)
         intent.type = "image/*"
         val uri: Uri? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            MediaUtils.getImageContentUri(context, file)
+            file.getImageContentUri(context)
         } else {
             Uri.fromFile(file)
         }
@@ -72,7 +72,7 @@ object SysShareUtils {
         val imageUris = ArrayList<Uri>()
         for (file in files) {
             val uri: Uri? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                MediaUtils.getImageContentUri(context, file)
+                file.getImageContentUri(context)
             } else {
                 Uri.fromFile(file)
             }
@@ -97,7 +97,7 @@ object SysShareUtils {
         val intent = Intent(Intent.ACTION_SEND)
         intent.type = "video/*"
         val uri: Uri? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            MediaUtils.getVideoContentUri(context, file)
+            file.getVideoContentUri(context)
         } else {
             Uri.fromFile(file)
         }
@@ -117,7 +117,7 @@ object SysShareUtils {
     fun shareFile(context: Context, title: String, file: File) {
         val intent = Intent(Intent.ACTION_SEND)
         intent.type = FileUtils.getMimeType(file.absolutePath)
-        intent.putExtra(Intent.EXTRA_STREAM, FileProviderUtils.getUriForFile(context, file))
+        intent.putExtra(Intent.EXTRA_STREAM, file.toUri(context))
         startShare(context, intent, title, true)
     }
 }

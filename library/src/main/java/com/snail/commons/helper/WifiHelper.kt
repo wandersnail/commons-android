@@ -9,7 +9,7 @@ import android.net.wifi.WifiManager
 import android.os.Handler
 import android.os.Looper
 import android.text.TextUtils
-import com.snail.commons.utils.NetworkUtils
+import com.snail.commons.utils.isCurrentNetworkWifi
 import java.util.*
 
 class WifiHelper(context: Context) {
@@ -182,7 +182,7 @@ class WifiHelper(context: Context) {
                     e.printStackTrace()
                 }
 
-                if (NetworkUtils.isCurrentNetworkWifi(context) && ssid != null && ssid == wifiInfo.ssid) {
+                if (context.isCurrentNetworkWifi() && ssid != null && ssid == wifiInfo.ssid) {
                     handleConnectCallback(callback, true)
                     return@Runnable
                 }

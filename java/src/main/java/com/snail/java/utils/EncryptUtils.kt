@@ -1,4 +1,4 @@
-package com.snail.java
+package com.snail.java.utils
 
 import java.io.File
 import java.io.FileInputStream
@@ -111,7 +111,10 @@ object EncryptUtils {
      */
     @JvmStatic 
     fun getMD5Code(plainText: String): String? {
-        return encryptByMessageDigest(plainText.toByteArray(), MD5)
+        return encryptByMessageDigest(
+            plainText.toByteArray(),
+            MD5
+        )
     }
 
     /**
@@ -120,7 +123,10 @@ object EncryptUtils {
      */
     @JvmStatic 
     fun getSHA1Code(plainText: String): String? {
-        return encryptByMessageDigest(plainText.toByteArray(), SHA1)
+        return encryptByMessageDigest(
+            plainText.toByteArray(),
+            SHA1
+        )
     }
 
     /**
@@ -193,7 +199,10 @@ object EncryptUtils {
      */
     @JvmStatic 
     fun getMD5Code(inputStream: InputStream): String? {
-        return encryptByMessageDigest(inputStream, MD5)
+        return encryptByMessageDigest(
+            inputStream,
+            MD5
+        )
     }
 
     /**
@@ -202,7 +211,10 @@ object EncryptUtils {
      */
     @JvmStatic 
     fun getSHA1Code(inputStream: InputStream): String? {
-        return encryptByMessageDigest(inputStream, SHA1)
+        return encryptByMessageDigest(
+            inputStream,
+            SHA1
+        )
     }
 
     /**

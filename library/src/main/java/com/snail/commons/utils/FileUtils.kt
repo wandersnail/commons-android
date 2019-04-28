@@ -1,6 +1,7 @@
 package com.snail.commons.utils
 
 import android.content.ContentUris
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.media.MediaMetadataRetriever
@@ -237,7 +238,7 @@ fun File.size(): Long {
 }
 
 /**
- * 移动文件或文件夹，不适用于Android
+ * 移动文件或文件夹
  *
  * @param target  目标文件或文件夹。类型需与源相同，如源为文件，则目标也必须是文件
  * @param replace 当有重名文件时是否替换。传false时，自动在原文件名后加上当前时间的毫秒值
@@ -275,27 +276,6 @@ private fun compareAndDeleteSrc(src: File, target: File): Boolean {
 }
 
 /**
- * 移动文件或文件夹，适用于Android
- *
- * @param target  目标文件或文件夹。类型需与源相同，如源为文件，则目标也必须是文件
- * @param replace 当有重名文件时是否替换。传false时，自动在原文件名后加上当前时间的毫秒值
- * @return 移动成功返回true, 否则返回false
- */
-fun File.moveToForAndroid(target: File, replace: Boolean): Boolean {
-    var targetFile = target
-    if (!exists()) {
-        return false
-    }
-    if (!replace) {
-        targetFile = FileUtils.checkAndRename(targetFile)
-    }
-    copyToForAndroid(targetFile)
-
-    //如果文件存在，并且大小与源文件相等，则写入成功，删除源文件
-    return compareAndDeleteSrc(this, targetFile)
-}
-
-/**
  * 使用GZIP压缩数据
  */
 fun ByteArray.compressByGZIP(): ByteArray? {
@@ -313,10 +293,11 @@ fun ByteArray.compressByGZIP(): ByteArray? {
  *
  * @param target 目标文件
  */
-fun File.compressByGZIP(target: File) {
+@JvmOverloads
+fun File.compressByGZIP(target: File, bufferSize: Int = 10240) {
     FileInputStream(this).use {
         GZIPOutputStream(FileOutputStream(target)).use { out ->
-            val buf = ByteArray(1024)
+            val buf = ByteArray(bufferSize)
             var num = it.read(buf)
             while (num != -1) {
                 out.write(buf, 0, num)
@@ -344,11 +325,12 @@ fun File.copyTo(target: File) {
  *
  * @param targetFile  目标文件
  */
-fun InputStream.toFile(targetFile: File) {
+@JvmOverloads
+fun InputStream.toFile(targetFile: File, bufferSize: Int = 10240) {
     BufferedInputStream(this).use {
         BufferedOutputStream(FileOutputStream(targetFile)).use { out ->
             // 缓冲数组   
-            val b = ByteArray(1024 * 5)
+            val b = ByteArray(bufferSize)
             var len = it.read(b)
             while (len != -1) {
                 out.write(b, 0, len)
@@ -360,45 +342,29 @@ fun InputStream.toFile(targetFile: File) {
     }
 }
 
-/**
- * 适用于Android平台的文件复制
- */
-private fun copyFileForAndroid(src: File, target: File) {
-    try {
-        FileInputStream(src).toFile(target)
-    } catch (e: FileNotFoundException) {
-        e.printStackTrace()
-    }
-}
-
-/**
- * 复制文件或文件夹，适用于Android
- *
- * @param target 目标文件或文件夹
- */
-fun File.copyToForAndroid(target: File) {
-    if (isFile) {
-        copyFileForAndroid(this, target)
-    } else {
-        copyDirForAndroid(this, target)
-    }
-}
-
 /*
- * 快速复制文件，不适用于Android
+ * 快速复制文件
  * @param source 源文件
  * @param target 目标文件
  */
 private fun copyFile(source: File, target: File) {
     FileInputStream(source).channel.use {
         FileOutputStream(target).channel.use { out -> 
-            it.transferTo(0, it.size(), out)
+            var position = 0L
+            var size = it.size()
+            while (size > 0) {
+                val count = it.transferTo(position, size, out)
+                if (count > 0) {
+                    position += count
+                    size -= count
+                }
+            }            
         }
     }
 }
 
 /*
- * 复制文件夹，不适用于Android
+ * 复制文件夹
  * @param sourceDir 源文件夹
  * @param targetDir 目标文件夹
  */
@@ -418,48 +384,27 @@ private fun copyDir(sourceDir: File, targetDir: File) {
     }
 }
 
-/*
- * 复制文件夹，适用于Android
- * @param sourceDir 源文件夹
- * @param targetDir 目标文件夹
- */
-private fun copyDirForAndroid(sourceDir: File, targetDir: File) {
-    //目标目录新建源文件夹
-    if (!targetDir.exists()) {
-        targetDir.mkdirs()
-    }
-    // 获取源文件夹当前下的文件或目录   
-    val files = sourceDir.listFiles()
-    for (file in files) {
-        if (file.isFile) {
-            copyFileForAndroid(file, File(targetDir, file.name))
-        } else {
-            copyDirForAndroid(file, File(targetDir, file.name))
-        }
-    }
-}
-
 /**
  * 兼容Android7.0以上，获取Intent传递的File的Uri
  */
-fun Context.getUriForFile(file: File): Uri {
+fun File.toUri(context: Context): Uri {
     // 判断版本大于等于7.0
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-        FileProvider.getUriForFile(this, "$packageName.fileprovider", file)
+        FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", this)
     } else {
-        Uri.fromFile(file)
+        Uri.fromFile(this)
     }
 }
 
-fun Context.setIntentDataAndType(intent: Intent, type: String, file: File, writeable: Boolean) {
+fun File.setIntentDataAndType(context: Context, intent: Intent, type: String, writeable: Boolean) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-        intent.setDataAndType(getUriForFile(file), type)
+        intent.setDataAndType(toUri(context), type)
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         if (writeable) {
             intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
         }
     } else {
-        intent.setDataAndType(Uri.fromFile(file), type)
+        intent.setDataAndType(Uri.fromFile(this), type)
     }
 }
 
@@ -607,4 +552,50 @@ private fun isMediaDocument(uri: Uri): Boolean {
  */
 private fun isGooglePhotosUri(uri: Uri): Boolean {
     return "com.google.android.apps.photos.content" == uri.authority
+}
+
+/**
+ * 根据文件获取content uri
+ * @param context 上下文
+ * @param baseUri 父uri
+ * @param file 文件
+ */
+private fun getContentUri(context: Context, baseUri: Uri, file: File): Uri? {
+    val filePath = file.absolutePath
+    val cursor = context.contentResolver.query(baseUri, arrayOf(BaseColumns._ID),
+        MediaStore.MediaColumns.DATA + "=? ", arrayOf(filePath), null)
+    return if (cursor != null && cursor.moveToFirst()) {
+        val id = cursor.getInt(cursor.getColumnIndex(BaseColumns._ID))
+        cursor.close()
+        Uri.withAppendedPath(baseUri, "" + id)
+    } else {
+        if (file.exists()) {
+            val values = ContentValues()
+            values.put(MediaStore.MediaColumns.DATA, filePath)
+            context.contentResolver.insert(baseUri, values)
+        } else {
+            null
+        }
+    }
+}
+
+/**
+ * 获取视频文件的content uri
+ */
+fun File.getVideoContentUri(context: Context): Uri? {
+    return getContentUri(context, MediaStore.Video.Media.EXTERNAL_CONTENT_URI, this)
+}
+
+/**
+ * 获取图片文件的content uri
+ */
+fun File.getImageContentUri(context: Context): Uri? {
+    return getContentUri(context, MediaStore.Images.Media.EXTERNAL_CONTENT_URI, this)
+}
+
+/**
+ * 获取音频文件的content uri
+ */
+fun File.getAudioContentUri(context: Context): Uri? {
+    return getContentUri(context, MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, this)
 }

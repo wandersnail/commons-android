@@ -6,7 +6,7 @@ import android.view.View
 import android.widget.TextView
 import com.snail.commons.entity.Storage
 import com.snail.commons.utils.FileUtils
-import com.snail.commons.utils.SystemUtils
+import com.snail.commons.utils.getStorages
 import com.snail.widget.listview.BaseListAdapter
 import com.snail.widget.listview.BaseViewHolder
 import kotlinx.android.synthetic.main.activity_storage.*
@@ -22,7 +22,7 @@ class StorageActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_storage)
-        val storages = SystemUtils.getStorages(this)
+        val storages = getStorages()
         if (storages != null) {
             lv.adapter = ListAdapter(this, storages)
         }

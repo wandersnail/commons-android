@@ -4,8 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
 import com.snail.commons.helper.WifiHelper
-import com.snail.commons.utils.NetworkUtils
-import com.snail.commons.utils.SystemUtils
+import com.snail.commons.utils.isCurrentNetworkWifi
+import com.snail.commons.utils.isGPSEnabled
+import com.snail.commons.utils.isLocationEnabled
+import com.snail.commons.utils.isNetworkAvailable
 import kotlinx.android.synthetic.main.activity_net_state.*
 
 /**
@@ -32,9 +34,9 @@ class NetStateActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        tvNetAvailable.text = if (NetworkUtils.isNetworkAvailable(this)) "是" else "否"
-        tvCurrentWifi.text = if (NetworkUtils.isCurrentNetworkWifi(this)) "是" else "否"
-        tvLocationEnabled.text = if (SystemUtils.isLocationEnabled(this)) "是" else "否"
-        tvGpsEnabled.text = if (SystemUtils.isGPSEnabled(this)) "是" else "否"
+        tvNetAvailable.text = if (isNetworkAvailable()) "是" else "否"
+        tvCurrentWifi.text = if (isCurrentNetworkWifi()) "是" else "否"
+        tvLocationEnabled.text = if (isLocationEnabled()) "是" else "否"
+        tvGpsEnabled.text = if (isGPSEnabled()) "是" else "否"
     }
 }

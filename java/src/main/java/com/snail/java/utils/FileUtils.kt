@@ -1,4 +1,4 @@
-package com.snail.java
+package com.snail.java.utils
 
 import java.io.*
 import java.text.DecimalFormat
@@ -210,7 +210,7 @@ fun File.size(): Long {
 }
 
 /**
- * 移动文件或文件夹，不适用于Android
+ * 移动文件或文件夹
  *
  * @param target  目标文件或文件夹。类型需与源相同，如源为文件，则目标也必须是文件
  * @param replace 当有重名文件时是否替换。传false时，自动在原文件名后加上当前时间的毫秒值
@@ -248,27 +248,6 @@ private fun compareAndDeleteSrc(src: File, target: File): Boolean {
 }
 
 /**
- * 移动文件或文件夹，适用于Android
- *
- * @param target  目标文件或文件夹。类型需与源相同，如源为文件，则目标也必须是文件
- * @param replace 当有重名文件时是否替换。传false时，自动在原文件名后加上当前时间的毫秒值
- * @return 移动成功返回true, 否则返回false
- */
-fun File.moveToForAndroid(target: File, replace: Boolean): Boolean {
-    var targetFile = target
-    if (!exists()) {
-        return false
-    }
-    if (!replace) {
-        targetFile = FileUtils.checkAndRename(targetFile)
-    }
-    copyToForAndroid(targetFile)
-
-    //如果文件存在，并且大小与源文件相等，则写入成功，删除源文件
-    return compareAndDeleteSrc(this, targetFile)
-}
-
-/**
  * 使用GZIP压缩数据
  */
 fun ByteArray.compressByGZIP(): ByteArray? {
@@ -286,10 +265,11 @@ fun ByteArray.compressByGZIP(): ByteArray? {
  *
  * @param target 目标文件
  */
-fun File.compressByGZIP(target: File) {
+@JvmOverloads
+fun File.compressByGZIP(target: File, bufferSize: Int = 10240) {
     FileInputStream(this).use {
         GZIPOutputStream(FileOutputStream(target)).use { out ->
-            val buf = ByteArray(1024)
+            val buf = ByteArray(bufferSize)
             var num = it.read(buf)
             while (num != -1) {
                 out.write(buf, 0, num)
@@ -300,7 +280,7 @@ fun File.compressByGZIP(target: File) {
 }
 
 /**
- * 复制文件或文件夹，不适用于Android
+ * 复制文件或文件夹
  *
  * @param target 目标文件或文件夹。类型需与源相同，如源为文件，则目标也必须是文件
  */
@@ -317,11 +297,12 @@ fun File.copyTo(target: File) {
  *
  * @param targetFile  目标文件
  */
-fun InputStream.toFile(targetFile: File) {
+@JvmOverloads
+fun InputStream.toFile(targetFile: File, bufferSize: Int = 10240) {
     BufferedInputStream(this).use {
         BufferedOutputStream(FileOutputStream(targetFile)).use { out ->
             // 缓冲数组   
-            val b = ByteArray(1024 * 5)
+            val b = ByteArray(bufferSize)
             var len = it.read(b)
             while (len != -1) {
                 out.write(b, 0, len)
@@ -333,45 +314,29 @@ fun InputStream.toFile(targetFile: File) {
     }
 }
 
-/**
- * 适用于Android平台的文件复制
- */
-private fun copyFileForAndroid(src: File, target: File) {
-    try {
-        FileInputStream(src).toFile(target)
-    } catch (e: FileNotFoundException) {
-        e.printStackTrace()
-    }
-}
-
-/**
- * 复制文件或文件夹，适用于Android
- *
- * @param target 目标文件或文件夹
- */
-fun File.copyToForAndroid(target: File) {
-    if (isFile) {
-        copyFileForAndroid(this, target)
-    } else {
-        copyDirForAndroid(this, target)
-    }
-}
-
 /*
- * 快速复制文件，不适用于Android
+ * 快速复制文件
  * @param source 源文件
  * @param target 目标文件
  */
 private fun copyFile(source: File, target: File) {
     FileInputStream(source).channel.use {
-        FileOutputStream(target).channel.use { out -> 
-            it.transferTo(0, it.size(), out)
+        FileOutputStream(target).channel.use { out ->
+            var position = 0L
+            var size = it.size()
+            while (size > 0) {
+                val count = it.transferTo(position, size, out)
+                if (count > 0) {
+                    position += count
+                    size -= count
+                }
+            }
         }
     }
 }
 
 /*
- * 复制文件夹，不适用于Android
+ * 复制文件夹
  * @param sourceDir 源文件夹
  * @param targetDir 目标文件夹
  */
@@ -387,27 +352,6 @@ private fun copyDir(sourceDir: File, targetDir: File) {
             copyFile(file, File(targetDir, file.name))
         } else {
             copyDir(file, File(targetDir, file.name))
-        }
-    }
-}
-
-/*
- * 复制文件夹，适用于Android
- * @param sourceDir 源文件夹
- * @param targetDir 目标文件夹
- */
-private fun copyDirForAndroid(sourceDir: File, targetDir: File) {
-    //目标目录新建源文件夹
-    if (!targetDir.exists()) {
-        targetDir.mkdirs()
-    }
-    // 获取源文件夹当前下的文件或目录   
-    val files = sourceDir.listFiles()
-    for (file in files) {
-        if (file.isFile) {
-            copyFileForAndroid(file, File(targetDir, file.name))
-        } else {
-            copyDirForAndroid(file, File(targetDir, file.name))
         }
     }
 }

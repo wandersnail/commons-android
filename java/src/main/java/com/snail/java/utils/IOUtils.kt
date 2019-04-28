@@ -1,4 +1,4 @@
-package com.snail.commons.utils
+package com.snail.java.utils
 
 import java.io.*
 import java.nio.charset.Charset
