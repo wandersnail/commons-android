@@ -28,5 +28,10 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'com.github.wandersnail:fileselector:1.1.6'
     implementation 'com.github.wandersnail:widgets:1.1.5'
+    implementation "com.squareup.retrofit2:retrofit:$retrofit2_version"
+    implementation "io.reactivex.rxjava2:rxkotlin:$rxkotlin_version"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit2_version"
+    implementation "com.alibaba:fastjson:$fastjson_version"
     implementation project(':library')
+    implementation project(':java')
 }

@@ -7,8 +7,8 @@ import com.snail.java.network.download.DownloadInfo
 import com.snail.java.network.download.DownloadWorker
 import com.snail.java.network.upload.UploadInfo
 import com.snail.java.network.upload.UploadWorker
-import com.snail.network.utils.HttpUtils
 import com.snail.java.network.utils.SchedulerUtils
+import com.snail.network.utils.HttpUtils
 import io.reactivex.Observable
 import io.reactivex.Observer
 import okhttp3.MediaType
@@ -78,7 +78,7 @@ object NetworkRequester {
         return UploadWorker(infos, listener)
     }
 
-    private fun <T> subscribe(observable: Observable<T>, configuration: Configuration, observer: Observer<T>? = null) {
+    private fun <T> subscribe(observable: Observable<T>, configuration: Configuration, observer: Observer<T>?) {
         observable.compose(SchedulerUtils.applyGeneralObservableSchedulers()).subscribe(GeneralRequestTask(configuration, observer))
     }
     
@@ -86,8 +86,7 @@ object NetworkRequester {
      * 普通GET请求
      */
     @JvmStatic
-    @JvmOverloads 
-    fun get(url: String, observer: Observer<ResponseBody>? = null) {
+    fun get(url: String, observer: Observer<ResponseBody>?) {
         val config = applyConfiguration(url, null)        
         subscribe(config.service!!.get(url), config, observer)
     }
@@ -96,8 +95,7 @@ object NetworkRequester {
      * 普通GET请求
      */
     @JvmStatic
-    @JvmOverloads 
-    fun get(configuration: Configuration, url: String, observer: Observer<ResponseBody>? = null) {
+    fun get(configuration: Configuration, url: String, observer: Observer<ResponseBody>?) {
         val config = applyConfiguration(url, configuration)
         subscribe(config.service!!.get(url), config, observer)
     }
@@ -109,7 +107,7 @@ object NetworkRequester {
      * @param T 转到成的对象类
      */
     @JvmStatic
-    fun <T> get(url: String, converter: ResponseConverter<T>, observer: Observer<T>) {
+    fun <T> get(url: String, converter: ResponseConverter<T>, observer: Observer<T>?) {
         val config = applyConfiguration(url, null)
         subscribe(HttpUtils.convertObservable(config.service!!.get(url), converter), config, observer)
     }
@@ -121,7 +119,7 @@ object NetworkRequester {
      * @param T 转到成的对象类
      */
     @JvmStatic
-    fun <T> get(configuration: Configuration, url: String, converter: ResponseConverter<T>, observer: Observer<T>) {
+    fun <T> get(configuration: Configuration, url: String, converter: ResponseConverter<T>, observer: Observer<T>?) {
         val config = applyConfiguration(url, configuration)
         subscribe(HttpUtils.convertObservable(config.service!!.get(url), converter), config, observer)
     }
@@ -132,8 +130,7 @@ object NetworkRequester {
      * @param url 请求的url
      */
     @JvmStatic
-    @JvmOverloads 
-    fun postJson(url: String, json: String, observer: Observer<ResponseBody>? = null) {
+    fun postJson(url: String, json: String, observer: Observer<ResponseBody>?) {
         val requestBody = RequestBody.create(MediaType.parse("application/json;charset=utf-8"), json)
         val config = applyConfiguration(url, null)
         subscribe(config.service!!.postJson(url, requestBody), config, observer)
@@ -144,8 +141,7 @@ object NetworkRequester {
      *
      * @param url 请求的url
      */
-    @JvmOverloads 
-    fun postJson(configuration: Configuration, url: String, json: String, observer: Observer<ResponseBody>? = null) {
+    fun postJson(configuration: Configuration, url: String, json: String, observer: Observer<ResponseBody>?) {
         val requestBody = RequestBody.create(MediaType.parse("application/json;charset=utf-8"), json)
         val config = applyConfiguration(url, configuration)
         subscribe(config.service!!.postJson(url, requestBody), config, observer)
@@ -158,7 +154,7 @@ object NetworkRequester {
      * @param T 转到成的对象类
      */
     @JvmStatic
-    fun <T> postJson(url: String, json: String, converter: ResponseConverter<T>, observer: Observer<T>) {
+    fun <T> postJson(url: String, json: String, converter: ResponseConverter<T>, observer: Observer<T>?) {
         val requestBody = RequestBody.create(MediaType.parse("application/json;charset=utf-8"), json)
         val config = applyConfiguration(url, null)
         val observable = config.service!!.postJson(url, requestBody)
@@ -172,7 +168,7 @@ object NetworkRequester {
      * @param T 转到成的对象类
      */
     @JvmStatic
-    fun <T> postJson(configuration: Configuration, url: String, json: String, converter: ResponseConverter<T>, observer: Observer<T>) {
+    fun <T> postJson(configuration: Configuration, url: String, json: String, converter: ResponseConverter<T>, observer: Observer<T>?) {
         val requestBody = RequestBody.create(MediaType.parse("application/json;charset=utf-8"), json)
         val config = applyConfiguration(url, configuration)
         val observable = config.service!!.postJson(url, requestBody)
@@ -183,8 +179,7 @@ object NetworkRequester {
      * POST请求，body是字符串
      */
     @JvmStatic
-    @JvmOverloads 
-    fun postText(url: String, text: String, observer: Observer<ResponseBody>? = null) {
+    fun postText(url: String, text: String, observer: Observer<ResponseBody>?) {
         val requestBody = RequestBody.create(MediaType.parse("text/plain;charset=utf-8"), text)
         val config = applyConfiguration(url, null)
         subscribe(config.service!!.post(url, requestBody), config, observer)
@@ -194,8 +189,7 @@ object NetworkRequester {
      * POST请求，body是字符串
      */
     @JvmStatic
-    @JvmOverloads 
-    fun postText(configuration: Configuration, url: String, text: String, observer: Observer<ResponseBody>? = null) {
+    fun postText(configuration: Configuration, url: String, text: String, observer: Observer<ResponseBody>?) {
         val requestBody = RequestBody.create(MediaType.parse("text/plain;charset=utf-8"), text)
         val config = applyConfiguration(url, configuration)
         subscribe(config.service!!.post(url, requestBody), config, observer)
@@ -208,7 +202,7 @@ object NetworkRequester {
      * @param T 转到成的对象类
      */
     @JvmStatic
-    fun <T> postText(url: String, text: String, converter: ResponseConverter<T>, observer: Observer<T>) {
+    fun <T> postText(url: String, text: String, converter: ResponseConverter<T>, observer: Observer<T>?) {
         val requestBody = RequestBody.create(MediaType.parse("text/plain;charset=utf-8"), text)
         val config = applyConfiguration(url, null)
         val observable = config.service!!.post(url, requestBody)
@@ -222,7 +216,7 @@ object NetworkRequester {
      * @param T 转到成的对象类
      */
     @JvmStatic
-    fun <T> postText(configuration: Configuration, url: String, text: String, converter: ResponseConverter<T>, observer: Observer<T>) {
+    fun <T> postText(configuration: Configuration, url: String, text: String, converter: ResponseConverter<T>, observer: Observer<T>?) {
         val requestBody = RequestBody.create(MediaType.parse("text/plain;charset=utf-8"), text)
         val config = applyConfiguration(url, configuration)
         val observable = config.service!!.post(url, requestBody)
@@ -235,8 +229,7 @@ object NetworkRequester {
      * @param map 参数集合
      */
     @JvmStatic
-    @JvmOverloads 
-    fun postForm(url: String, map: Map<String, Any>, observer: Observer<ResponseBody>? = null) {
+    fun postForm(url: String, map: Map<String, Any>, observer: Observer<ResponseBody>?) {
         val config = applyConfiguration(url, null)
         subscribe(config.service!!.postForm(url, map), config, observer)
     }
@@ -247,8 +240,7 @@ object NetworkRequester {
      * @param map 参数集合
      */
     @JvmStatic
-    @JvmOverloads 
-    fun postForm(configuration: Configuration, url: String, map: Map<String, Any>, observer: Observer<ResponseBody>? = null) {
+    fun postForm(configuration: Configuration, url: String, map: Map<String, Any>, observer: Observer<ResponseBody>?) {
         val config = applyConfiguration(url, configuration)
         subscribe(config.service!!.postForm(url, map), config, observer)
     }
@@ -260,7 +252,7 @@ object NetworkRequester {
      * @param T 转到成的对象类
      */
     @JvmStatic
-    fun <T> postForm(url: String, map: Map<String, Any>, converter: ResponseConverter<T>, observer: Observer<T>) {
+    fun <T> postForm(url: String, map: Map<String, Any>, converter: ResponseConverter<T>, observer: Observer<T>?) {
         val config = applyConfiguration(url, null)
         val observable = config.service!!.postForm(url, map)
         subscribe(HttpUtils.convertObservable(observable, converter), config, observer)
@@ -273,7 +265,7 @@ object NetworkRequester {
      * @param T 转到成的对象类
      */
     @JvmStatic
-    fun <T> postForm(configuration: Configuration, url: String, map: Map<String, Any>, converter: ResponseConverter<T>, observer: Observer<T>) {
+    fun <T> postForm(configuration: Configuration, url: String, map: Map<String, Any>, converter: ResponseConverter<T>, observer: Observer<T>?) {
         val config = applyConfiguration(url, configuration)
         val observable = config.service!!.postForm(url, map)
         subscribe(HttpUtils.convertObservable(observable, converter), config, observer)

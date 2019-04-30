@@ -6,9 +6,8 @@ apply plugin: 'maven'
 dependencies {
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compileOnly "com.squareup.retrofit2:retrofit:$retrofit2_version"
-    compileOnly "com.squareup.retrofit2:adapter-rxjava2:$retrofit2_version"
-    compileOnly "io.reactivex.rxjava2:rxjava:$rxjava2_version"
     compileOnly "io.reactivex.rxjava2:rxkotlin:$rxkotlin_version"
+    compileOnly "com.squareup.retrofit2:adapter-rxjava2:$retrofit2_version"
     compileOnly "com.alibaba:fastjson:$fastjson_version"
 }
 
