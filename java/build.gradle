@@ -4,19 +4,18 @@ apply plugin: 'com.novoda.bintray-release'
 apply plugin: 'maven'
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation "com.squareup.retrofit2:retrofit:$retrofit2_version"
-    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit2_version"
-    implementation "io.reactivex.rxjava2:rxjava:$rxjava2_version"
-    implementation "io.reactivex.rxjava2:rxkotlin:$rxkotlin_version"
-    implementation "com.alibaba:fastjson:$fastjson_version"
+    compileOnly "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compileOnly "com.squareup.retrofit2:retrofit:$retrofit2_version"
+    compileOnly "com.squareup.retrofit2:adapter-rxjava2:$retrofit2_version"
+    compileOnly "io.reactivex.rxjava2:rxjava:$rxjava2_version"
+    compileOnly "io.reactivex.rxjava2:rxkotlin:$rxkotlin_version"
+    compileOnly "com.alibaba:fastjson:$fastjson_version"
 }
 
 sourceCompatibility = "8"
 targetCompatibility = "8"
 
-def versionName = '1.0.2'
+def versionName = '1.0.3'
 group = "com.github.wandersnail"
 version = "$versionName"
 
