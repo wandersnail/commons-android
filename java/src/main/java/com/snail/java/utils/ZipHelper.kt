@@ -1,12 +1,5 @@
-package com.snail.commons.helper
+package com.snail.java.utils
 
-import android.text.TextUtils
-import com.snail.commons.AppHolder
-import com.snail.commons.annotation.RunThread
-import com.snail.commons.annotation.ThreadType
-import com.snail.commons.interfaces.Callback
-import com.snail.commons.utils.FileUtils
-import com.snail.commons.utils.IOUtils
 import java.io.*
 import java.util.*
 import java.util.zip.ZipEntry
@@ -28,27 +21,6 @@ object ZipHelper {
     @JvmStatic
     fun unzip(): UnzipExecutor {
         return UnzipExecutor()
-    }
-
-    private fun <T> handleCallback(callback: Callback<T>?, obj: T?) {
-        if (callback != null) {
-            try {
-                var needMain = false
-                callback.javaClass.methods.forEach {
-                    val annotation = it.getAnnotation(RunThread::class.java)
-                    if (annotation != null && annotation.value === ThreadType.MAIN) {
-                        needMain = true
-                    }                    
-                }
-                if (needMain) {
-                    AppHolder.postToMainThread(Runnable { callback.onCallback(obj) })
-                } else {
-                    callback.onCallback(obj)
-                }
-            } catch (e: Exception) {
-                callback.onCallback(obj)
-            }
-        }
     }
 
     class ZipExecutor internal constructor() {
@@ -171,7 +143,7 @@ object ZipHelper {
                             if (level > 0) {
                                 zos.setLevel(level)
                             }
-                            if (!TextUtils.isEmpty(comment)) {
+                            if (comment != null && comment!!.isEmpty()) {
                                 zos.setComment(comment)
                             }
                             if (method > 0) {
@@ -189,17 +161,6 @@ object ZipHelper {
                     IOUtils.closeQuietly(zos)
                 }
             }
-        }
-
-        /**
-         * 执行压缩，异步的
-         */
-        fun execute(callback: Callback<File>?) {
-            Thread(Runnable { 
-                val file = execute()
-                handleCallback(callback, file)
-            }
-            ).start()
         }
 
         /**
@@ -316,16 +277,6 @@ object ZipHelper {
                 }
                 return true
             }
-        }
-
-        /**
-         * 执行解压，异步的
-         */
-        fun execute(callback: Callback<Boolean>?) {
-            Thread(Runnable { 
-                val result = execute()
-                handleCallback(callback, result) 
-            }).start()
         }
     }
 }
