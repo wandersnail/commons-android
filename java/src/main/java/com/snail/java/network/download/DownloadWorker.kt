@@ -7,13 +7,12 @@ import com.snail.java.network.callback.TaskListener
 import com.snail.java.network.exception.RetryWhenException
 import com.snail.java.network.interceptor.ProgressInterceptor
 import com.snail.java.utils.IOUtils
-import com.snail.java.network.utils.SchedulerUtils
+import io.reactivex.internal.schedulers.IoScheduler
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import java.io.File
-import java.io.IOException
 import java.io.RandomAccessFile
 import java.nio.channels.FileChannel
 
@@ -52,7 +51,7 @@ class DownloadWorker<T : DownloadInfo> : TaskWorker<T, T> {
                 writeToDisk(responseBody, File(info.temporaryFilePath), info)
                 info
             }
-            .compose(SchedulerUtils.applyGeneralObservableSchedulers())
+            .subscribeOn(IoScheduler())
             .subscribe(observer)
     }
     
@@ -101,27 +100,23 @@ class DownloadWorker<T : DownloadInfo> : TaskWorker<T, T> {
             file.parentFile.mkdirs()
         }
         val inputStream = responseBody.byteStream()
-        var randomAccessFile: RandomAccessFile? = null
-        var channelOut: FileChannel? = null
+        val allLength: Long = if (info.contentLength == 0L) {
+            responseBody.contentLength()
+        } else {
+            info.contentLength
+        }
         try {
-            val allLength: Long = if (info.contentLength == 0L) {
-                responseBody.contentLength()
-            } else {
-                info.contentLength
+            RandomAccessFile(file, "rwd").channel.use {
+                val mappedBuffer = it.map(FileChannel.MapMode.READ_WRITE, info.completionLength, allLength - info.completionLength)
+                val buffer = ByteArray(1024 * 80)
+                var len = inputStream.read(buffer)
+                while (len != -1) {
+                    mappedBuffer.put(buffer, 0, len)
+                    len = inputStream.read(buffer)
+                }
             }
-            randomAccessFile = RandomAccessFile(file, "rwd")
-            channelOut = randomAccessFile.channel
-            val mappedBuffer = channelOut.map(FileChannel.MapMode.READ_WRITE, info.completionLength, allLength - info.completionLength)
-            val buffer = ByteArray(1024 * 8)
-            var len = inputStream.read(buffer)
-            while (len != -1) {
-                mappedBuffer.put(buffer, 0, len)
-                len = inputStream.read(buffer)
-            }
-        } catch (e: IOException) {
-            e.printStackTrace()
-        } finally {
-            IOUtils.closeQuietly(responseBody.byteStream(), channelOut, randomAccessFile)
+        } catch (e: Exception) {
+            IOUtils.closeQuietly(inputStream)
         }
     }
 }

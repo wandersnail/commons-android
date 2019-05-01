@@ -17,7 +17,7 @@ import java.util.*
  * 作者: zengfansheng
  */
 class AppHolder private constructor() : Application.ActivityLifecycleCallbacks {
-    private val activities = HashMap<String, WeakReference<Activity>>()
+    private val activityMap = HashMap<String, WeakReference<Activity>>()
     private var isCompleteExit: Boolean = false
     private var app: Application? = null
     private val mainHandler = Handler(Looper.getMainLooper())
@@ -56,7 +56,7 @@ class AppHolder private constructor() : Application.ActivityLifecycleCallbacks {
 
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
         synchronized(this) {
-            activities.put(activity.javaClass.name, WeakReference(activity))
+            activityMap.put(activity.javaClass.name, WeakReference(activity))
         }
     }
 
@@ -82,10 +82,10 @@ class AppHolder private constructor() : Application.ActivityLifecycleCallbacks {
 
     override fun onActivityDestroyed(activity: Activity) {
         synchronized(this) {
-            activities.remove(activity.javaClass.name)
-            if (isCompleteExit && activities.isEmpty()) {
-                System.exit(0)
+            activityMap.remove(activity.javaClass.name)
+            if (isCompleteExit && activityMap.isEmpty()) {
                 android.os.Process.killProcess(android.os.Process.myPid())
+                System.exit(0)
             }
         }
     }
@@ -147,7 +147,7 @@ class AppHolder private constructor() : Application.ActivityLifecycleCallbacks {
          */
         @JvmStatic
         fun finish(className: String, vararg classNames: String) {
-            val iterator = Holder.appHolder.activities.entries.iterator()
+            val iterator = Holder.appHolder.activityMap.entries.iterator()
             while (iterator.hasNext()) {
                 val entry = iterator.next()
                 val value = entry.value
@@ -166,12 +166,12 @@ class AppHolder private constructor() : Application.ActivityLifecycleCallbacks {
          */
         @JvmStatic
         fun finishAllWithout(className: String?, vararg classNames: String) {
-            val iterator = Holder.appHolder.activities.entries.iterator()
+            val iterator = Holder.appHolder.activityMap.entries.reversed().iterator()
             while (iterator.hasNext()) {
                 val entry = iterator.next()
                 val value = entry.value
                 if (value.get() == null) {
-                    iterator.remove()
+                    Holder.appHolder.activityMap.remove(entry.key)
                 } else if (!classNames.contains(entry.key) && entry.key != className) {
                     value.get()!!.finish()
                 }
@@ -193,32 +193,35 @@ class AppHolder private constructor() : Application.ActivityLifecycleCallbacks {
          */
         @JvmStatic
         fun backTo(className: String) {
-            val list = ArrayList(Holder.appHolder.activities.values)
-            val index = list.size - 1
-            for (i in index downTo 0) {
+            val list = ArrayList(Holder.appHolder.activityMap.values).reversed()
+            for (i in list.indices) {
                 val ref = list[i]
                 val activity = ref.get()
-                if (activity != null && activity.javaClass.name != className) {
-                    activity.finish()
+                if (activity != null) {
+                    if (activity.javaClass.name == className) {
+                        break
+                    } else {
+                        activity.finish()
+                    }
                 }
             }
         }
 
         @JvmStatic
         fun getActivity(className: String): Activity? {
-            val reference = Holder.appHolder.activities[className]
+            val reference = Holder.appHolder.activityMap[className]
             return reference?.get()
         }
 
         @JvmStatic
         val isAllActivitiesFinished: Boolean
-            get() = Holder.appHolder.activities.isEmpty()
+            get() = Holder.appHolder.activityMap.isEmpty()
 
         @JvmStatic
         val allActivities: List<Activity>
             get() {
                 val list = ArrayList<Activity>()
-                for (reference in Holder.appHolder.activities.values) {
+                for (reference in Holder.appHolder.activityMap.values) {
                     if (reference.get() != null) {
                         list.add(reference.get()!!)
                     }
@@ -232,7 +235,7 @@ class AppHolder private constructor() : Application.ActivityLifecycleCallbacks {
         @JvmStatic
         fun completeExit() {
             Holder.appHolder.isCompleteExit = true
-            val iterator = Holder.appHolder.activities.entries.iterator()
+            val iterator = Holder.appHolder.activityMap.entries.iterator()
             while (iterator.hasNext()) {
                 val entry = iterator.next()
                 val value = entry.value

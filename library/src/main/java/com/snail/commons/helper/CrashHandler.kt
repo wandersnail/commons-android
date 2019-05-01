@@ -5,7 +5,6 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Environment
 import com.snail.commons.utils.DateUtils
-import com.snail.commons.utils.IOUtils
 import java.io.File
 import java.io.FileOutputStream
 import java.io.PrintWriter
@@ -76,34 +75,25 @@ class CrashHandler private constructor() : UncaughtExceptionHandler {
     }
 
     private fun saveErrorLog(e: Throwable): Boolean {
-        var fos: FileOutputStream? = null
-        var sw: StringWriter? = null
-        var pw: PrintWriter? = null
-        try {
-            sw = StringWriter()
-            pw = PrintWriter(sw)
-            pw.println("CRASH_TIME=" + DateUtils.formatDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss.SSS"))
-            //获取手机的环境
-            appendParams(pw, Arrays.asList("DEVICE", "MODEL", "SUPPORTED_ABIS", "REGION", "SOFT_VERSION", "BRAND"), Build::class.java.declaredFields)
-            appendParams(pw, Arrays.asList("RELEASE", "SECURITY_PATCH", "CODENAME"), Build.VERSION::class.java.declaredFields)
-            pw.println("APP_VERSION=" + appVerName!!)
-            pw.println("APP_NAME=" + appName!!)
-            pw.println("APP_PACKAGE_NAME=" + packageName!!)
-            e.printStackTrace(pw)
-            pw.println("\n")
-            val file = File(logSaveDir, "crash_log_" + DateUtils.formatDate(System.currentTimeMillis(), "yyyy-MM-dd") + ".txt")
-            fos = FileOutputStream(file, true)
-            val detailError = sw.toString()
-            fos.write(detailError.toByteArray())
-            if (callback != null) {
-                return callback!!.onSaved(detailError, e)
+        val file = File(logSaveDir, "crash_log_${DateUtils.formatDate(System.currentTimeMillis(), "yyyy-MM-dd")}.txt")
+        val sw = StringWriter()
+        FileOutputStream(file, true).use { out ->
+            PrintWriter(sw).use {
+                it.println("*********************************** CRASH START ***********************************")
+                it.println("CRASH_TIME=${DateUtils.formatDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss.SSS")}")
+                //获取手机的环境
+                appendParams(it, Arrays.asList("DEVICE", "MODEL", "SUPPORTED_ABIS", "REGION", "SOFT_VERSION", "BRAND"), Build::class.java.declaredFields)
+                appendParams(it, Arrays.asList("RELEASE", "SECURITY_PATCH", "CODENAME"), Build.VERSION::class.java.declaredFields)
+                it.println("APP_VERSION=$appVerName")
+                it.println("APP_NAME=$appName")
+                it.println("APP_PACKAGE_NAME=$packageName")
+                e.printStackTrace(it)
+                it.println("*********************************** CRASH END ***********************************\n")
+                val detailError = sw.toString()
+                out.write(detailError.toByteArray())
+                return callback?.onSaved(detailError, e) == true
             }
-        } catch (ex: Exception) {
-            ex.printStackTrace()
-        } finally {
-            IOUtils.close(sw, pw, fos)
         }
-        return false
     }
 
     @Throws(IllegalAccessException::class)

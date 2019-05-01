@@ -1,6 +1,6 @@
 package com.snail.java.network
 
-import com.snail.network.utils.HttpUtils
+import com.snail.java.network.utils.HttpUtils
 import java.util.*
 
 /**

@@ -6,7 +6,7 @@ apply plugin: 'maven'
 dependencies {
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compileOnly "com.squareup.retrofit2:retrofit:$retrofit2_version"
-    compileOnly "io.reactivex.rxjava2:rxkotlin:$rxkotlin_version"
+    compileOnly "io.reactivex.rxjava2:rxjava:$rxjava2_version"
     compileOnly "com.squareup.retrofit2:adapter-rxjava2:$retrofit2_version"
     compileOnly "com.alibaba:fastjson:$fastjson_version"
 }
@@ -16,15 +16,15 @@ targetCompatibility = "8"
 
 def versionName = '1.0.3'
 group = "com.github.wandersnail"
-version = "$versionName"
+version = versionName
 
 publish {
     repoName="java"//仓库名
     userOrg = 'wandersnail' //bintray.com用户名  
     groupId = 'com.github.wandersnail' //jcenter上的路径  
     artifactId = 'commons-java' //项目名称  
-    publishVersion = "$versionName" //版本号  
-    desc = 'widely used tools'
+    publishVersion = versionName //版本号  
+    desc = 'Java平台使用的公共库'
     website = 'https://github.com/wandersnail'
 }
 
@@ -43,7 +43,7 @@ if (project.getGradle().startParameter.taskNames.any{it.contains('bintrayUpload'
                     packaging 'jar'
                     description 'widely used tools'
                     url 'https://github.com/wandersnail'
-                    version "$versionName"
+                    version versionName
 
                     scm {
                         url 'https://github.com/wandersnail/commons'

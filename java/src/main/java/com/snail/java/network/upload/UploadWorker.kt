@@ -1,11 +1,10 @@
 package com.snail.java.network.upload
 
+import com.snail.java.network.TaskWorker
 import com.snail.java.network.callback.MultiTaskListener
 import com.snail.java.network.callback.ProgressListener
 import com.snail.java.network.callback.TaskListener
-import com.snail.java.network.TaskWorker
-import com.snail.network.utils.HttpUtils
-import com.snail.java.network.utils.SchedulerUtils
+import com.snail.java.network.utils.HttpUtils
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import retrofit2.Retrofit
@@ -38,9 +37,7 @@ class UploadWorker<R, T : UploadInfo<R>> : TaskWorker<R, T> {
         } else {//带参数
             service.upload(info.url, info.args, createFilePart(info.mediaType, info.file, observer))
         }
-        HttpUtils.convertObservable(observable, info.converter)
-            .compose(SchedulerUtils.applyGeneralObservableSchedulers())
-            .subscribe(observer)
+        HttpUtils.convertObservable(observable, info.converter).subscribe(observer)
     }
     
     private fun createFilePart(mediaType: MediaType?, file: File, listener: ProgressListener?): MultipartBody.Part {

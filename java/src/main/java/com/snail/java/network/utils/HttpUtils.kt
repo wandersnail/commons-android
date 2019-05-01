@@ -1,4 +1,4 @@
-package com.snail.network.utils
+package com.snail.java.network.utils
 
 import com.snail.java.network.converter.Converter
 import io.reactivex.Observable

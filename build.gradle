@@ -49,4 +49,4 @@ task clean(type: Delete) {
 
 // 需要更新到的bintray的就设置成true
 tasks.getByPath(":java:bintrayUpload").enabled = true
-tasks.getByPath(":library:bintrayUpload").enabled = false
+tasks.getByPath(":library:bintrayUpload").enabled = true
