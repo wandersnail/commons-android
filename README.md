@@ -1,5 +1,8 @@
 ## 代码托管
+[![](https://jitpack.io/v/wandersnail/commons-android.svg)](https://jitpack.io/#wandersnail/commons-android)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.wandersnail/commons-android/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.wandersnail/commons-android)
 [![Download](https://api.bintray.com/packages/wandersnail/android/commons-android/images/download.svg) ](https://bintray.com/wandersnail/android/commons-android/_latestVersion)
+
 
 ## 使用
 
