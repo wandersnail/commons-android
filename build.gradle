@@ -46,7 +46,3 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
-
-// 需要更新到的bintray的就设置成true
-tasks.getByPath(":java:bintrayUpload").enabled = false
-tasks.getByPath(":android:bintrayUpload").enabled = true
