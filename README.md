@@ -1,6 +1,5 @@
 ## 代码托管
-[![](https://jitpack.io/v/wandersnail/commons.svg)](https://jitpack.io/#wandersnail/commons)
-[![Download](https://api.bintray.com/packages/wandersnail/android/commons/images/download.svg) ](https://bintray.com/wandersnail/android/commons/_latestVersion)
+[![Download](https://api.bintray.com/packages/wandersnail/android/commons-android/images/download.svg) ](https://bintray.com/wandersnail/android/commons-android/_latestVersion)
 
 ## 使用
 
@@ -8,7 +7,7 @@
 ```
 dependencies {
 	...
-	implementation 'com.github.wandersnail:commons:1.0.0'
+	implementation 'com.github.wandersnail:commons-android:1.3.2'
 }
 ```
 
