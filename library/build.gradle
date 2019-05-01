@@ -61,7 +61,7 @@ if (project.getGradle().startParameter.taskNames.any { it.contains('bintrayUploa
                     name "commons"
                     artifactId 'commons'
                     packaging 'aar'
-                    description 'Android http网络请求'
+                    description '在Android平台使用的公共库'
                     url 'https://github.com/wandersnail'
                     version lib_version
 
