@@ -20,10 +20,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val data = arrayListOf("储存信息获取", "md5和sha1算法", "系统分享", "网络及位置服务状态", "解压缩", "点击波纹", "Toast", "文件操作", "debug包判断")
+        val data = arrayListOf("储存信息获取", "md5和sha1算法", "系统分享", "网络及位置服务状态", "解压缩", "点击波纹", "Toast", "文件操作", "debug包判断",
+            "系统下载并安装APP")
         val clsArr = arrayListOf(StorageActivity::class.java, MD5Activity::class.java, ShareActivity::class.java, NetStateActivity::class.java, 
                 ZipActivity::class.java, ClickRippleActivity::class.java, ToastUtilsActivity::class.java, FilesOprateActivity::class.java,
-                DebugJudgeActivity::class.java)
+                DebugJudgeActivity::class.java, ApkDownloadActivity::class.java)
         lv.adapter = object : BaseListAdapter<String>(this, data) {
             override fun createViewHolder(position: Int): BaseViewHolder<String> {
                 return object : BaseViewHolder<String>() {
@@ -66,7 +67,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        requester?.onActivityResult(requestCode, resultCode, data)
+        requester?.onActivityResult(requestCode)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

@@ -43,7 +43,7 @@ class MD5Activity : BaseActivity() {
         }
         btnCalc.setOnClickListener { 
             val text = et.text.toString()
-            if (!text.isEmpty()) {
+            if (text.isNotEmpty()) {
                 val code = EncryptUtils.getMD5Code(text)
                 val sha1 = EncryptUtils.getSHA1Code(text)
                 val separator = etSeparator.text.toString()

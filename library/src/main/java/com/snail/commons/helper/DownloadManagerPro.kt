@@ -140,8 +140,8 @@ class DownloadManagerPro(private val downloadManager: DownloadManager) {
     /**
      * get failed code or paused reason
      * @return if status of downloadId is [DownloadManager.STATUS_PAUSED], return
-     * [.getPausedReason]
-     * if status of downloadId is [DownloadManager.STATUS_FAILED], return [.getErrorCode]
+     * [getPausedReason]
+     * if status of downloadId is [DownloadManager.STATUS_FAILED], return [getErrorCode]
      * if status of downloadId is neither [DownloadManager.STATUS_PAUSED] nor
      * [DownloadManager.STATUS_FAILED], return 0
      */

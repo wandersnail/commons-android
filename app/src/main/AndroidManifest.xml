@@ -66,8 +66,12 @@
             android:name=".FilesOprateActivity"
             android:configChanges="keyboardHidden|orientation|navigation|screenSize|keyboard"
             android:screenOrientation="portrait"/>
-        <activity 
+        <activity
             android:name=".DebugJudgeActivity"
+            android:configChanges="keyboardHidden|orientation|navigation|screenSize|keyboard"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ApkDownloadActivity"
             android:configChanges="keyboardHidden|orientation|navigation|screenSize|keyboard"
             android:screenOrientation="portrait"/>
     </application>

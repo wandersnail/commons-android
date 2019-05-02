@@ -33,4 +33,5 @@ dependencies {
     implementation "io.reactivex.rxjava2:rxjava:$rxjava2_version"
     implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit2_version"
     implementation "com.alibaba:fastjson:$fastjson_version"
+    implementation project(':library')
 }

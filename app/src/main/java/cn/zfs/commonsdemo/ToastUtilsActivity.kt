@@ -25,7 +25,7 @@ class ToastUtilsActivity : BaseActivity() {
 
         btnGravity.setOnClickListener {
             ToastUtils.reset()
-            ToastUtils.setGravity(Gravity.TOP, UiUtils.dp2px(50f).toInt(), UiUtils.dp2px(50f).toInt())
+            ToastUtils.setGravity(Gravity.TOP, UiUtils.dp2px(50f), UiUtils.dp2px(50f))
             ToastUtils.showShort("这是一个带位置及偏移Toast")
         }
 

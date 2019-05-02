@@ -62,7 +62,7 @@ class ShareActivity : BaseActivity() {
         }
         btnShareText.setOnClickListener { 
             val text = etText.text.toString().trim()
-            if (!text.isEmpty()) {
+            if (text.isNotEmpty()) {
                 SysShareUtils.shareText(this, "分享到", text)
             }
         }

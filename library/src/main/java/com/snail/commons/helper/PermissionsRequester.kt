@@ -113,7 +113,7 @@ class PermissionsRequester {
         return needRequestPermissonList
     }
 
-    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    fun onActivityResult(requestCode: Int) {
         val context: Context = if (activity != null) activity!! else fragment!!.context!!
         if (requestCode == REQUEST_CODE_WRITE_SETTINGS && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!Settings.System.canWrite(context)) {
