@@ -1,24 +1,20 @@
 package com.snail.commons.helper
 
-import android.app.Activity
 import android.app.DownloadManager
 import android.content.Context
-import android.content.Intent
 import android.database.ContentObserver
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.os.Handler
 import android.os.Looper
-import android.provider.Settings
 import com.snail.commons.utils.StringUtils
 import com.snail.commons.utils.moveTo
-import com.snail.commons.utils.setIntentDataAndType
 import java.io.File
 
 
 /**
- * 调用系统下载管理下载APK并安装
+ * 调用系统下载管理下载文件
  *
  * date: 2019/5/2 17:04
  * author: zengfansheng
@@ -27,7 +23,7 @@ import java.io.File
  * @param savePath 保存路径
  * @param listener 下载监听
  */
-class ApkDownloadHelper(context: Context, private val url: String, private val title: String, private val savePath: String, private val listener: DownloadListener?) {
+class FileDownloadHelper(context: Context, private val mimeType: String, private val url: String, private val title: String, private val savePath: String, private val listener: DownloadListener?) {
     private var appContext = context.applicationContext
     private val downloadManager = appContext.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
     private val downloadMgrPro = DownloadManagerPro(downloadManager)
@@ -64,7 +60,7 @@ class ApkDownloadHelper(context: Context, private val url: String, private val t
         request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, tempFile.name)
         request.setVisibleInDownloadsUi(true)
         request.allowScanningByMediaScanner()
-        request.setMimeType("application/vnd.android.package-archive")
+        request.setMimeType(mimeType)
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
         downloadId = downloadManager.enqueue(request) //开始下载
     }
@@ -112,40 +108,10 @@ class ApkDownloadHelper(context: Context, private val url: String, private val t
                     }
                 }
             }
-            if (this@ApkDownloadHelper.status != status) {
-                this@ApkDownloadHelper.status = status
+            if (this@FileDownloadHelper.status != status) {
+                this@FileDownloadHelper.status = status
                 listener?.onStateChange(status)
             }
-        }
-    }
-
-    /**
-     * 如果是Android8.0以上需要在Activity中的onActivityResult调用此方法
-     */
-    fun onActivityResult(requestCode: Int) {
-        if (requestCode == REQUEST_CODE && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            if (appContext.packageManager.canRequestPackageInstalls()) {
-                install()
-            }
-        }
-    }
-
-    fun install(activity: Activity) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !appContext.packageManager.canRequestPackageInstalls()) {
-            val intent = Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, Uri.parse("package:" + appContext.packageName))
-            activity.startActivityForResult(intent, REQUEST_CODE)
-        } else {
-            install()
-        }
-    }
-
-    private fun install() {
-        val apkFile = File(savePath)
-        if (apkFile.exists()) {
-            val intent = Intent(Intent.ACTION_VIEW)
-            apkFile.setIntentDataAndType(appContext, intent, "application/vnd.android.package-archive", false)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            appContext.startActivity(intent)
         }
     }
 
@@ -166,7 +132,8 @@ class ApkDownloadHelper(context: Context, private val url: String, private val t
         fun onStateChange(status: Int)
     }
 
-    companion object {
-        private const val REQUEST_CODE = 3984
+    companion object {        
+        const val MIME_TYPE_BINARY = "application/octet-stream"
+        const val MIME_TYPE_APK = "application/vnd.android.package-archive"
     }
 }

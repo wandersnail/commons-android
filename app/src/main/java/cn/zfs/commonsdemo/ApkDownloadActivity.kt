@@ -4,7 +4,8 @@ import android.app.DownloadManager
 import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
-import com.snail.commons.helper.ApkDownloadHelper
+import com.snail.commons.helper.ApkInstallHelper
+import com.snail.commons.helper.FileDownloadHelper
 import kotlinx.android.synthetic.main.activity_apk_download.*
 import java.io.File
 
@@ -16,7 +17,8 @@ import java.io.File
  */
 class ApkDownloadActivity : BaseActivity() {
     private val url = "http://gdown.baidu.com/data/wisegame/55dc62995fe9ba82/jinritoutiao_448.apk"
-    private var downloader: ApkDownloadHelper? = null
+    private var downloader: FileDownloadHelper? = null
+    private val apkInstallHelper = ApkInstallHelper(this)
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,8 +27,9 @@ class ApkDownloadActivity : BaseActivity() {
         if (!dir.exists()) {
             dir.mkdir()
         }
-        val savePath = File(dir, "toutiao.apk").absolutePath
-        downloader = ApkDownloadHelper(this, url, "今日头条", savePath, object : ApkDownloadHelper.DownloadListener {
+        val apkFile = File(dir, "toutiao.apk")
+        val savePath = apkFile.absolutePath
+        downloader = FileDownloadHelper(this, FileDownloadHelper.MIME_TYPE_APK, url, "今日头条", savePath, object : FileDownloadHelper.DownloadListener {
             override fun onProgress(downloaded: Int, total: Int) {
                 progressBar.max = total
                 progressBar.progress = downloaded
@@ -40,11 +43,10 @@ class ApkDownloadActivity : BaseActivity() {
                     DownloadManager.STATUS_PENDING -> tvStatus.text = "等待下载..."
                     DownloadManager.STATUS_SUCCESSFUL -> {
                         tvStatus.text = "下载成功"
-                        downloader!!.install(this@ApkDownloadActivity)
+                        apkInstallHelper.install(apkFile)
                     }
                 }
             }
-
         })
         btnDownload.setOnClickListener { 
             downloader!!.start()
@@ -53,7 +55,7 @@ class ApkDownloadActivity : BaseActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        downloader?.onActivityResult(requestCode)
+        apkInstallHelper.onActivityResult(requestCode)
     }
 
     override fun onDestroy() {
