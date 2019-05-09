@@ -1,4 +1,4 @@
-package com.snail.commons.helper
+package com.snail.commons.entity
 
 import android.Manifest
 import android.app.Activity
@@ -62,9 +62,13 @@ class PermissionsRequester {
                 if (!onlyCheck) {
                     val intent = Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS, Uri.parse("package:" + context.packageName))
                     if (activity != null) {
-                        activity!!.startActivityForResult(intent, REQUEST_CODE_WRITE_SETTINGS)
+                        activity!!.startActivityForResult(intent,
+                            REQUEST_CODE_WRITE_SETTINGS
+                        )
                     } else {
-                        fragment!!.startActivityForResult(intent, REQUEST_CODE_WRITE_SETTINGS)
+                        fragment!!.startActivityForResult(intent,
+                            REQUEST_CODE_WRITE_SETTINGS
+                        )
                     }
                 }
                 return false
@@ -75,9 +79,13 @@ class PermissionsRequester {
                 if (!onlyCheck) {
                     val intent = Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, Uri.parse("package:" + context.packageName))
                     if (activity != null) {
-                        activity!!.startActivityForResult(intent, REQUEST_CODE_UNKNOWN_APP_SOURCES)
+                        activity!!.startActivityForResult(intent,
+                            REQUEST_CODE_UNKNOWN_APP_SOURCES
+                        )
                     } else {
-                        fragment!!.startActivityForResult(intent, REQUEST_CODE_UNKNOWN_APP_SOURCES)
+                        fragment!!.startActivityForResult(intent,
+                            REQUEST_CODE_UNKNOWN_APP_SOURCES
+                        )
                     }
                 }
                 return false
@@ -88,9 +96,13 @@ class PermissionsRequester {
             onlyCheck -> needRequestPermissonList.isEmpty()
             needRequestPermissonList.isNotEmpty() -> {
                 if (activity != null) {
-                    ActivityCompat.requestPermissions(activity!!, needRequestPermissonList.toTypedArray(), PERMISSON_REQUESTCODE)
+                    ActivityCompat.requestPermissions(activity!!, needRequestPermissonList.toTypedArray(),
+                        PERMISSON_REQUESTCODE
+                    )
                 } else {
-                    fragment!!.requestPermissions(needRequestPermissonList.toTypedArray(), PERMISSON_REQUESTCODE)
+                    fragment!!.requestPermissions(needRequestPermissonList.toTypedArray(),
+                        PERMISSON_REQUESTCODE
+                    )
                 }
                 false
             }

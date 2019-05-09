@@ -1,15 +1,12 @@
-package com.snail.commons.helper
+package com.snail.commons.entity
 
 import android.app.DownloadManager
 import android.content.Context
 import android.database.ContentObserver
 import android.net.Uri
 import android.os.Build
-import android.os.Environment
 import android.os.Handler
 import android.os.Looper
-import com.snail.commons.utils.StringUtils
-import com.snail.commons.utils.moveTo
 import java.io.File
 
 
@@ -23,15 +20,16 @@ import java.io.File
  * @param savePath 保存路径
  * @param listener 下载监听
  */
-class FileDownloadHelper(context: Context, private val mimeType: String, private val url: String, private val title: String, private val savePath: String, private val listener: DownloadListener?) {
+class FileDownloadHelper(context: Context, private val mimeType: String, private val url: String, private val title: String, savePath: String, private val listener: DownloadListener?) {
     private var appContext = context.applicationContext
     private val downloadManager = appContext.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
     private val downloadMgrPro = DownloadManagerPro(downloadManager)
     private var downloadId = -1L
-    private var tempFile = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "${StringUtils.randomUuid()}.apk")
     private var downloading = false
     private val observer = DownloadChangeObserver()
     private var status = -1
+    private val targetFile = File(savePath)
+    private var isSucceeded = false
 
     /**
      * 开始下载
@@ -46,10 +44,11 @@ class FileDownloadHelper(context: Context, private val mimeType: String, private
         }
         downloadId = -1
         downloading = true
+        isSucceeded = false
         //注册监听
         appContext.contentResolver.registerContentObserver(DownloadManagerPro.CONTENT_URI, true, observer)
         //如果文件存在，先删除
-        File(savePath).delete()
+        targetFile.delete()
         val request = DownloadManager.Request(Uri.parse(url))
         //7.0以上的系统适配
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -57,7 +56,7 @@ class FileDownloadHelper(context: Context, private val mimeType: String, private
             request.setRequiresCharging(false)
         }
         request.setTitle(title)
-        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, tempFile.name)
+        request.setDestinationUri(Uri.fromFile(targetFile))
         request.setVisibleInDownloadsUi(true)
         request.allowScanningByMediaScanner()
         request.setMimeType(mimeType)
@@ -76,7 +75,9 @@ class FileDownloadHelper(context: Context, private val mimeType: String, private
      */
     fun cancel() {
         unregisterListener()
-        downloadManager.remove(downloadId)
+        if (!isSucceeded) {
+            downloadManager.remove(downloadId)
+        }
     }
 
     private inner class DownloadChangeObserver : ContentObserver(Handler(Looper.getMainLooper())) {
@@ -98,14 +99,10 @@ class FileDownloadHelper(context: Context, private val mimeType: String, private
                 DownloadManager.STATUS_FAILED -> unregisterListener()
                 DownloadManager.STATUS_SUCCESSFUL -> {
                     unregisterListener()
-                    //从下载临时路径移动到目标路径
-                    if (tempFile.exists() && tempFile.moveTo(File(savePath), true)) {
-                        //更新最新进度
-                        val downloadBytes = downloadMgrPro.getDownloadBytes(downloadId)
-                        listener?.onProgress(downloadBytes[0], downloadBytes[1])
-                    } else {
-                        status = DownloadManager.STATUS_FAILED
-                    }
+                    //更新最新进度
+                    val downloadBytes = downloadMgrPro.getDownloadBytes(downloadId)
+                    listener?.onProgress(downloadBytes[0], downloadBytes[1])
+                    isSucceeded = true
                 }
             }
             if (this@FileDownloadHelper.status != status) {

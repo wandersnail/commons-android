@@ -1,4 +1,4 @@
-package com.snail.commons.helper
+package com.snail.commons.entity
 
 import android.text.TextUtils
 import com.snail.commons.AppHolder

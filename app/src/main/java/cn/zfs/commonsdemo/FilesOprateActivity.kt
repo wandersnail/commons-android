@@ -3,7 +3,7 @@ package cn.zfs.commonsdemo
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import com.snail.commons.helper.SysFileChooser
+import com.snail.commons.entity.SysFileChooser
 import kotlinx.android.synthetic.main.activity_sys_files.*
 
 /**

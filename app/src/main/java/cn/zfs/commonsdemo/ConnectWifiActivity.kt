@@ -13,7 +13,7 @@ import android.widget.AbsListView
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
-import com.snail.commons.helper.WifiHelper
+import com.snail.commons.entity.WifiHelper
 import com.snail.commons.utils.ToastUtils
 import com.snail.commons.utils.UiUtils
 import com.snail.widget.listview.BaseListAdapter

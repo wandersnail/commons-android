@@ -1,4 +1,4 @@
-package com.snail.commons.helper
+package com.snail.commons.entity
 
 import android.app.Activity
 import android.content.Context
@@ -30,12 +30,16 @@ class SysFileChooser {
     
     @JvmOverloads
     fun choose(activity: Activity, mimeTyps: Array<String>, title: String = "") {
-        activity.startActivityForResult(generateIntent(mimeTyps, title), REQUEST_CODE)
+        activity.startActivityForResult(generateIntent(mimeTyps, title),
+            REQUEST_CODE
+        )
     }
 
     @JvmOverloads
     fun choose(fragment: Fragment, mimeTyps: Array<String>, title: String = "") {
-        fragment.startActivityForResult(generateIntent(mimeTyps, title), REQUEST_CODE)
+        fragment.startActivityForResult(generateIntent(mimeTyps, title),
+            REQUEST_CODE
+        )
     }
 
     /**

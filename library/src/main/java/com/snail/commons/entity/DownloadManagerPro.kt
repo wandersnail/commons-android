@@ -1,10 +1,10 @@
-package com.snail.commons.helper
+package com.snail.commons.entity
 
 import android.app.DownloadManager
 import android.app.DownloadManager.Request
 import android.database.Cursor
 import android.net.Uri
-import com.snail.commons.helper.DownloadManagerPro.RequestPro
+import com.snail.commons.entity.DownloadManagerPro.RequestPro
 import java.lang.reflect.Method
 
 /**
@@ -317,7 +317,8 @@ class DownloadManagerPro(private val downloadManager: DownloadManager) {
 
             isInitPauseDownload = true
             try {
-                pauseDownload = DownloadManager::class.java.getMethod(METHOD_NAME_PAUSE_DOWNLOAD, LongArray::class.java)
+                pauseDownload = DownloadManager::class.java.getMethod(
+                    METHOD_NAME_PAUSE_DOWNLOAD, LongArray::class.java)
             } catch (e: Exception) {
                 // accept all exception
                 e.printStackTrace()
@@ -332,7 +333,8 @@ class DownloadManagerPro(private val downloadManager: DownloadManager) {
 
             isInitResumeDownload = true
             try {
-                resumeDownload = DownloadManager::class.java.getMethod(METHOD_NAME_RESUME_DOWNLOAD, LongArray::class.java)
+                resumeDownload = DownloadManager::class.java.getMethod(
+                    METHOD_NAME_RESUME_DOWNLOAD, LongArray::class.java)
             } catch (e: Exception) {
                 // accept all exception
                 e.printStackTrace()

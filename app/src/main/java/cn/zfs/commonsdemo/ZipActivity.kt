@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.os.Environment
 import com.snail.commons.annotation.RunThread
 import com.snail.commons.annotation.ThreadType
-import com.snail.commons.helper.ZipHelper
+import com.snail.commons.entity.ZipHelper
 import com.snail.commons.interfaces.Callback
 import com.snail.commons.utils.ToastUtils
 import com.snail.fileselector.FileSelector
