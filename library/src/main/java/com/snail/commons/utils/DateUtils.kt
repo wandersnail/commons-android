@@ -133,17 +133,19 @@ object DateUtils {
     /**
      * 返回指定格式日期
      */
-    @JvmStatic 
-    fun formatDate(date: Date, pattern: String): String {
-        return SimpleDateFormat(pattern).format(date)
+    @JvmStatic
+    @JvmOverloads
+    fun formatDate(date: Date, pattern: String, locale: Locale = Locale.getDefault()): String {
+        return SimpleDateFormat(pattern, locale).format(date)
     }
 
     /**
      * 返回指定格式日期
      */
-    @JvmStatic 
-    fun formatDate(time: Long, pattern: String): String {
-        return SimpleDateFormat(pattern).format(time)
+    @JvmStatic
+    @JvmOverloads
+    fun formatDate(time: Long, pattern: String, locale: Locale = Locale.getDefault()): String {
+        return SimpleDateFormat(pattern, locale).format(time)
     }
 
     /**
