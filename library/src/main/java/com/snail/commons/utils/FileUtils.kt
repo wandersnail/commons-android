@@ -34,11 +34,11 @@ object FileUtils {
         }
         return when {
             size < 1024L -> size.toString() + "B"
-            size < 1048576L -> decimalFormat.format((size / 1024f).toDouble()) + "KB"
-            size < 1073741824L -> decimalFormat.format((size / 1048576f).toDouble()) + "MB"
-            size < 1099511627776L -> decimalFormat.format((size / 1073741824f).toDouble()) + "GB"
-            size < 1125899906842624L -> decimalFormat.format((size / 1099511627776f).toDouble()) + "TB"
-            size < 1152921504606846976L -> decimalFormat.format((size / 1125899906842624f).toDouble()) + "PB"
+            size < 1048576L -> decimalFormat.format((size / 1024f.toDouble())) + "KB"
+            size < 1073741824L -> decimalFormat.format((size / 1048576.toDouble())) + "MB"
+            size < 1099511627776L -> decimalFormat.format((size / 1073741824.toDouble())) + "GB"
+            size < 1125899906842624L -> decimalFormat.format((size / 1099511627776.toDouble())) + "TB"
+            size < 1152921504606846976L -> decimalFormat.format((size / 1125899906842624f.toDouble())) + "PB"
             else -> "size: out of range"
         }
     }
@@ -218,17 +218,17 @@ fun File.clear() {
  */
 fun File.size(): Long {
     return when {
-        !exists() -> -1
+        !exists() -> 0
         isFile -> length()
         else -> {
             var s: Long = 0
             val files = listFiles()
             if (files != null) {
                 for (file in files) {
-                    s += if (file.isDirectory) {
-                        size()
-                    } else {
-                        file.length()
+                    s += when {
+                        file.isDirectory -> file.size()
+                        file.isFile -> file.length()
+                        else -> 0
                     }
                 }
                 s
