@@ -374,12 +374,11 @@ private fun copyDir(sourceDir: File, targetDir: File) {
         targetDir.mkdirs()
     }
     // 获取源文件夹当前下的文件或目录   
-    val files = sourceDir.listFiles()
-    for (file in files) {
-        if (file.isFile) {
-            copyFile(file, File(targetDir, file.name))
+    sourceDir.listFiles()?.forEach {
+        if (it.isFile) {
+            copyFile(it, File(targetDir, it.name))
         } else {
-            copyDir(file, File(targetDir, file.name))
+            copyDir(it, File(targetDir, it.name))
         }
     }
 }
