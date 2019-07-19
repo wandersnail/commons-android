@@ -196,19 +196,6 @@ object FileUtils {
 /*############################################ 扩展函数 #########################################*/
 
 /**
- * 删除文件夹内所有文件
- */
-fun File.clear() {
-    listFiles()?.forEach {
-        if (it.isDirectory) {
-            deleteRecursively()
-        } else {
-            it.delete()
-        }
-    }
-}
-
-/**
  * 获取文件夹的大小
  *
  * @return 所传参数是目录且存在，则返回文件夹大小，否则返回-1
