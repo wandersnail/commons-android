@@ -199,14 +199,11 @@ object FileUtils {
  * 删除文件夹内所有文件
  */
 fun File.clear() {
-    val files = listFiles()
-    if (files != null) {
-        for (f in files) {
-            if (f.isDirectory) {
-                deleteRecursively()
-            } else {
-                f.delete()
-            }
+    listFiles()?.forEach {
+        if (it.isDirectory) {
+            deleteRecursively()
+        } else {
+            it.delete()
         }
     }
 }
