@@ -1,6 +1,8 @@
 package com.snail.commons.utils
 
 import java.util.*
+import kotlin.math.min
+import kotlin.math.pow
 
 /**
  * Created by zeng on 2016/6/1.
@@ -14,7 +16,7 @@ object MathUtils {
      */
     @JvmStatic 
     fun setDoubleAccuracy(num: Double, scale: Int): Double {
-        return (num * Math.pow(10.0, scale.toDouble())).toInt() / Math.pow(10.0, scale.toDouble())
+        return (num * 10.0.pow(scale.toDouble())).toInt() / 10.0.pow(scale.toDouble())
     }
 
     /**
@@ -38,7 +40,7 @@ object MathUtils {
         }
 
         val fs = FloatArray(values.size)
-        val sc = Math.pow(10.0, (scale + 2).toDouble()).toInt()
+        val sc = 10.0.pow((scale + 2).toDouble()).toInt()
         var sum = 0f
         for (i in list.indices) {
             val index = list[i]
@@ -56,7 +58,7 @@ object MathUtils {
     /**
      * 将整数转字节数组
      *
-     * @param bigEndian ture表示高位在前，false表示低位在前
+     * @param bigEndian true表示高位在前，false表示低位在前
      * @param value     整数，short、int、long
      * @param len 结果取几个字节，如是高位在前，从数组后端向前计数；如是低位在前，从数组前端向后计数
      */
@@ -73,12 +75,12 @@ object MathUtils {
     /**
      * 将字节数组转long数值
      *
-     * @param bigEndian ture表示高位在前，false表示低位在前
+     * @param bigEndian true表示高位在前，false表示低位在前
      * @param src       待转字节数组
      */
     @JvmStatic 
     fun bytesToLong(bigEndian: Boolean, vararg src: Byte): Long {
-        val len = Math.min(8, src.size)
+        val len = min(8, src.size)
         val bs = ByteArray(8)
         System.arraycopy(src, 0, bs, if (bigEndian) 8 - len else 0, len)
         var value: Long = 0
@@ -98,7 +100,7 @@ object MathUtils {
     /**
      * 将字节数组转int数值
      *
-     * @param bigEndian ture表示高位在前，false表示低位在前
+     * @param bigEndian true表示高位在前，false表示低位在前
      * @param src      待转字节数组
      */
     @JvmStatic 
@@ -109,7 +111,7 @@ object MathUtils {
     /**
      * 将字节数组转int数值
      *
-     * @param bigEndian ture表示高位在前，false表示低位在前
+     * @param bigEndian true表示高位在前，false表示低位在前
      * @param src      待转字节数组
      */
     @JvmStatic 
@@ -153,7 +155,7 @@ object MathUtils {
         val loopCount = src.size / size + if (src.size % size == 0) 0 else 1
         for (j in 0 until loopCount) {
             val from = j * size
-            val to = Math.min(src.size, from + size)
+            val to = min(src.size, from + size)
             list.add(Arrays.copyOfRange(src, j * size, to))
         }
         return list
