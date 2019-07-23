@@ -107,3 +107,29 @@ fun Throwable.toDetailMsg(): String {
 fun Int.toDuration(duration: Int, format: String = "%02d:%02d:%02d"): String {
     return String.format(Locale.US, format, duration / 3600, duration % 3600 / 60, duration % 60)
 }
+
+fun Int.toHex(): String {
+    val s = toString(16)
+    return if (s.length % 2 != 0) "0$s" else s
+}
+
+fun Long.toHex(): String {
+    val s = toString(16)
+    return if (s.length % 2 != 0) "0$s" else s
+}
+
+fun Int.toBinary(): String {
+    var s = toString(2)
+    while (s.length % 8 != 0) {
+        s = "0$s"
+    }
+    return s
+}
+
+fun Long.toBinary(): String {
+    var s = toString(2)
+    while (s.length % 8 != 0) {
+        s = "0$s"
+    }
+    return s
+}
