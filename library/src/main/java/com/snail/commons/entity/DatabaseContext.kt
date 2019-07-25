@@ -48,7 +48,7 @@ class DatabaseContext
      * 重载这个方法，是用来打开SD卡上的数据库的，android 2.3及以下会调用这个方法。
      */
     override fun openOrCreateDatabase(name: String, mode: Int, factory: SQLiteDatabase.CursorFactory?): SQLiteDatabase {
-        return SQLiteDatabase.openOrCreateDatabase(getDatabasePath(name)!!, null)
+        return SQLiteDatabase.openOrCreateDatabase(getDatabasePath(name)!!, factory)
     }
 
     /**
@@ -56,6 +56,6 @@ class DatabaseContext
      * @see ContextWrapper.openOrCreateDatabase
      */
     override fun openOrCreateDatabase(name: String, mode: Int, factory: SQLiteDatabase.CursorFactory?, errorHandler: DatabaseErrorHandler?): SQLiteDatabase {
-        return SQLiteDatabase.openOrCreateDatabase(getDatabasePath(name)!!, null)
+        return SQLiteDatabase.openOrCreateDatabase(getDatabasePath(name)!!, factory)
     }
 }

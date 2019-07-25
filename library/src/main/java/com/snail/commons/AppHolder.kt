@@ -189,7 +189,7 @@ class AppHolder private constructor() : Application.ActivityLifecycleCallbacks {
         /**
          * 退回到指定Activity
          *
-         * @param className 完成类名
+         * @param className 完整类名
          */
         @JvmStatic
         fun backTo(className: String) {

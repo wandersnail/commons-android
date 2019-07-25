@@ -39,7 +39,6 @@ object DbUtils {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-
     }
 
     private fun execSQL(db: Any, sql: String, bindArgs: Array<Any>) {
@@ -48,7 +47,6 @@ object DbUtils {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-
     }
 
     private fun invokeVoidNoPrama(db: Any, methodName: String) {
@@ -57,7 +55,6 @@ object DbUtils {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-
     }
 
     private fun beginTransaction(db: Any) {
