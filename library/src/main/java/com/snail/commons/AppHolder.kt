@@ -10,6 +10,7 @@ import android.os.Handler
 import android.os.Looper
 import java.lang.ref.WeakReference
 import java.util.*
+import kotlin.system.exitProcess
 
 /**
  * 描述:
@@ -85,7 +86,7 @@ class AppHolder private constructor() : Application.ActivityLifecycleCallbacks {
             activityMap.remove(activity.javaClass.name)
             if (isCompleteExit && activityMap.isEmpty()) {
                 android.os.Process.killProcess(android.os.Process.myPid())
-                System.exit(0)
+                exitProcess(0)
             }
         }
     }

@@ -64,6 +64,17 @@ object UiUtils {
             }
             return result
         }
+    
+    @JvmStatic
+    val navigationBarHeight: Int
+        get() {
+            var result = 0
+            val resourceId = AppHolder.context.resources.getIdentifier("navigation_bar_height", "dimen", "android")
+            if (resourceId > 0) {
+                result = AppHolder.context.resources.getDimensionPixelSize(resourceId)
+            }
+            return result
+        }
 
     @StringDef(ANIM, ARRAY, ATTR, BOOL, COLOR, DIMEN, DRAWABLE, ID, INTEGER, LAYOUT, MIPMAP, STRING, STYLE)
     @Retention(AnnotationRetention.SOURCE)

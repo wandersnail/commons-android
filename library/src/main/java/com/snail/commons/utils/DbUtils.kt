@@ -139,7 +139,7 @@ object DbUtils {
                 execSQL(db, "ALTER TABLE $tableName RENAME TO $tmpTableName")
                 //新建表sql语句
                 var newTableSql = StringBuilder("CREATE TABLE $tableName(")
-                val list = Arrays.asList(*columnNames)
+                val list = listOf(*columnNames)
                 //复制数据sql语句
                 var copySql = StringBuilder("INSERT INTO $tableName SELECT ")
                 for (column in columns) {

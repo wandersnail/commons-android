@@ -30,6 +30,7 @@ class FileDownloadHelper(context: Context, private val mimeType: String, private
     private var status = -1
     private val targetFile = File(savePath)
     private var isSucceeded = false
+    var description = ""
 
     /**
      * 开始下载
@@ -56,6 +57,9 @@ class FileDownloadHelper(context: Context, private val mimeType: String, private
             request.setRequiresCharging(false)
         }
         request.setTitle(title)
+        if (description.isNotEmpty()) {
+            request.setDescription(description)
+        }
         request.setDestinationUri(Uri.fromFile(targetFile))
         request.setVisibleInDownloadsUi(true)
         request.allowScanningByMediaScanner()
@@ -128,7 +132,7 @@ class FileDownloadHelper(context: Context, private val mimeType: String, private
          */
         fun onStateChange(status: Int)
     }
-
+    
     companion object {        
         const val MIME_TYPE_BINARY = "application/octet-stream"
         const val MIME_TYPE_APK = "application/vnd.android.package-archive"
