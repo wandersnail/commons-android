@@ -48,8 +48,8 @@ object VersionUtils {
             }
         } catch (e: Exception) {
             e.printStackTrace()
-        }
-        return 0
+            return -1
+        }        
     }
 
     /**
