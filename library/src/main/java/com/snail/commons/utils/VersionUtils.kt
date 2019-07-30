@@ -58,6 +58,13 @@ object VersionUtils {
      */
     @JvmStatic
     fun compareVersion(ver1: String, ver2: String): Int {
+        if (ver1.isEmpty() && ver2.isEmpty()) {
+            return 0
+        } else if (ver1.isEmpty()) {
+            return -1
+        } else if (ver2.isEmpty()) {
+            return 1
+        }
         return try {
             //如果是纯数字，则转换成Long型直接比较
             ver1.toLong().compareTo(ver2.toLong())
