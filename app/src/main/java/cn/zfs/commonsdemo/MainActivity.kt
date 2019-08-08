@@ -6,9 +6,9 @@ import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.snail.commons.entity.PermissionsRequester
-import com.snail.commons.utils.Logger
-import com.snail.commons.utils.ToastUtils
+import com.snail.commons.helper.PermissionsRequester
+import com.snail.commons.util.Logger
+import com.snail.commons.util.ToastUtils
 import com.snail.widget.listview.BaseListAdapter
 import com.snail.widget.listview.BaseViewHolder
 import kotlinx.android.synthetic.main.activity_main.*
@@ -20,11 +20,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val data = arrayListOf("储存信息获取", "md5和sha1算法", "系统分享", "网络及位置服务状态", "解压缩", "点击波纹", "Toast", "文件操作", "debug包判断",
-            "系统下载并安装APP")
+        val data = arrayListOf("储存信息获取", "md5和sha1算法", "系统分享", "网络及位置服务状态", "解压缩", "点击波纹", "Toast", "系统文件选择器", "debug包判断",
+            "系统下载并安装APP", "文件操作")
         val clsArr = arrayListOf(StorageActivity::class.java, MD5Activity::class.java, ShareActivity::class.java, NetStateActivity::class.java, 
-                ZipActivity::class.java, ClickRippleActivity::class.java, ToastUtilsActivity::class.java, FilesOprateActivity::class.java,
-                DebugJudgeActivity::class.java, ApkDownloadActivity::class.java)
+                ZipActivity::class.java, ClickRippleActivity::class.java, ToastUtilsActivity::class.java, SysFileChooserActivity::class.java,
+                DebugJudgeActivity::class.java, ApkDownloadActivity::class.java, FileOperateActivity::class.java)
         lv.adapter = object : BaseListAdapter<String>(this, data) {
             override fun createViewHolder(position: Int): BaseViewHolder<String> {
                 return object : BaseViewHolder<String>() {
@@ -54,15 +54,12 @@ class MainActivity : AppCompatActivity() {
         list.add(Manifest.permission.ACCESS_COARSE_LOCATION)
         list.add(Manifest.permission.ACCESS_FINE_LOCATION)
         list.add(Manifest.permission.ACCESS_NETWORK_STATE)
-        requester?.checkAndRequest(list)
-        requester?.setOnRequestResultListener(object : PermissionsRequester.OnRequestResultListener {
-            override fun onRequestResult(refusedPermissions: MutableList<String>) {
-                if (refusedPermissions.isNotEmpty()) {
-                    ToastUtils.showShort("部分权限被拒绝，可能造成某些功能无法使用")
-                }
+        requester!!.setCallback {
+            if (it.isNotEmpty()) {
+                ToastUtils.showShort("部分权限被拒绝，可能造成某些功能无法使用")
             }
-        })
-        
+        }
+        requester!!.checkAndRequest(list)        
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

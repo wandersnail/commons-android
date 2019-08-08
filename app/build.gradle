@@ -26,12 +26,16 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
     implementation "androidx.appcompat:appcompat:$appcompat_version"
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation "androidx.core:core-ktx:1.0.1"
-    implementation 'com.github.wandersnail:fileselector:1.1.6'
-    implementation 'com.github.wandersnail:widgets:1.1.6'
+    implementation "androidx.core:core-ktx:1.0.2"
+    implementation 'com.github.wandersnail:fileselector:1.2.0'
+    implementation 'com.github.wandersnail:widgets:1.2.2'
     implementation "com.squareup.retrofit2:retrofit:$retrofit2_version"
+    implementation "com.github.bumptech.glide:glide:$glide_version"
     implementation "io.reactivex.rxjava2:rxjava:$rxjava2_version"
     implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit2_version"
     implementation "com.alibaba:fastjson:$fastjson_version"
-    implementation project(':library')
+    implementation project(':commons-basic')
+    implementation project(':commons-utils')
+    implementation project(':commons-method-poster')
+    implementation project(':commons-helper')
 }

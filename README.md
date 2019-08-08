@@ -1,16 +1,28 @@
 ## 代码托管
-[![](https://jitpack.io/v/wandersnail/commons-android.svg)](https://jitpack.io/#wandersnail/commons-android)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.wandersnail/commons-android/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.wandersnail/commons-android)
-[![Download](https://api.bintray.com/packages/wandersnail/android/commons-android/images/download.svg) ](https://bintray.com/wandersnail/android/commons-android/_latestVersion)
+[![](https://jitpack.io/v/wandersnail/commons-basic.svg)](https://jitpack.io/#wandersnail/commons-basic)
+[![](https://jitpack.io/v/wandersnail/commons-utils.svg)](https://jitpack.io/#wandersnail/commons-utils)
+[![](https://jitpack.io/v/wandersnail/commons-method-poster.svg)](https://jitpack.io/#wandersnail/commons-method-poster)
+[![](https://jitpack.io/v/wandersnail/commons-helper.svg)](https://jitpack.io/#wandersnail/commons-helper)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.wandersnail/commons-basic/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.wandersnail/commons-basic)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.wandersnail/commons-utils/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.wandersnail/commons-utils)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.wandersnail/commons-method-poster/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.wandersnail/commons-method-poster)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.wandersnail/commons-helper/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.wandersnail/commons-helper)
+[![Download](https://api.bintray.com/packages/wandersnail/android/commons-basic/images/download.svg) ](https://bintray.com/wandersnail/android/commons-basic/_latestVersion)
+[![Download](https://api.bintray.com/packages/wandersnail/android/commons-utils/images/download.svg) ](https://bintray.com/wandersnail/android/commons-utils/_latestVersion)
+[![Download](https://api.bintray.com/packages/wandersnail/android/commons-method-poster/images/download.svg) ](https://bintray.com/wandersnail/android/commons-method-poster/_latestVersion)
+[![Download](https://api.bintray.com/packages/wandersnail/android/commons-helper/images/download.svg) ](https://bintray.com/wandersnail/android/commons-helper/_latestVersion)
 
 
 ## 使用
 
-1. module的build.gradle中的添加依赖，自行修改为最新版本，同步后通常就可以用了：
+1. module的build.gradle中的添加依赖，自行修改为最新版本，需要哪个就依赖哪个，同步后通常就可以用了：
 ```
 dependencies {
 	...
-	implementation 'com.github.wandersnail:commons-android:1.3.2'
+	implementation 'com.github.wandersnail:commons-basic:latestVersion'
+	implementation 'com.github.wandersnail:commons-utils:latestVersion'
+	implementation 'com.github.wandersnail:commons-method-poster:latestVersion'
+	implementation 'com.github.wandersnail:commons-helper:latestVersion'
 }
 ```
 

@@ -2,8 +2,7 @@ package cn.zfs.commonsdemo
 
 import android.content.Intent
 import android.os.Bundle
-import com.snail.commons.utils.isDebugApk
-import com.snail.commons.utils.isRunInDebug
+import com.snail.commons.util.SystemUtils
 import com.snail.fileselector.FileSelector
 import com.snail.fileselector.OnFileSelectListener
 import kotlinx.android.synthetic.main.activity_debug_judge.*
@@ -29,10 +28,10 @@ class DebugJudgeActivity : BaseActivity() {
         fileSelector.setSelectionMode(FileSelector.FILES_ONLY)        
         fileSelector.setOnFileSelectListener(object : OnFileSelectListener {
             override fun onFileSelect(paths: List<String>) {
-                tvApkState.text = if (isDebugApk(paths[0])) "选择的apk是debug包" else "选择的apk是release包"
+                tvApkState.text = if (SystemUtils.isDebugApk(this@DebugJudgeActivity, paths[0])) "选择的apk是debug包" else "选择的apk是release包"
             }
         })
-        tvAppState.text = if (isRunInDebug()) "当前app是debug包" else "当前app是release包"
+        tvAppState.text = if (SystemUtils.isRunInDebug(this)) "当前app是debug包" else "当前app是release包"
         btnSelect.setOnClickListener { fileSelector.select(this) }
     }
 

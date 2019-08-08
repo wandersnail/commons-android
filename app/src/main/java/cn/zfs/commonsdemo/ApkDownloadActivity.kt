@@ -4,8 +4,8 @@ import android.app.DownloadManager
 import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
-import com.snail.commons.entity.ApkInstallHelper
-import com.snail.commons.entity.FileDownloadHelper
+import com.snail.commons.helper.ApkInstallHelper
+import com.snail.commons.helper.FileDownloadHelper
 import kotlinx.android.synthetic.main.activity_apk_download.*
 import java.io.File
 
@@ -29,31 +29,26 @@ class ApkDownloadActivity : BaseActivity() {
         }
         val apkFile = File(dir, "toutiao.apk")
         val savePath = apkFile.absolutePath
-        downloader = FileDownloadHelper(
-            this,
-            FileDownloadHelper.MIME_TYPE_APK,
-            url,
-            "今日头条",
-            savePath,
-            object : FileDownloadHelper.DownloadListener {
-                override fun onProgress(downloaded: Int, total: Int) {
-                    progressBar.max = total
-                    progressBar.progress = downloaded
-                }
+        downloader = FileDownloadHelper(this, FileDownloadHelper.MIME_TYPE_APK, url, "今日头条", "下载中...嗒嗒嗒", savePath)
+        downloader!!.setCallback(object : FileDownloadHelper.Callback {
+            override fun onProgress(downloaded: Int, total: Int) {
+                progressBar.max = total
+                progressBar.progress = downloaded
+            }
 
-                override fun onStateChange(status: Int) {
-                    when (status) {
-                        DownloadManager.STATUS_FAILED -> tvStatus.text = "下载失败"
-                        DownloadManager.STATUS_RUNNING -> tvStatus.text = "下载中..."
-                        DownloadManager.STATUS_PAUSED -> tvStatus.text = "下载暂停"
-                        DownloadManager.STATUS_PENDING -> tvStatus.text = "等待下载..."
-                        DownloadManager.STATUS_SUCCESSFUL -> {
-                            tvStatus.text = "下载成功"
-                            apkInstallHelper.install(apkFile)
-                        }
+            override fun onStateChange(status: Int) {
+                when (status) {
+                    DownloadManager.STATUS_FAILED -> tvStatus.text = "下载失败"
+                    DownloadManager.STATUS_RUNNING -> tvStatus.text = "下载中..."
+                    DownloadManager.STATUS_PAUSED -> tvStatus.text = "下载暂停"
+                    DownloadManager.STATUS_PENDING -> tvStatus.text = "等待下载..."
+                    DownloadManager.STATUS_SUCCESSFUL -> {
+                        tvStatus.text = "下载成功"
+                        apkInstallHelper.install(apkFile)
                     }
                 }
-            })
+            }
+        })
         btnDownload.setOnClickListener { 
             downloader!!.start()
         }

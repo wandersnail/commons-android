@@ -1,0 +1,85 @@
+apply plugin: 'com.android.library'
+apply plugin: 'com.novoda.bintray-release'
+apply plugin: 'maven'
+
+def lib_version = '1.0.0'
+group = "com.github.wandersnail"
+version = lib_version
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    defaultConfig {
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 1
+        versionName "$lib_version"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    lintOptions {
+        abortOnError false
+    }
+}
+
+dependencies {
+    compileOnly fileTree(dir: 'libs', include: ['*.jar'])
+    compileOnly "androidx.appcompat:appcompat:$appcompat_version"
+}
+
+publish {
+    repoName="android"//仓库名
+    userOrg = 'wandersnail' //bintray.com用户名  
+    groupId = 'com.github.wandersnail' //jcenter上的路径  
+    artifactId = 'commons-method-poster' //项目名称  
+    publishVersion = "$lib_version" //版本号  
+    desc = 'commons-method-poster for Android'
+    website = 'https://github.com/wandersnail/commons'
+}
+
+if (project.getGradle().startParameter.taskNames.any { it.contains('bintrayUpload') }) {
+    gradle.taskGraph.whenReady { taskGraph ->
+        taskGraph.getAllTasks().find {
+            it.path == ":$project.name:generatePomFileForReleasePublication"
+        }.doLast {
+            file("build/publications/release/pom-default.xml").delete()
+            println 'Overriding pom-file to make sure we can sync to maven central!'
+            pom {
+                //noinspection GroovyAssignabilityCheck
+                project {
+                    name "commons-method-poster"
+                    artifactId 'commons-method-poster'
+                    packaging 'aar'
+                    description 'commons-method-poster lib for Android'
+                    url 'https://github.com/wandersnail'
+                    version lib_version
+
+                    scm {
+                        url 'https://github.com/wandersnail/commons'
+                        connection 'scm:git:https://github.com/wandersnail/commons.git'
+                        developerConnection 'scm:git:https://github.com/wandersnail/commons.git'
+                    }
+
+                    licenses {
+                        license {
+                            name 'The Apache License, Version 2.0'
+                            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id 'wandersnail'
+                            name 'Zeng Fansheng'
+                            email 'bingmo977@qq.com'
+                        }
+                    }
+                }
+            }.writeTo("build/publications/release/pom-default.xml")
+        }
+    }
+}

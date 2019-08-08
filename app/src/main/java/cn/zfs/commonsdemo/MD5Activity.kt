@@ -3,8 +3,8 @@ package cn.zfs.commonsdemo
 import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
-import com.snail.commons.utils.EncryptUtils
-import com.snail.commons.utils.SignUtils
+import com.snail.commons.util.EncryptUtils
+import com.snail.commons.util.SignUtils
 import com.snail.fileselector.FileSelector
 import com.snail.fileselector.OnFileSelectListener
 import kotlinx.android.synthetic.main.activity_md5.*
@@ -33,7 +33,7 @@ class MD5Activity : BaseActivity() {
                     tvSha1.text = if (separator.isEmpty()) sha1 else EncryptUtils.addSeparator(sha1 ?: "", separator)
                 } else if (selectType == 1) {
                     val signInfo = SignUtils.getSignatureFromApk(this@MD5Activity, paths[0])
-                    tvSignInfo.text = "hashCode: ${signInfo?.hashCode}\nmd5: ${signInfo?.md5}\nsha1: ${signInfo?.addSeparator(signInfo!!.sha1 ?: "", ":")}"
+                    tvSignInfo.text = "hashCode: ${signInfo?.hashCode}\nmd5: ${signInfo?.md5}\nsha1: ${EncryptUtils.addSeparator(signInfo!!.sha1 ?: "", ":")}"
                 }
             }
         })
@@ -57,7 +57,7 @@ class MD5Activity : BaseActivity() {
         }
         btnApp.setOnClickListener {
             val signInfo = SignUtils.getSignatureInstalled(this)
-            tvSignInfo.text = "hashCode: ${signInfo?.hashCode}\nmd5: ${signInfo?.md5}\nsha1: ${signInfo?.addSeparator(signInfo!!.sha1 ?: "", ":")}"
+            tvSignInfo.text = "hashCode: ${signInfo?.hashCode}\nmd5: ${signInfo?.md5}\nsha1: ${EncryptUtils.addSeparator(signInfo!!.sha1 ?: "", ":")}"
         }
     }
 

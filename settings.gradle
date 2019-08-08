@@ -1,1 +1,1 @@
-include ':app', ':library'
+include ':app', ':commons-basic', ':commons-utils', ':commons-helper', ':commons-method-poster'

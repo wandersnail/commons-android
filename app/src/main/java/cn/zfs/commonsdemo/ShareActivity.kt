@@ -3,7 +3,7 @@ package cn.zfs.commonsdemo
 import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
-import com.snail.commons.utils.SysShareUtils
+import com.snail.commons.util.SysShareUtils
 import com.snail.fileselector.FileSelector
 import com.snail.fileselector.OnFileSelectListener
 import kotlinx.android.synthetic.main.activity_share.*

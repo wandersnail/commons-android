@@ -4,11 +4,8 @@ import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
-import com.snail.commons.annotation.RunThread
-import com.snail.commons.annotation.ThreadType
-import com.snail.commons.entity.ZipHelper
-import com.snail.commons.interfaces.Callback
-import com.snail.commons.utils.ToastUtils
+import com.snail.commons.helper.ZipHelper
+import com.snail.commons.util.ToastUtils
 import com.snail.fileselector.FileSelector
 import com.snail.fileselector.OnFileSelectListener
 import kotlinx.android.synthetic.main.activity_zip.*
@@ -81,27 +78,21 @@ class ZipActivity : BaseActivity() {
                     }
                     2 -> {
                         loadDialog.show()
-                        ZipHelper.unzip().addZipFiles(files).setTargetDir(paths[0]).execute(object : Callback<Boolean> {
-                            @RunThread(ThreadType.MAIN)
-                            override fun onCallback(obj: Boolean?) {
-                                loadDialog.dismiss()
-                                files.clear()
-                                tvPaths.text = ""
-                                ToastUtils.showShort("解压${if (obj == true) "成功" else "失败"}")
-                            }
-                        })
+                        ZipHelper.unzip().addZipFiles(files).setTargetDir(paths[0]).execute { obj ->
+                            loadDialog.dismiss()
+                            files.clear()
+                            tvPaths.text = ""
+                            ToastUtils.showShort("解压${if (obj == true) "成功" else "失败"}")
+                        }
                     }
                     3 -> {
                         loadDialog.show()
-                        ZipHelper.zip().addSourceFiles(files).setLevel(9).setTarget(paths[0], "test").execute(object : Callback<File> {
-                            @RunThread(ThreadType.MAIN)
-                            override fun onCallback(obj: File?) {
-                                loadDialog.dismiss()
-                                files.clear()
-                                tvPaths.text = ""
-                                ToastUtils.showShort("压缩${if (obj != null) "成功" else "失败"}")
-                            }
-                        })
+                        ZipHelper.zip().addSourceFiles(files).setLevel(9).setTarget(paths[0], "test").execute { obj ->
+                            loadDialog.dismiss()
+                            files.clear()
+                            tvPaths.text = ""
+                            ToastUtils.showShort("压缩${if (obj != null) "成功" else "失败"}")
+                        }
                     }
                 }
             }

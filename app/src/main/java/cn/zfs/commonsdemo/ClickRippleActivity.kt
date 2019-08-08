@@ -8,10 +8,10 @@ import android.graphics.drawable.StateListDrawable
 import android.os.Build
 import android.os.Bundle
 import androidx.annotation.RequiresApi
-import com.snail.commons.entity.GradientDrawableBuilder
-import com.snail.commons.entity.SolidDrawableBuilder
-import com.snail.commons.utils.UiUtils
-import com.snail.commons.utils.enableRipple
+import com.snail.commons.helper.GradientDrawableBuilder
+import com.snail.commons.helper.SolidDrawableBuilder
+import com.snail.commons.util.ImageUtils
+import com.snail.commons.util.UiUtils
 import kotlinx.android.synthetic.main.activity_click_ripple.*
 
 /**
@@ -44,7 +44,7 @@ class ClickRippleActivity : BaseActivity() {
         ivOutBg.setOnClickListener {  }
         ivOutSrc.setOnClickListener {  }
         view.setOnClickListener {  }
-        root.enableRipple(0xff00574B.toInt(), allBackground = true, recursive = true)
+        ImageUtils.enableRipple(root, 0xff00574B.toInt(), false, true)
         UiUtils.setTextColor(root, Color.WHITE)
     }
     

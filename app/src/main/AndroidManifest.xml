@@ -63,7 +63,7 @@
             android:configChanges="keyboardHidden|orientation|navigation|screenSize|keyboard"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".FilesOprateActivity"
+            android:name=".SysFileChooserActivity"
             android:configChanges="keyboardHidden|orientation|navigation|screenSize|keyboard"
             android:screenOrientation="portrait"/>
         <activity
@@ -72,6 +72,10 @@
             android:screenOrientation="portrait"/>
         <activity
             android:name=".ApkDownloadActivity"
+            android:configChanges="keyboardHidden|orientation|navigation|screenSize|keyboard"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".FileOperateActivity"
             android:configChanges="keyboardHidden|orientation|navigation|screenSize|keyboard"
             android:screenOrientation="portrait"/>
     </application>

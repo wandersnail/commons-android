@@ -4,8 +4,8 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.Gravity
 import android.widget.TextView
-import com.snail.commons.utils.ToastUtils
-import com.snail.commons.utils.UiUtils
+import com.snail.commons.util.ToastUtils
+import com.snail.commons.util.UiUtils
 import kotlinx.android.synthetic.main.activity_toast_utils.*
 
 /**

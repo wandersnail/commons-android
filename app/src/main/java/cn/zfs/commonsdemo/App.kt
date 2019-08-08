@@ -1,6 +1,7 @@
 package cn.zfs.commonsdemo
 
 import android.app.Application
+import com.snail.commons.AppHolder
 
 /**
  * 描述:
@@ -10,5 +11,6 @@ import android.app.Application
 class App : Application() {
     override fun onCreate() {
         super.onCreate()
+        AppHolder.initialize(this)
     }
 }

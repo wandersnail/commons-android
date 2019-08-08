@@ -13,9 +13,9 @@ import android.widget.AbsListView
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
-import com.snail.commons.entity.WifiHelper
-import com.snail.commons.utils.ToastUtils
-import com.snail.commons.utils.UiUtils
+import com.snail.commons.helper.WifiHelper
+import com.snail.commons.util.ToastUtils
+import com.snail.commons.util.UiUtils
 import com.snail.widget.listview.BaseListAdapter
 import com.snail.widget.listview.BaseViewHolder
 import kotlinx.android.synthetic.main.activity_connect_wifi.*
@@ -27,29 +27,19 @@ import kotlinx.android.synthetic.main.activity_connect_wifi.*
  */
 class ConnectWifiActivity : BaseActivity() {
     private val scanResultList = ArrayList<ScanResult>()
-    private val adapter = ListAdapter(this, scanResultList)
     private var helper: WifiHelper? = null
     private var progressDialog: ProgressDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_connect_wifi)
+        title = "连接WiFi"
+        val adapter = ListAdapter(this, scanResultList)
         lv.adapter = adapter
         helper = WifiHelper(this)
         progressDialog = ProgressDialog(this)
         refreshLayout.setOnRefreshListener {
-            scanResultList.clear()
-            adapter.notifyDataSetChanged()
-            helper?.startScan(5000, object : WifiHelper.OnScanCallback {
-                override fun onScanResult(scanResult: ScanResult) {
-                    scanResultList.add(scanResult)
-                    adapter.notifyDataSetChanged()
-                }
-
-                override fun onScanStop() {
-                    refreshLayout.isRefreshing = false
-                }
-            })
+            startScan(adapter)
         }
         lv.setOnItemClickListener { _, _, position, _ ->
             val result = scanResultList[position]
@@ -65,11 +55,24 @@ class ConnectWifiActivity : BaseActivity() {
                     }.show()
             }
         }
+        refreshLayout.isRefreshing = true
+        startScan(adapter)
     }
-    
+
+    private fun startScan(adapter: ListAdapter) {
+        scanResultList.clear()
+        adapter.notifyDataSetChanged()
+        helper?.startScan(10000) { scanResults ->
+            refreshLayout.isRefreshing = false
+            scanResultList.clear()
+            scanResultList.addAll(scanResults)
+            adapter.notifyDataSetChanged()
+        }
+    }
+
     private fun connect(cfg: WifiConfiguration) {
         progressDialog?.show()
-        helper?.addNetwork(cfg, 10000, object : WifiHelper.OnConnectCallback {
+        helper?.addNetwork(cfg, 10000, object : WifiHelper.ConnectCallback {
             override fun onSuccess() {
                 progressDialog?.dismiss()
                 ToastUtils.showShort("连接成功")
