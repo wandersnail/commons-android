@@ -38,6 +38,32 @@ public class MethodInfo {
         this.parameters = parameters;
     }
 
+    @Nullable
+    public Class<?>[] getParameterTypes() {
+        if (parameters == null) {
+            return null;
+        } else {
+            Class<?>[] types = new Class[parameters.length];
+            for (int i = 0; i < parameters.length; i++) {
+                types[i] = parameters[i].type;
+            }
+            return types;
+        }
+    }
+    
+    @Nullable
+    public Object[] getParameterValues() {
+        if (parameters == null) {
+            return null;
+        } else {
+            Object[] values = new Class[parameters.length];
+            for (int i = 0; i < parameters.length; i++) {
+                values[i] = parameters[i].value;
+            }
+            return values;
+        }
+    }
+    
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

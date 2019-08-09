@@ -1,11 +1,11 @@
 package com.snail.commons.methodpost;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.concurrent.ExecutorService;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 /**
  * 任务分配
@@ -17,13 +17,13 @@ public class PosterDispatcher {
     private final ThreadMode defaultMode;
     private final Poster backgroundPoster;
     private final Poster mainThreadPoster;
-    private final Poster ayncPoster;
+    private final Poster asyncPoster;
 
     public PosterDispatcher(@NonNull ExecutorService executorService, @NonNull ThreadMode defaultMode) {
         this.defaultMode = defaultMode;
         backgroundPoster = new BackgroundPoster(executorService);
         mainThreadPoster = new MainThreadPoster();
-        ayncPoster = new AsyncPoster(executorService);
+        asyncPoster = new AsyncPoster(executorService);
     }
 
     /**
@@ -32,7 +32,7 @@ public class PosterDispatcher {
     public void clearTasks() {
         backgroundPoster.clear();
         mainThreadPoster.clear();
-        ayncPoster.clear();
+        asyncPoster.clear();
     }
     
     /**
@@ -49,6 +49,9 @@ public class PosterDispatcher {
                 mode = defaultMode;
             } else {
                 mode = annotation.value();
+                if (mode == ThreadMode.UNSPECIFIED) {
+                    mode = defaultMode;
+                }
             }
             post(mode, runnable);
         }
@@ -72,7 +75,7 @@ public class PosterDispatcher {
                 backgroundPoster.enqueue(runnable);
                 break;
             case ASYNC:
-                ayncPoster.enqueue(runnable);
+                asyncPoster.enqueue(runnable);
                 break;
         }
     }

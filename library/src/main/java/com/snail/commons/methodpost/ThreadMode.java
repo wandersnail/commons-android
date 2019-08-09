@@ -22,5 +22,9 @@ public enum ThreadMode {
     /**
      * 异步线程
      */
-    ASYNC
+    ASYNC,
+    /**
+     * 未指定
+     */
+    UNSPECIFIED
 }
