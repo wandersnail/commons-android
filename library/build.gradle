@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.novoda.bintray-release'
 apply plugin: 'maven'
 
-def lib_version = '1.0.0'
+def lib_version = '1.4.0'
 group = "com.github.wandersnail"
 version = lib_version
 
@@ -29,15 +29,16 @@ android {
 dependencies {
     compileOnly fileTree(dir: 'libs', include: ['*.jar'])
     compileOnly "androidx.appcompat:appcompat:$appcompat_version"
+    compileOnly "androidx.exifinterface:exifinterface:$exifinterface_version"
 }
 
 publish {
     repoName="android"//仓库名
     userOrg = 'wandersnail' //bintray.com用户名  
     groupId = 'com.github.wandersnail' //jcenter上的路径  
-    artifactId = 'commons-method-poster' //项目名称  
+    artifactId = 'commons-android' //项目名称  
     publishVersion = "$lib_version" //版本号  
-    desc = 'commons-method-poster for Android'
+    desc = 'commons for Android'
     website = 'https://github.com/wandersnail/commons'
 }
 
@@ -51,10 +52,10 @@ if (project.getGradle().startParameter.taskNames.any { it.contains('bintrayUploa
             pom {
                 //noinspection GroovyAssignabilityCheck
                 project {
-                    name "commons-method-poster"
-                    artifactId 'commons-method-poster'
+                    name "commons-android"
+                    artifactId 'commons-android'
                     packaging 'aar'
-                    description 'commons-method-poster lib for Android'
+                    description 'commons-android lib for Android'
                     url 'https://github.com/wandersnail'
                     version lib_version
 

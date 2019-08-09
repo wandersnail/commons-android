@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.snail.commons.core">
+          package="com.snail.commons">
     <application>
         <provider
                 android:name="androidx.core.content.FileProvider"

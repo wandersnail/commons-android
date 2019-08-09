@@ -1,16 +1,7 @@
 ## 代码托管
-[![](https://jitpack.io/v/wandersnail/commons-basic.svg)](https://jitpack.io/#wandersnail/commons-basic)
-[![](https://jitpack.io/v/wandersnail/commons-utils.svg)](https://jitpack.io/#wandersnail/commons-utils)
-[![](https://jitpack.io/v/wandersnail/commons-method-poster.svg)](https://jitpack.io/#wandersnail/commons-method-poster)
-[![](https://jitpack.io/v/wandersnail/commons-helper.svg)](https://jitpack.io/#wandersnail/commons-helper)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.wandersnail/commons-basic/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.wandersnail/commons-basic)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.wandersnail/commons-utils/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.wandersnail/commons-utils)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.wandersnail/commons-method-poster/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.wandersnail/commons-method-poster)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.wandersnail/commons-helper/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.wandersnail/commons-helper)
-[![Download](https://api.bintray.com/packages/wandersnail/android/commons-basic/images/download.svg) ](https://bintray.com/wandersnail/android/commons-basic/_latestVersion)
-[![Download](https://api.bintray.com/packages/wandersnail/android/commons-utils/images/download.svg) ](https://bintray.com/wandersnail/android/commons-utils/_latestVersion)
-[![Download](https://api.bintray.com/packages/wandersnail/android/commons-method-poster/images/download.svg) ](https://bintray.com/wandersnail/android/commons-method-poster/_latestVersion)
-[![Download](https://api.bintray.com/packages/wandersnail/android/commons-helper/images/download.svg) ](https://bintray.com/wandersnail/android/commons-helper/_latestVersion)
+[![](https://jitpack.io/v/wandersnail/commons-android.svg)](https://jitpack.io/#wandersnail/commons-android)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.wandersnail/commons-android/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.wandersnail/commons-android)
+[![Download](https://api.bintray.com/packages/wandersnail/android/commons-android/images/download.svg) ](https://bintray.com/wandersnail/android/commons-android/_latestVersion)
 
 
 ## 使用
@@ -19,10 +10,7 @@
 ```
 dependencies {
 	...
-	implementation 'com.github.wandersnail:commons-basic:latestVersion'
-	implementation 'com.github.wandersnail:commons-utils:latestVersion'
-	implementation 'com.github.wandersnail:commons-method-poster:latestVersion'
-	implementation 'com.github.wandersnail:commons-helper:latestVersion'
+	implementation 'com.github.wandersnail:commons-android:latestVersion'
 }
 ```
 
@@ -36,6 +24,15 @@ allprojects {
 	}
 }
 ```
+
+## 按需要依赖单个库
+
+- 如果不想全部依赖，可以依赖单个的，仓库如下：
+
+1. https://github.com/wandersnail/commons-basic
+2. https://github.com/wandersnail/commons-method-poster
+3. https://github.com/wandersnail/commons-utils
+4. https://github.com/wandersnail/commons-helper
 
 ## 功能
 

@@ -53,9 +53,3 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
-
-// 需要更新到的bintray的就设置成true
-tasks.getByPath(":commons-basic:bintrayUpload").enabled = false
-tasks.getByPath(":commons-utils:bintrayUpload").enabled = false
-tasks.getByPath(":commons-method-poster:bintrayUpload").enabled = false
-tasks.getByPath(":commons-helper:bintrayUpload").enabled = false
