@@ -4,13 +4,11 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
 import android.widget.Toast;
-
+import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
 import com.snail.commons.AppHolder;
 
 import java.lang.ref.WeakReference;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.StringRes;
 
 /**
  * 单例Toast工具类，依赖AppHolder，需要在AppHolder初始化后方可使用
@@ -160,13 +158,16 @@ public final class ToastUtils {
         });
     }
 
-    private static void postToMainThread(Runnable runnable) {
+    private static void postToMainThread(final Runnable runnable) {
         if (toast == null) {
             handler = new Handler(AppHolder.getInstance().getMainLooper());
-            Looper.prepare();
-            toast = Toast.makeText(AppHolder.getInstance().getContext(), "", Toast.LENGTH_SHORT);
-            handler.post(runnable);
-            Looper.loop();
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    toast = Toast.makeText(AppHolder.getInstance().getContext(), "", Toast.LENGTH_SHORT);
+                    runnable.run();
+                }
+            });
         } else if (Looper.myLooper() == AppHolder.getInstance().getMainLooper()) {
             runnable.run();
         } else {

@@ -125,6 +125,9 @@ public class AppHolder implements Application.ActivityLifecycleCallbacks {
     
     @NonNull
     public Looper getMainLooper() {
+        if (mainLooper == null) {
+            mainLooper = Looper.getMainLooper();
+        }
         return mainLooper;
     }
     
