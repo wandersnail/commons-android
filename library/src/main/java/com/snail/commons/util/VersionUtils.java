@@ -16,7 +16,7 @@ public class VersionUtils {
      * 抽取版本号。如果是xxx1.2.3 Rev 456之类的，只对1.2.3进行抽取
      */
     @NonNull
-    public String extractVersion(@NonNull String version) {
+    public static String extractVersion(@NonNull String version) {
         if (version.contains(" ")) {
             version = version.substring(0, version.indexOf(" "));
         }
@@ -26,7 +26,7 @@ public class VersionUtils {
     /**
      * 将数字抽取出来。如果是xxx1.2.3 Rev 456之类的，只对1.2.3进行抽取
      */
-    public String[] splitVersion(@NonNull String version) {
+    public static String[] splitVersion(@NonNull String version) {
         version = extractVersion(version);
         String[] strings = version.split("\\D+");
         List<String> list = new ArrayList<>();
@@ -46,7 +46,7 @@ public class VersionUtils {
      * @param index 从第几个元素开始比较
      * @return 相等，则返回值0；小于，则返回负数；大于，则返回正数。
      */
-    private int compare(String[] ver1, String[] ver2, int index) {
+    private static int compare(String[] ver1, String[] ver2, int index) {
         try {
             int a = Integer.valueOf(ver1[index]);
             int b = Integer.valueOf(ver2[index]);
@@ -70,7 +70,7 @@ public class VersionUtils {
      *
      * @return 相等，则返回值0；小于，则返回负数；大于，则返回正数。
      */
-    public int compareVersion(@NonNull String ver1, @NonNull String ver2) {
+    public static int compareVersion(@NonNull String ver1, @NonNull String ver2) {
         if (ver1.isEmpty() && ver2.isEmpty()) {
             return 0;
         } else if (ver1.isEmpty()) {

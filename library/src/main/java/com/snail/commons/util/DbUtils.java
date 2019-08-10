@@ -6,13 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * 数组库
@@ -370,7 +364,8 @@ public class DbUtils {
         }
 
         public Cursor build() {
-            String sql = String.format("select %s from %s%s%s%s%s%s%s", whats, table, where, and, or, groupBy, limit, offset);
+            String sql = String.format("select %s from %s%s%s%s%s%s%s%s", whats, table, where, and, or, 
+                    groupBy, limit, offset, orderBy);
             String[] args = new String[values.size()];
             for (int i = 0; i < args.length; i++) {
                 args[i] = values.get(i).toString();

@@ -13,7 +13,7 @@ import android.os.storage.StorageManager;
 import android.provider.Settings;
 import androidx.annotation.NonNull;
 import androidx.core.os.EnvironmentCompat;
-import com.snail.commons.entity.Storage;
+import com.snail.commons.util.entity.Storage;
 
 import java.io.*;
 import java.lang.reflect.Method;
@@ -101,7 +101,7 @@ public class SystemUtils {
     }
 
     public static String getSystemProperty(@NonNull String propName) {
-        String line = null;
+        String line;
         BufferedReader input = null;
         try {
             Process p = Runtime.getRuntime().exec("getprop " + propName);
@@ -217,17 +217,17 @@ public class SystemUtils {
             //得到StorageManager中的getVolumeList()方法的对象
             Method getVolumeList = storageManager.getClass().getMethod("getVolumeList");
             //得到StorageVolume类的对象
-            Class<?> storageValumeClazz = Class.forName("android.os.storage.StorageVolume");
+            Class<?> storageVolumeClazz = Class.forName("android.os.storage.StorageVolume");
             //获得StorageVolume中的一些方法
-            Method getPath = storageValumeClazz.getMethod("getPath");
-            Method isRemovable = storageValumeClazz.getMethod("isRemovable");
-            Method allowMassStorage = storageValumeClazz.getMethod("allowMassStorage");
-            Method primary = storageValumeClazz.getMethod("isPrimary");
-            Method description = storageValumeClazz.getMethod("getDescription", Context.class);
+            Method getPath = storageVolumeClazz.getMethod("getPath");
+            Method isRemovable = storageVolumeClazz.getMethod("isRemovable");
+            Method allowMassStorage = storageVolumeClazz.getMethod("allowMassStorage");
+            Method primary = storageVolumeClazz.getMethod("isPrimary");
+            Method description = storageVolumeClazz.getMethod("getDescription", Context.class);
 
             Method mGetState = null;
             try {
-                mGetState = storageValumeClazz.getMethod("getState");
+                mGetState = storageVolumeClazz.getMethod("getState");
             } catch (NoSuchMethodException ignore) {
             }
 
@@ -245,8 +245,8 @@ public class SystemUtils {
                 boolean isAllowMassStorage = invokeAllowMass != null && (boolean) invokeAllowMass;
                 Object invokePrimary = primary.invoke(storageValume);
                 boolean isPrimary = invokePrimary != null && (boolean) invokePrimary;
-                Object invokeValume = description.invoke(storageValume, context);
-                String desc = invokeValume == null ? "" : (String) invokeValume;
+                Object invokeVolume = description.invoke(storageValume, context);
+                String desc = invokeVolume == null ? "" : (String) invokeVolume;
                 String state;
                 if (mGetState != null) {
                     state = (String) mGetState.invoke(storageValume);
@@ -254,13 +254,13 @@ public class SystemUtils {
                     state = Environment.getStorageState(new File(path));
                 }
                 long totalSize = 0;
-                long availaleSize = 0;
+                long availableSize = 0;
                 if (Environment.MEDIA_MOUNTED.equals(state)) {
                     totalSize = SystemUtils.getStorageTotalSpace(path);
-                    availaleSize = SystemUtils.getStorageFreeSpace(path);
+                    availableSize = SystemUtils.getStorageFreeSpace(path);
                 }
                 Storage storage = new Storage();
-                storage.setAvailaleSize(availaleSize);
+                storage.setAvailaleSize(availableSize);
                 storage.setTotalSize(totalSize);
                 storage.setState(state == null ? EnvironmentCompat.MEDIA_UNKNOWN : state);
                 storage.setPath(path);

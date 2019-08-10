@@ -1,11 +1,6 @@
 package com.snail.commons.util;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.Closeable;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -36,8 +31,7 @@ public class IOUtils {
     public static void closeQuietly(Closeable... closeables) {
         try {
             close(closeables);
-        } catch (IOException e) {
-            // do nothing
+        } catch (IOException ignore) {
         }
     }
 
@@ -53,7 +47,7 @@ public class IOUtils {
     /**
      * 从输入流中获取字符串
      *
-     * @param in  输入流
+     * @param in  输入流，不会主动关闭
      * @param enc 返回的字符串采用的编码格式, 如果为null则使用平台默认的编码格式
      */
     public static String getString(InputStream in, String enc) throws IOException {
@@ -72,7 +66,7 @@ public class IOUtils {
     /**
      * 从输入流中获取符合指定正则表达式的字符串
      *
-     * @param in    输入流
+     * @param in    输入流，不会主动关闭
      * @param regex 用来筛选字符串的正则表达式
      * @return 筛选反的字符串集合
      */
@@ -83,7 +77,7 @@ public class IOUtils {
     /**
      * 从输入流中获取符合指定正则表达式的字符串
      *
-     * @param in    输入流
+     * @param in    输入流，不会主动关闭
      * @param regex 用来筛选字符串的正则表达式
      * @param enc   用来解析输入流数据的字符集
      * @return 筛选反的字符串集合
