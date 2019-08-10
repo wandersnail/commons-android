@@ -81,9 +81,11 @@ public class MathUtils {
      * 将字节数组转数值
      *
      * @param bigEndian true表示高位在前，false表示低位在前
+     * @param cls       返回的数据类型
      * @param src       待转字节数组
      */
-    public static long bytesToNumber(boolean bigEndian, @NonNull byte... src) {
+    @SuppressWarnings("unchecked")
+    public static <T> T bytesToNumber(boolean bigEndian, Class<T> cls, @NonNull byte... src) {
         int len = Math.min(8, src.length);
         byte[] bs = new byte[8];
         System.arraycopy(src, 0, bs, bigEndian ? 8 - len : 0, len);
@@ -94,13 +96,20 @@ public class MathUtils {
             value = value | ((long) 0xff << shift & ((long) bs[i] << shift));
         }
         if (src.length == 1) {
-            return value & 0xff;
+            value = (byte) value;
         } else if (src.length == 2) {
-            return value & 0xffff;
+            value = (short) value;
         } else if (src.length <= 4) {
-            return value & 0xffffffffL;
+            value = (int) value;
         }
-        return value;
+        if (cls == short.class || cls == Short.class) {
+            return (T) Short.valueOf((short) value);
+        } else if (cls == int.class || cls == Integer.class) {
+            return (T) Integer.valueOf((int) value);
+        } else if (cls == long.class || cls == Long.class) {
+            return (T) Long.valueOf(value);
+        }
+        throw new IllegalArgumentException("cls must be one of short, int and long");
     }
 
     /**
@@ -187,11 +196,30 @@ public class MathUtils {
      * CRC校验，CRC-CCITT (XModem)
      */
     public static int calcCRC_CCITT_XModem(byte[] bytes) {
-        int crc = 0x00;          // initial value  
+        int crc = 0;          // initial value  
         int polynomial = 0x1021;
         for (byte b : bytes) {
             for (int i = 0; i < 8; i++) {
                 boolean bit = ((b >> (7 - i) & 1) == 1);
+                boolean c15 = ((crc >> 15 & 1) == 1);
+                crc <<= 1;
+                if (c15 ^ bit) crc ^= polynomial;
+            }
+        }
+        crc &= 0xffff;
+        return crc;
+    }
+
+    /**
+     * CRC校验，CRC-CCITT (XModem)
+     */
+    public static int calcCRC_CCITT_XModem(byte[] bytes, int offset, int len) {
+        int crc = 0;          // initial value  
+        int polynomial = 0x1021;
+        for (int i = offset; i < offset + len; i++) {
+            byte b = bytes[i];
+            for (int j = 0; j < 8; j++) {
+                boolean bit = ((b >> (7 - j) & 1) == 1);
                 boolean c15 = ((crc >> 15 & 1) == 1);
                 crc <<= 1;
                 if (c15 ^ bit) crc ^= polynomial;
@@ -212,8 +240,26 @@ public class MathUtils {
                 boolean bit = ((b >> (7 - i) & 1) == 1);
                 boolean c15 = ((crc >> 15 & 1) == 1);
                 crc <<= 1;
-                if (c15 ^ bit)
-                    crc ^= polynomial;
+                if (c15 ^ bit) crc ^= polynomial;
+            }
+        }
+        crc &= 0xffff;
+        return crc;
+    }
+
+    /**
+     * CRC校验，CRC-CCITT (0xFFFF)
+     */
+    public static int calcCRC_CCITT_0xFFFF(byte[] bytes, int offset, int len) {
+        int crc = 0xffff; // initial value
+        int polynomial = 0x1021; // poly value
+        for (int i = offset; i < offset + len; i++) {
+            byte b = bytes[i];
+            for (int j = 0; j < 8; j++) {
+                boolean bit = ((b >> (7 - j) & 1) == 1);
+                boolean c15 = ((crc >> 15 & 1) == 1);
+                crc <<= 1;
+                if (c15 ^ bit) crc ^= polynomial;
             }
         }
         crc &= 0xffff;

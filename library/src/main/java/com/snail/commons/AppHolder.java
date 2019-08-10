@@ -9,19 +9,14 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Looper;
-
-import java.lang.ref.WeakReference;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
-
 import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import java.lang.ref.WeakReference;
+import java.lang.reflect.Method;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * date: 2019/8/6 10:02
@@ -29,7 +24,7 @@ import androidx.annotation.Nullable;
  */
 public class AppHolder implements Application.ActivityLifecycleCallbacks {
     //正在运行的Activity
-    private final Map<String, WeakReference<Activity>>  runningActivites = new ConcurrentHashMap<>();
+    private final Map<String, WeakReference<Activity>> runningActivities = new ConcurrentHashMap<>();
     //是否完全退出
     private boolean isCompleteExit = false;
     private Application application;
@@ -40,7 +35,7 @@ public class AppHolder implements Application.ActivityLifecycleCallbacks {
         //尝试获取application
         application = tryGetApplication();
         if (application != null) {
-            application.registerActivityLifecycleCallbacks(AppHolder.this);
+            application.registerActivityLifecycleCallbacks(this);
         }       
     }
 
@@ -71,7 +66,7 @@ public class AppHolder implements Application.ActivityLifecycleCallbacks {
     @CallSuper
     @Override
     public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-        runningActivites.put(activity.getClass().getName(), new WeakReference<>(activity));
+        runningActivities.put(activity.getClass().getName(), new WeakReference<>(activity));
     }
 
     @CallSuper
@@ -107,8 +102,8 @@ public class AppHolder implements Application.ActivityLifecycleCallbacks {
     @CallSuper
     @Override
     public void onActivityDestroyed(Activity activity) {
-        runningActivites.remove(activity.getClass().getName());
-        if (isCompleteExit && runningActivites.isEmpty()) {
+        runningActivities.remove(activity.getClass().getName());
+        if (isCompleteExit && runningActivities.isEmpty()) {
             android.os.Process.killProcess(android.os.Process.myPid());
             System.exit(0);
         }
@@ -184,7 +179,7 @@ public class AppHolder implements Application.ActivityLifecycleCallbacks {
      * finish掉Activity
      */
     public void finish(String className, String... classNames) {
-        List<WeakReference<Activity>> list = new ArrayList<>(runningActivites.values());
+        List<WeakReference<Activity>> list = new ArrayList<>(runningActivities.values());
         Collections.reverse(list);//倒序，后开的先finish
         for (WeakReference<Activity> reference : list) {
             Activity activity = reference.get();
@@ -203,7 +198,7 @@ public class AppHolder implements Application.ActivityLifecycleCallbacks {
      * @param classNames 此Activity的类名，如果是null将finish所有Activity
      */
     public void finishAllWithout(@Nullable String className, String... classNames) {
-        List<WeakReference<Activity>> list = new ArrayList<>(runningActivites.values());
+        List<WeakReference<Activity>> list = new ArrayList<>(runningActivities.values());
         Collections.reverse(list);//倒序，后开的先finish
         for (WeakReference<Activity> reference : list) {
             Activity activity = reference.get();
@@ -229,7 +224,7 @@ public class AppHolder implements Application.ActivityLifecycleCallbacks {
      * @param className 完整类名
      */
     public void backBo(String className) {
-        List<WeakReference<Activity>> list = new ArrayList<>(runningActivites.values());
+        List<WeakReference<Activity>> list = new ArrayList<>(runningActivities.values());
         Collections.reverse(list);//倒序，后开的先finish
         for (WeakReference<Activity> reference : list) {
             Activity activity = reference.get();
@@ -245,17 +240,17 @@ public class AppHolder implements Application.ActivityLifecycleCallbacks {
     
     @Nullable
     public Activity getActivity(String className) {
-        WeakReference<Activity> reference = runningActivites.get(className);
+        WeakReference<Activity> reference = runningActivities.get(className);
         return reference == null ? null : reference.get();
     }
     
     public boolean isAllFinished() {
-        return runningActivites.isEmpty();
+        return runningActivities.isEmpty();
     }
     
     public List<Activity> getAllActivities() {
         List<Activity> activities = new ArrayList<>();
-        for (WeakReference<Activity> reference : runningActivites.values()) {
+        for (WeakReference<Activity> reference : runningActivities.values()) {
             Activity activity = reference.get();
             if (activity != null) {
                 activities.add(activity);
@@ -269,7 +264,7 @@ public class AppHolder implements Application.ActivityLifecycleCallbacks {
      */
     public void completeExit() {
         isCompleteExit = true;
-        List<WeakReference<Activity>> list = new ArrayList<>(runningActivites.values());
+        List<WeakReference<Activity>> list = new ArrayList<>(runningActivities.values());
         Collections.reverse(list);//倒序，后开的先finish
         for (WeakReference<Activity> reference : list) {
             Activity activity = reference.get();

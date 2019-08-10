@@ -29,10 +29,10 @@ allprojects {
 
 - 如果不想全部依赖，可以依赖单个的，仓库如下：
 
-1. https://github.com/wandersnail/commons-basic
-2. https://github.com/wandersnail/commons-method-poster
-3. https://github.com/wandersnail/commons-utils
-4. https://github.com/wandersnail/commons-helper
+1. [https://github.com/wandersnail/commons-basic](https://github.com/wandersnail/commons-basic)
+2. [https://github.com/wandersnail/commons-method-poster](https://github.com/wandersnail/commons-method-poster)
+3. [https://github.com/wandersnail/commons-utils](https://github.com/wandersnail/commons-utils)
+4. [https://github.com/wandersnail/commons-helper](https://github.com/wandersnail/commons-helper)
 
 ## 功能
 
