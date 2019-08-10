@@ -4,11 +4,13 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
 import android.widget.Toast;
-import androidx.annotation.NonNull;
-import androidx.annotation.StringRes;
+
 import com.snail.commons.AppHolder;
 
 import java.lang.ref.WeakReference;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
 
 /**
  * 单例Toast工具类，依赖AppHolder，需要在AppHolder初始化后方可使用
@@ -18,17 +20,27 @@ import java.lang.ref.WeakReference;
  */
 public final class ToastUtils {
     private static WeakReference<View> weakRef;
-    private static Toast toast = Toast.makeText(AppHolder.getInstance().getContext(), "", Toast.LENGTH_SHORT);
-    private static final Handler handler = new Handler(AppHolder.getInstance().getMainLooper());
-
+    private static Toast toast;
+    private static Handler handler;
+    
     public static void reset() {
-        weakRef = null;
-        toast.cancel();
-        toast = Toast.makeText(AppHolder.getInstance().getContext(), "", Toast.LENGTH_SHORT);
+        postToMainThread(new Runnable() {
+            @Override
+            public void run() {
+                weakRef = null;
+                toast.cancel();
+                toast = Toast.makeText(AppHolder.getInstance().getContext(), "", Toast.LENGTH_SHORT);
+            }
+        });
     }
     
     public static void cancel() {
-        toast.cancel();
+        postToMainThread(new Runnable() {
+            @Override
+            public void run() {
+                toast.cancel();
+            }
+        });
     }
 
     /**
@@ -41,8 +53,13 @@ public final class ToastUtils {
      *                         container height, between the container's edges and the
      *                         notification
      */
-    public static void setMargin(float horizontalMargin, float verticalMargin) {
-        toast.setMargin(horizontalMargin, verticalMargin);
+    public static void setMargin(final float horizontalMargin, final float verticalMargin) {
+        postToMainThread(new Runnable() {
+            @Override
+            public void run() {
+                toast.setMargin(horizontalMargin, verticalMargin);
+            }
+        });
     }
 
     /**
@@ -51,16 +68,26 @@ public final class ToastUtils {
      * @see android.view.Gravity
      * @see Toast#getGravity
      */
-    public static void setGravity(int gravity, int xOffset, int yOffset) {
-        toast.setGravity(gravity, xOffset, yOffset);
+    public static void setGravity(final int gravity, final int xOffset, final int yOffset) {
+        postToMainThread(new Runnable() {
+            @Override
+            public void run() {
+                toast.setGravity(gravity, xOffset, yOffset);
+            }
+        });
     }
 
     /**
      * Set the view to show.
      */
-    public static void setView(@NonNull View view) {
-        weakRef = new WeakReference<>(view);
-        toast.setView(view);
+    public static void setView(@NonNull final View view) {
+        postToMainThread(new Runnable() {
+            @Override
+            public void run() {
+                weakRef = new WeakReference<>(view);
+                toast.setView(view);
+            }
+        });
     }
 
     private static void show(CharSequence text, int duration) {
@@ -134,7 +161,13 @@ public final class ToastUtils {
     }
 
     private static void postToMainThread(Runnable runnable) {
-        if (Looper.myLooper() == AppHolder.getInstance().getMainLooper()) {
+        if (toast == null) {
+            handler = new Handler(AppHolder.getInstance().getMainLooper());
+            Looper.prepare();
+            toast = Toast.makeText(AppHolder.getInstance().getContext(), "", Toast.LENGTH_SHORT);
+            handler.post(runnable);
+            Looper.loop();
+        } else if (Looper.myLooper() == AppHolder.getInstance().getMainLooper()) {
             runnable.run();
         } else {
             handler.post(runnable);

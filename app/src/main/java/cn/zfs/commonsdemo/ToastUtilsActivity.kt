@@ -7,6 +7,7 @@ import android.widget.TextView
 import com.snail.commons.util.ToastUtils
 import com.snail.commons.util.UiUtils
 import kotlinx.android.synthetic.main.activity_toast_utils.*
+import kotlin.concurrent.thread
 
 /**
  *
@@ -44,6 +45,14 @@ class ToastUtilsActivity : BaseActivity() {
             tv.setPadding(30, 16, 30, 16)
             ToastUtils.setView(tv)
             ToastUtils.showShort()
+        }
+        btnBackground.setOnClickListener {
+            thread {
+                ToastUtils.showShort("这是子线程的Toast")
+            }
+        }
+        thread {
+            ToastUtils.showShort("这是子线程的Toast")
         }
     }
 }
