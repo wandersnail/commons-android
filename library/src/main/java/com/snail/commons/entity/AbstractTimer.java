@@ -25,7 +25,7 @@ public abstract class AbstractTimer {
     /**
      * 回调
      */
-    abstract void onTick();
+    public abstract void onTick();
 
     /**
      * 开始

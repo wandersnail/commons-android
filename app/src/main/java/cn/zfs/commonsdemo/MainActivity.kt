@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity() {
                 ToastUtils.showShort("部分权限被拒绝，可能造成某些功能无法使用")
             }
         }
-        requester!!.checkAndRequest(list)        
+        requester!!.checkAndRequest(list)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
