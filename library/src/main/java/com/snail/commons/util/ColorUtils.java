@@ -32,6 +32,19 @@ public class ColorUtils {
     /**
      * @param normal   正常时的颜色
      * @param pressed  按压时的颜色
+     */
+    public static ColorStateList createColorStateList(int normal, int pressed) {
+        //normal一定要最后
+        int[][] states = new int[][]{
+                new int[]{android.R.attr.state_pressed},
+                new int[0]
+        };
+        return new ColorStateList(states, new int[]{pressed, normal});
+    }
+    
+    /**
+     * @param normal   正常时的颜色
+     * @param pressed  按压时的颜色
      * @param disabled 不可用时的颜色
      */
     public static ColorStateList createColorStateList(int normal, int pressed, int disabled) {

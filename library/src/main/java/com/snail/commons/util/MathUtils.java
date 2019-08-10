@@ -1,10 +1,10 @@
 package com.snail.commons.util;
 
-import androidx.annotation.NonNull;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import androidx.annotation.NonNull;
 
 /**
  * date: 2019/8/7 21:01

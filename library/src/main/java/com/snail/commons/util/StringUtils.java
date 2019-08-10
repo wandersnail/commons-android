@@ -1,10 +1,11 @@
 package com.snail.commons.util;
 
 import android.text.TextUtils;
-import androidx.annotation.NonNull;
 
 import java.util.Locale;
 import java.util.UUID;
+
+import androidx.annotation.NonNull;
 
 /**
  * date: 2019/8/7 11:15
