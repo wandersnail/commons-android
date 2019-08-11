@@ -2,8 +2,12 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.novoda.bintray-release'
 apply plugin: 'maven'
 
-def lib_version = '1.4.6'
-group = "com.github.wandersnail"
+def lib_version = '1.4.7'
+def lib_group = 'com.github.wandersnail'
+def lib_artifact = 'commons-android'
+def lib_packaging = 'aar'
+def lib_description = 'commons for Android'
+group = lib_group
 version = lib_version
 
 android {
@@ -35,10 +39,10 @@ dependencies {
 publish {
     repoName="android"//仓库名
     userOrg = 'wandersnail' //bintray.com用户名  
-    groupId = 'com.github.wandersnail' //jcenter上的路径  
-    artifactId = 'commons-android' //项目名称  
-    publishVersion = "$lib_version" //版本号  
-    desc = 'commons for Android'
+    groupId = lib_group //jcenter上的路径  
+    artifactId = lib_artifact //项目名称  
+    publishVersion = lib_version //版本号  
+    desc = lib_description
     website = 'https://github.com/wandersnail/commons'
 }
 
@@ -52,10 +56,10 @@ if (project.getGradle().startParameter.taskNames.any { it.contains('bintrayUploa
             pom {
                 //noinspection GroovyAssignabilityCheck
                 project {
-                    name "commons-android"
-                    artifactId 'commons-android'
-                    packaging 'aar'
-                    description 'commons-android lib for Android'
+                    name lib_artifact
+                    artifactId lib_artifact
+                    packaging lib_packaging
+                    description lib_description
                     url 'https://github.com/wandersnail'
                     version lib_version
 
@@ -87,21 +91,30 @@ if (project.getGradle().startParameter.taskNames.any { it.contains('bintrayUploa
 
 afterEvaluate { project ->
     uploadArchives {
+        //加载资源
+        Properties properties = new Properties()
+        InputStream inputStream = rootProject.file('local.properties').newDataInputStream()
+        properties.load(inputStream)
+        //读取本地maven的url
+        def localMavenBaseUrl = properties.containsKey('maven.local.url.base') ? properties['maven.local.url.base']
+                : rootProject['maven.local.url.base']
+        def username = properties.containsKey('nexus.username') ? properties['nexus.username'] : rootProject['nexus.username']
+        def password = properties.containsKey('nexus.password') ? properties['nexus.password'] : rootProject['nexus.password']
         repositories {
             mavenDeployer {
-                repository(url: 'http://localhost:8081/repository/maven-releases/') {
-                    authentication(userName: "admin", password: "123456")
+                repository(url: "${localMavenBaseUrl}repository/maven-releases") {
+                    authentication(userName: username, password: password)
                 }
 
-                snapshotRepository(url: 'http://localhost:8081/repository/maven-snapshots/') {
-                    authentication(userName: "admin", password: "123456")
+                snapshotRepository(url: "${localMavenBaseUrl}repository/maven-snapshots") {
+                    authentication(userName: username, password: password)
                 }
                 pom.project {
-                    groupId "com.github.wandersnail"
-                    artifactId 'commons-android'
-                    packaging 'aar'
-                    description 'commons-android lib for Android'
+                    groupId lib_group
+                    artifactId lib_artifact
                     version lib_version
+                    packaging lib_packaging
+                    description lib_description
                 }
             }
         }
@@ -112,8 +125,8 @@ afterEvaluate { project ->
         from android.sourceSets.main.java.srcDirs
     }
 
-    task classJar(type: Jar) {
-        from (project.zipTree("${project.buildDir.absolutePath}/intermediates/packaged-classes/release/classes.jar"))
+    task classJar(type: Jar, dependsOn: ['assembleRelease', 'sourcesJar']) {
+        from(project.zipTree("${project.buildDir.absolutePath}/intermediates/packaged-classes/release/classes.jar"))
         exclude '**/R.class', '**/R$*.class', '**/**/BuildConfig.class', '**/**/BuildConfig$*.class'
     }
 

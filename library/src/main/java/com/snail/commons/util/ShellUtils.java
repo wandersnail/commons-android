@@ -145,15 +145,15 @@ public class ShellUtils {
         /**
          * result of command
          */
-        int result;
+        private int result;
         /**
          * success message of command result
          */
-        String successMsg = "";
+        private String successMsg = "";
         /**
          * error message of command result
          */
-        String errorMsg = "";
+        private String errorMsg = "";
 
 
         public CommandResult(int result) {
@@ -165,6 +165,18 @@ public class ShellUtils {
             this.result = result;
             this.successMsg = successMsg;
             this.errorMsg = errorMsg;
+        }
+
+        public int getResult() {
+            return result;
+        }
+
+        public String getSuccessMsg() {
+            return successMsg;
+        }
+
+        public String getErrorMsg() {
+            return errorMsg;
         }
     }
 }
