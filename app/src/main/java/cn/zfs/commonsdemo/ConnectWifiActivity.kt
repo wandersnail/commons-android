@@ -43,7 +43,7 @@ class ConnectWifiActivity : BaseActivity() {
         }
         lv.setOnItemClickListener { _, _, position, _ ->
             val result = scanResultList[position]
-            val wificipher = WifiHelper.getWificipher(result)
+            val wificipher = WifiHelper.getWifiCipher(result)
             if (wificipher == WifiHelper.WIFICIPHER_NOPASS) {
                 connect(WifiHelper.createWifiConfiguration(result.SSID, "", wificipher))
             } else {
@@ -56,7 +56,7 @@ class ConnectWifiActivity : BaseActivity() {
             }
         }
         refreshLayout.isRefreshing = true
-        startScan(adapter)
+        startScan(adapter)        
     }
 
     private fun startScan(adapter: ListAdapter) {

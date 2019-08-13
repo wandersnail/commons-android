@@ -3,6 +3,7 @@ package cn.zfs.commonsdemo
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import com.snail.commons.helper.WifiHelper
 import com.snail.commons.util.NetworkUtils
 import com.snail.commons.util.SystemUtils
@@ -28,6 +29,8 @@ class NetStateActivity : BaseActivity() {
         btnGoLocation.setOnClickListener {
             startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
         }
+        Log.i("NetStateActivity", "ip: " + helper.currentIpAddress + ", gateway:" + helper.ipAddressFromHotspot + 
+                ", serverAddress: " + helper.serverIpAddress)
     }
 
     override fun onResume() {
