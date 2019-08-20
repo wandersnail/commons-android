@@ -3,28 +3,46 @@ package cn.zfs.commonsdemo
 import android.Manifest
 import android.content.Intent
 import android.os.Bundle
+import android.os.Looper
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.snail.commons.helper.PermissionsRequester
+import com.snail.commons.methodpost.PosterDispatcher
+import com.snail.commons.methodpost.ThreadMode
+import com.snail.commons.observer.Observe
 import com.snail.commons.util.Logger
 import com.snail.commons.util.ToastUtils
 import com.snail.widget.listview.BaseListAdapter
 import com.snail.widget.listview.BaseViewHolder
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
+import java.util.concurrent.Executors
+import kotlin.concurrent.thread
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), MyObserver {
     private var requester: PermissionsRequester? = null
-    
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val data = arrayListOf("储存信息获取", "md5和sha1算法", "系统分享", "网络及位置服务状态", "解压缩", "点击波纹", "Toast", "系统文件选择器", "debug包判断",
-            "系统下载并安装APP", "文件操作")
-        val clsArr = arrayListOf(StorageActivity::class.java, MD5Activity::class.java, ShareActivity::class.java, NetStateActivity::class.java, 
-                ZipActivity::class.java, ClickRippleActivity::class.java, ToastUtilsActivity::class.java, SysFileChooserActivity::class.java,
-                DebugJudgeActivity::class.java, ApkDownloadActivity::class.java, FileOperateActivity::class.java)
+        val data = arrayListOf(
+            "储存信息获取", "md5和sha1算法", "系统分享", "网络及位置服务状态", "解压缩", "点击波纹", "Toast", "系统文件选择器", "debug包判断",
+            "系统下载并安装APP", "文件操作"
+        )
+        val clsArr = arrayListOf(
+            StorageActivity::class.java,
+            MD5Activity::class.java,
+            ShareActivity::class.java,
+            NetStateActivity::class.java,
+            ZipActivity::class.java,
+            ClickRippleActivity::class.java,
+            ToastUtilsActivity::class.java,
+            SysFileChooserActivity::class.java,
+            DebugJudgeActivity::class.java,
+            ApkDownloadActivity::class.java,
+            FileOperateActivity::class.java
+        )
         lv.adapter = object : BaseListAdapter<String>(this, data) {
             override fun createViewHolder(position: Int): BaseViewHolder<String> {
                 return object : BaseViewHolder<String>() {
@@ -60,6 +78,36 @@ class MainActivity : AppCompatActivity() {
             }
         }
         requester!!.checkAndRequest(list)
+        thread {
+            try {
+                val method = javaClass.getMethod("test")
+                PosterDispatcher(Executors.newCachedThreadPool(), ThreadMode.POSTING).post(method, MyRunOn::class.java) {
+                    method.invoke(this@MainActivity)
+                }
+            } catch (e: Exception) {
+            }
+        }
+        App.instance?.observable?.registerObserver(this)
+    }
+
+    override fun onDestroy() {
+        App.instance?.observable?.unregisterObserver(this)
+        super.onDestroy()
+    }
+
+    @Observe
+    override fun onChanged(o: Any?) {
+        ToastUtils.showShort("$o, 主线程: ${Looper.getMainLooper() == Looper.myLooper()}")
+    }
+
+    @Observe(ThreadMode.MAIN)
+    override fun coming() {
+        ToastUtils.showShort("coming, 主线程: ${Looper.getMainLooper() == Looper.myLooper()}")
+    }
+
+    @MyRunOn(ThreadMode.MAIN)
+    fun test() {
+        ToastUtils.showShort("主线程: ${Looper.getMainLooper() == Looper.myLooper()}")
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

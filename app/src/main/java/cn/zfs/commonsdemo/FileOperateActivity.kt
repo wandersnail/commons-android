@@ -2,12 +2,14 @@ package cn.zfs.commonsdemo
 
 import android.content.Intent
 import android.os.Bundle
+import com.snail.commons.methodpost.MethodInfo
 import com.snail.commons.util.FileUtils
 import com.snail.commons.util.ToastUtils
 import com.snail.fileselector.FileSelector
 import com.snail.fileselector.OnFileSelectListener
 import kotlinx.android.synthetic.main.activity_file_operate.*
 import java.io.File
+import kotlin.concurrent.thread
 
 /**
  * date: 2019/8/8 12:28
@@ -68,6 +70,9 @@ class FileOperateActivity : BaseActivity() {
             if (path.isNotEmpty()) {
                 FileUtils.deleteDir(File(path))
             }
+        }
+        thread {
+            App.instance?.observable?.notifyObservers("onChanged", MethodInfo.Parameter(Any::class.java, "大风来了"))
         }
     }
 
