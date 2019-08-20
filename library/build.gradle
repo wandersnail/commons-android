@@ -40,6 +40,26 @@ dependencies {
     compileOnly "androidx.exifinterface:exifinterface:$exifinterface_version"
 }
 
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from android.sourceSets.main.java.srcDirs
+}
+
+task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
 publish {
     repoName="android"//仓库名
     userOrg = 'wandersnail' //bintray.com用户名  
@@ -51,15 +71,6 @@ publish {
 }
 
 if (project.getGradle().startParameter.taskNames.any { it.contains('bintrayUpload') }) {
-    task javadoc(type: Javadoc) {
-        source = android.sourceSets.main.java.srcDirs
-        classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-    }
-
-    task androidJavadocsJar(type: Jar, dependsOn: javadoc) {
-        classifier = 'javadoc'
-        from javadoc.destinationDir
-    }
     gradle.taskGraph.whenReady { taskGraph ->
         taskGraph.getAllTasks().find {
             it.path == ":$project.name:generatePomFileForReleasePublication"
@@ -134,24 +145,4 @@ afterEvaluate { project ->
             }
         }
     }
-}
-
-task sourcesJar(type: Jar) {
-    classifier = 'sources'
-    from android.sourceSets.main.java.srcDirs
-}
-
-task javadoc(type: Javadoc) {
-    source = android.sourceSets.main.java.srcDirs
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
-
-artifacts {
-    archives sourcesJar
-    archives javadocJar
 }
