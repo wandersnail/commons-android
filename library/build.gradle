@@ -2,11 +2,11 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.novoda.bintray-release'
 apply plugin: 'maven'
 
-def lib_version = '1.5.0'
-def lib_group = 'com.github.wandersnail'
-def lib_artifact = 'commons-android'
+def lib_version = '1.0.0'
+def lib_group = 'cn.wandersnail'
+def lib_artifact = 'common-full'
 def lib_packaging = 'aar'
-def lib_description = 'commons for Android'
+def lib_description = 'common-full for Android'
 group = lib_group
 version = lib_version
 
@@ -41,7 +41,7 @@ dependencies {
 }
 
 task sourcesJar(type: Jar) {
-    classifier = 'sources'
+    archiveClassifier.set('sources')
     from android.sourceSets.main.java.srcDirs
 }
 
@@ -51,7 +51,7 @@ task javadoc(type: Javadoc) {
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
+    archiveClassifier.set('javadoc')
     from javadoc.destinationDir
 }
 
@@ -61,13 +61,13 @@ artifacts {
 }
 
 publish {
-    repoName="android"//仓库名
+    repoName="androidx"//仓库名
     userOrg = 'wandersnail' //bintray.com用户名  
     groupId = lib_group //jcenter上的路径  
     artifactId = lib_artifact //项目名称  
     publishVersion = lib_version //版本号  
     desc = lib_description
-    website = 'https://github.com/wandersnail/commons'
+    website = 'https://github.com/wandersnail/commons-android'
 }
 
 if (project.getGradle().startParameter.taskNames.any { it.contains('bintrayUpload') }) {
@@ -88,9 +88,9 @@ if (project.getGradle().startParameter.taskNames.any { it.contains('bintrayUploa
                     version lib_version
 
                     scm {
-                        url 'https://github.com/wandersnail/commons'
-                        connection 'scm:git:https://github.com/wandersnail/commons.git'
-                        developerConnection 'scm:git:https://github.com/wandersnail/commons.git'
+                        url 'https://github.com/wandersnail/commons-android'
+                        connection 'scm:git:https://github.com/wandersnail/commons-android.git'
+                        developerConnection 'scm:git:https://github.com/wandersnail/commons-android.git'
                     }
 
                     licenses {

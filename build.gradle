@@ -22,7 +22,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.4.2'
+        classpath 'com.android.tools.build:gradle:3.5.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.novoda:bintray-release:0.9.1'
         // NOTE: Do not place your application dependencies here; they belong
@@ -35,8 +35,7 @@ allprojects {
         google()
         jcenter()
         mavenCentral()
-        maven { url 'https://jitpack.io' }
-        maven { url 'https://dl.bintray.com/wandersnail/android/' }
+        maven { url 'https://dl.bintray.com/wandersnail/androidx/' }
     }
     // 指定编码
     tasks.withType(JavaCompile) {

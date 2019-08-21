@@ -1,4 +1,4 @@
-<manifest package="cn.zfs.commonsdemo"
+<manifest package="cn.wandersnail.commonsdemo"
           xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
@@ -9,9 +9,10 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
 
     <application
-        android:name=".App"
+        android:name="cn.wandersnail.commonsdemo.App"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -19,7 +20,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".MainActivity"
+            android:name="cn.wandersnail.commonsdemo.MainActivity"
             android:configChanges="keyboardHidden|orientation|navigation|screenSize|keyboard"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -31,51 +32,51 @@
         </activity>
 
         <activity
-            android:name=".StorageActivity"
+            android:name="cn.wandersnail.commonsdemo.StorageActivity"
             android:configChanges="keyboardHidden|orientation|navigation|screenSize|keyboard"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".ClickRippleActivity"
+            android:name="cn.wandersnail.commonsdemo.ClickRippleActivity"
             android:configChanges="keyboardHidden|orientation|navigation|screenSize|keyboard"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".MD5Activity"
+            android:name="cn.wandersnail.commonsdemo.MD5Activity"
             android:configChanges="keyboardHidden|orientation|navigation|screenSize|keyboard"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".ShareActivity"
+            android:name="cn.wandersnail.commonsdemo.ShareActivity"
             android:configChanges="keyboardHidden|orientation|navigation|screenSize|keyboard"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".NetStateActivity"
+            android:name="cn.wandersnail.commonsdemo.NetStateActivity"
             android:configChanges="keyboardHidden|orientation|navigation|screenSize|keyboard"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".ConnectWifiActivity"
+            android:name="cn.wandersnail.commonsdemo.ConnectWifiActivity"
             android:configChanges="keyboardHidden|orientation|navigation|screenSize|keyboard"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".ZipActivity"
+            android:name="cn.wandersnail.commonsdemo.ZipActivity"
             android:configChanges="keyboardHidden|orientation|navigation|screenSize|keyboard"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".ToastUtilsActivity"
+            android:name="cn.wandersnail.commonsdemo.ToastUtilsActivity"
             android:configChanges="keyboardHidden|orientation|navigation|screenSize|keyboard"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".SysFileChooserActivity"
+            android:name="cn.wandersnail.commonsdemo.SysFileChooserActivity"
             android:configChanges="keyboardHidden|orientation|navigation|screenSize|keyboard"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".DebugJudgeActivity"
+            android:name="cn.wandersnail.commonsdemo.DebugJudgeActivity"
             android:configChanges="keyboardHidden|orientation|navigation|screenSize|keyboard"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".ApkDownloadActivity"
+            android:name="cn.wandersnail.commonsdemo.ApkDownloadActivity"
             android:configChanges="keyboardHidden|orientation|navigation|screenSize|keyboard"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".FileOperateActivity"
+            android:name="cn.wandersnail.commonsdemo.FileOperateActivity"
             android:configChanges="keyboardHidden|orientation|navigation|screenSize|keyboard"
             android:screenOrientation="portrait"/>
     </application>

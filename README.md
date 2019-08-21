@@ -1,7 +1,6 @@
 ## 代码托管
-[![](https://jitpack.io/v/wandersnail/commons-android.svg)](https://jitpack.io/#wandersnail/commons-android)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.wandersnail/commons-android/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.wandersnail/commons-android)
-[![Download](https://api.bintray.com/packages/wandersnail/android/commons-android/images/download.svg) ](https://bintray.com/wandersnail/android/commons-android/_latestVersion)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/cn.wandersnail/common-full/badge.svg)](https://maven-badges.herokuapp.com/maven-central/cn.wandersnail/common-full)
+[![Download](https://api.bintray.com/packages/wandersnail/android/common-full/images/download.svg) ](https://bintray.com/wandersnail/android/common-full/_latestVersion)
 
 
 ## 使用
@@ -10,17 +9,17 @@
 ```
 dependencies {
 	...
-	implementation 'com.github.wandersnail:commons-android:latestVersion'
+	implementation 'cn.wandersnail:common-full:latestVersion'
 }
 ```
 
-2. 如果从jcenter下载失败。在project的build.gradle里的repositories添加内容，最好两个都加上，有时jitpack会抽风，同步不下来。添加完再次同步即可。
+2. 如果从jcenter下载失败。在project的build.gradle里的repositories添加内容，最好两个都加上，添加完再次同步即可。
 ```
 allprojects {
 	repositories {
 		...
-		maven { url 'https://jitpack.io' }
-		maven { url 'https://dl.bintray.com/wandersnail/android/' }
+		mavenCentral()
+		maven { url 'https://dl.bintray.com/wandersnail/androidx/' }
 	}
 }
 ```
@@ -30,7 +29,8 @@ allprojects {
 - 如果不想全部依赖，可以依赖单个的，仓库如下：
 
 1. [https://github.com/wandersnail/commons-basic](https://github.com/wandersnail/commons-basic)
-2. [https://github.com/wandersnail/commons-method-poster](https://github.com/wandersnail/commons-method-poster)
+1. [https://github.com/wandersnail/commons-observer](https://github.com/wandersnail/commons-observer)
+2. [https://github.com/wandersnail/commons-poster](https://github.com/wandersnail/commons-poster)
 3. [https://github.com/wandersnail/commons-utils](https://github.com/wandersnail/commons-utils)
 4. [https://github.com/wandersnail/commons-helper](https://github.com/wandersnail/commons-helper)
 
