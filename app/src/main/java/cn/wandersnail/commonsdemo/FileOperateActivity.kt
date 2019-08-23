@@ -5,8 +5,7 @@ import android.os.Bundle
 import cn.wandersnail.commons.poster.MethodInfo
 import cn.wandersnail.commons.util.FileUtils
 import cn.wandersnail.commons.util.ToastUtils
-import com.snail.fileselector.FileSelector
-import com.snail.fileselector.OnFileSelectListener
+import cn.wandersnail.fileselector.FileSelector
 import kotlinx.android.synthetic.main.activity_file_operate.*
 import java.io.File
 import kotlin.concurrent.thread
@@ -24,23 +23,19 @@ class FileOperateActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_file_operate)
-        fileSelector.setOnFileSelectListener(object : OnFileSelectListener {
-            override fun onFileSelect(paths: List<String>) {
-                path = paths[0]
-                tvPath.text = path
-            }
-        })
+        fileSelector.setOnFileSelectListener { paths ->
+            path = paths[0]
+            tvPath.text = path
+        }
         fileSelector2.setSelectionMode(FileSelector.DIRECTORIES_ONLY)
-        fileSelector2.setOnFileSelectListener(object : OnFileSelectListener {
-            override fun onFileSelect(paths: List<String>) {
-                if (copy) {
-                    FileUtils.copy(File(path), File(paths[0], FileUtils.getFileName(path)))
-                } else {
-                    FileUtils.move(File(path), File(paths[0], FileUtils.getFileName(path)))
-                }
-                ToastUtils.showShort(if (copy) "复制完成: ${paths[0]}" else "移动完成: ${paths[0]}")
+        fileSelector2.setOnFileSelectListener { paths ->
+            if (copy) {
+                FileUtils.copy(File(path), File(paths[0], FileUtils.getFileName(path)))
+            } else {
+                FileUtils.move(File(path), File(paths[0], FileUtils.getFileName(path)))
             }
-        })
+            ToastUtils.showShort(if (copy) "复制完成: ${paths[0]}" else "移动完成: ${paths[0]}")
+        }
         btnSelectFile.setOnClickListener { 
             fileSelector.setSelectionMode(FileSelector.FILES_ONLY)
             fileSelector.select(this)

@@ -6,11 +6,9 @@ import android.os.Bundle
 import android.os.Environment
 import cn.wandersnail.commons.helper.ZipHelper
 import cn.wandersnail.commons.util.ToastUtils
-import com.snail.fileselector.FileSelector
-import com.snail.fileselector.OnFileSelectListener
+import cn.wandersnail.fileselector.FileSelector
 import kotlinx.android.synthetic.main.activity_zip.*
 import java.io.File
-import java.io.FilenameFilter
 
 /**
  * 描述:
@@ -30,9 +28,9 @@ class ZipActivity : BaseActivity() {
         fileSelector.setRoot(Environment.getExternalStorageDirectory())
         btnSelectZip.setOnClickListener { 
             selectType = 0
-            fileSelector.setFilenameFilter(FilenameFilter { dir, name -> 
+            fileSelector.setFilenameFilter { dir, name ->
                 File(dir, name).isDirectory || name.endsWith(".zip", true)
-            })
+            }
             fileSelector.setMultiSelectionEnabled(true)
             fileSelector.setSelectionMode(FileSelector.FILES_ONLY)
             fileSelector.select(this)
@@ -58,45 +56,43 @@ class ZipActivity : BaseActivity() {
             fileSelector.setSelectionMode(FileSelector.DIRECTORIES_ONLY)
             fileSelector.select(this)
         }
-        fileSelector.setOnFileSelectListener(object : OnFileSelectListener {
-            override fun onFileSelect(paths: List<String>) {
-                tvPaths.text = ""
-                when (selectType) {
-                    0 -> {
+        fileSelector.setOnFileSelectListener { paths ->
+            tvPaths.text = ""
+            when (selectType) {
+                0 -> {
+                    files.clear()
+                    paths.forEach { path ->
+                        tvPaths.append("$path\n")
+                        files.add(File(path))
+                    }
+                }
+                1 -> {
+                    files.clear()
+                    paths.forEach { path ->
+                        tvPaths.append("$path\n")
+                        files.add(File(path))
+                    }
+                }
+                2 -> {
+                    loadDialog.show()
+                    ZipHelper.unzip().addZipFiles(files).setTargetDir(paths[0]).execute { obj ->
+                        loadDialog.dismiss()
                         files.clear()
-                        paths.forEach { path ->
-                            tvPaths.append("$path\n")
-                            files.add(File(path))
-                        }
+                        tvPaths.text = ""
+                        ToastUtils.showShort("解压${if (obj == true) "成功" else "失败"}")
                     }
-                    1 -> {
+                }
+                3 -> {
+                    loadDialog.show()
+                    ZipHelper.zip().addSourceFiles(files).setLevel(9).setTarget(paths[0], "test").execute { obj ->
+                        loadDialog.dismiss()
                         files.clear()
-                        paths.forEach { path ->
-                            tvPaths.append("$path\n")
-                            files.add(File(path))
-                        }
-                    }
-                    2 -> {
-                        loadDialog.show()
-                        ZipHelper.unzip().addZipFiles(files).setTargetDir(paths[0]).execute { obj ->
-                            loadDialog.dismiss()
-                            files.clear()
-                            tvPaths.text = ""
-                            ToastUtils.showShort("解压${if (obj == true) "成功" else "失败"}")
-                        }
-                    }
-                    3 -> {
-                        loadDialog.show()
-                        ZipHelper.zip().addSourceFiles(files).setLevel(9).setTarget(paths[0], "test").execute { obj ->
-                            loadDialog.dismiss()
-                            files.clear()
-                            tvPaths.text = ""
-                            ToastUtils.showShort("压缩${if (obj != null) "成功" else "失败"}")
-                        }
+                        tvPaths.text = ""
+                        ToastUtils.showShort("压缩${if (obj != null) "成功" else "失败"}")
                     }
                 }
             }
-        })
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

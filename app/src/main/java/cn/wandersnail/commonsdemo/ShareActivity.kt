@@ -4,8 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
 import cn.wandersnail.commons.util.SysShareUtils
-import com.snail.fileselector.FileSelector
-import com.snail.fileselector.OnFileSelectListener
+import cn.wandersnail.fileselector.FileSelector
 import kotlinx.android.synthetic.main.activity_share.*
 import java.io.File
 
@@ -25,39 +24,25 @@ class ShareActivity : BaseActivity() {
         fileSelector.setSelectionMode(FileSelector.FILES_ONLY)
         fileSelector.setMultiSelectionEnabled(true)
         btnSelectImage.setOnClickListener {
-            fileSelector.setOnFileSelectListener(object : OnFileSelectListener {
-                override fun onFileSelect(paths: List<String>) {
-                    tvImagePath.text = paths[0]
-                }
-            })
+            fileSelector.setOnFileSelectListener { paths -> tvImagePath.text = paths[0] }
             fileSelector.select(this)
         }
         btnSelectImages.setOnClickListener {
-            fileSelector.setOnFileSelectListener(object : OnFileSelectListener {
-                override fun onFileSelect(paths: List<String>) {
-                    tvImagePaths.text = ""
-                    paths.forEach { path ->
-                        tvImagePaths.append("$path\n")
-                        imageFiles.add(File(path))
-                    }
+            fileSelector.setOnFileSelectListener { paths ->
+                tvImagePaths.text = ""
+                paths.forEach { path ->
+                    tvImagePaths.append("$path\n")
+                    imageFiles.add(File(path))
                 }
-            })
+            }
             fileSelector.select(this)
         }
         btnSelectFile.setOnClickListener {
-            fileSelector.setOnFileSelectListener(object : OnFileSelectListener {
-                override fun onFileSelect(paths: List<String>) {
-                    tvFilePath.text = paths[0]
-                }
-            })
+            fileSelector.setOnFileSelectListener { paths -> tvFilePath.text = paths[0] }
             fileSelector.select(this)
         }
         btnSelectVideo.setOnClickListener {
-            fileSelector.setOnFileSelectListener(object : OnFileSelectListener {
-                override fun onFileSelect(paths: List<String>) {
-                    tvVideoPath.text = paths[0]
-                }
-            })
+            fileSelector.setOnFileSelectListener { paths -> tvVideoPath.text = paths[0] }
             fileSelector.select(this)
         }
         btnShareText.setOnClickListener { 

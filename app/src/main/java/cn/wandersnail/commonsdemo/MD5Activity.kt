@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.os.Environment
 import cn.wandersnail.commons.util.EncryptUtils
 import cn.wandersnail.commons.util.SignUtils
-import com.snail.fileselector.FileSelector
+import cn.wandersnail.fileselector.FileSelector
 import kotlinx.android.synthetic.main.activity_md5.*
 import kotlin.concurrent.thread
 

@@ -31,7 +31,7 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$appcompat_version"
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation "androidx.core:core-ktx:1.0.2"
-    implementation 'com.github.wandersnail:fileselector:1.2.1'
+    implementation 'cn.wandersnail:file-selector:1.0.0'
     implementation 'com.github.wandersnail:widgets:1.2.2'
     implementation "com.squareup.retrofit2:retrofit:$retrofit2_version"
     implementation "com.github.bumptech.glide:glide:$glide_version"
