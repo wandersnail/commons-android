@@ -143,6 +143,38 @@ public class ImageUtils {
     }
 
     /**
+     * 根据图片字节数据加载bitmap
+     *
+     * @param bytes 图片字节数据
+     * @param w     宽
+     * @param h     高
+     */
+    public static Bitmap getBitmap(@NonNull byte[] bytes, int w, int h) {
+        try {
+            BitmapFactory.Options opts = new BitmapFactory.Options();
+            opts.inJustDecodeBounds = true;
+            opts.inPreferredConfig = Bitmap.Config.ARGB_8888;
+            BitmapFactory.decodeByteArray(bytes, 0, bytes.length, opts);
+            int width = opts.outWidth;
+            int height = opts.outHeight;
+            float scaleWidth = 0f;
+            float scaleHeight = 0f;
+            if (width > w || height > h) {
+                // 缩放
+                scaleWidth = width * 1f / w;
+                scaleHeight = height * 1f / h;
+            }
+            opts.inJustDecodeBounds = false;
+            float scale = Math.max(scaleWidth, scaleHeight);
+            opts.inSampleSize = (int) scale;
+            return BitmapFactory.decodeByteArray(bytes, 0, bytes.length, opts);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
      * 读取图片属性：旋转的角度
      *
      * @param path 图片绝对路径
