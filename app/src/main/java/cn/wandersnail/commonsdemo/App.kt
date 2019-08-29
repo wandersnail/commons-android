@@ -2,9 +2,9 @@ package cn.wandersnail.commonsdemo
 
 import android.app.Application
 import cn.wandersnail.commons.base.AppHolder
+import cn.wandersnail.commons.observer.Observable
 import cn.wandersnail.commons.poster.PosterDispatcher
 import cn.wandersnail.commons.poster.ThreadMode
-import cn.wandersnail.commons.observer.Observable
 import java.util.concurrent.Executors
 
 /**
@@ -13,7 +13,7 @@ import java.util.concurrent.Executors
  * 作者: zengfansheng
  */
 class App : Application() { 
-    val observable = Observable(PosterDispatcher(Executors.newCachedThreadPool(), ThreadMode.POSTING), true)
+    val observable = Observable(PosterDispatcher(Executors.newCachedThreadPool(), ThreadMode.POSTING), false)
     
     override fun onCreate() {
         super.onCreate()

@@ -3,24 +3,18 @@ package cn.wandersnail.commonsdemo
 import android.Manifest
 import android.content.Intent
 import android.os.Bundle
-import android.os.Looper
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import cn.wandersnail.commons.helper.PermissionsRequester
-import cn.wandersnail.commons.observer.Observe
-import cn.wandersnail.commons.poster.PosterDispatcher
-import cn.wandersnail.commons.poster.ThreadMode
 import cn.wandersnail.commons.util.Logger
 import cn.wandersnail.commons.util.ToastUtils
 import com.snail.widget.listview.BaseListAdapter
 import com.snail.widget.listview.BaseViewHolder
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
-import java.util.concurrent.Executors
-import kotlin.concurrent.thread
 
-class MainActivity : AppCompatActivity(), MyObserver {
+class MainActivity : AppCompatActivity() {
     private var requester: PermissionsRequester? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -77,37 +71,7 @@ class MainActivity : AppCompatActivity(), MyObserver {
                 ToastUtils.showShort("部分权限被拒绝，可能造成某些功能无法使用")
             }
         }
-        requester!!.checkAndRequest(list)
-        thread {
-            try {
-                val method = javaClass.getMethod("test")
-                PosterDispatcher(Executors.newCachedThreadPool(), ThreadMode.POSTING).post(method, MyRunOn::class.java) {
-                    method.invoke(this@MainActivity)
-                }
-            } catch (e: Exception) {
-            }
-        }
-        App.instance?.observable?.registerObserver(this)
-    }
-
-    override fun onDestroy() {
-        App.instance?.observable?.unregisterObserver(this)
-        super.onDestroy()
-    }
-
-    @Observe
-    override fun onChanged(o: Any?) {
-        ToastUtils.showShort("$o, 主线程: ${Looper.getMainLooper() == Looper.myLooper()}")
-    }
-
-    @Observe(ThreadMode.MAIN)
-    override fun coming() {
-        ToastUtils.showShort("coming, 主线程: ${Looper.getMainLooper() == Looper.myLooper()}")
-    }
-
-    @MyRunOn(ThreadMode.MAIN)
-    fun test() {
-        ToastUtils.showShort("主线程: ${Looper.getMainLooper() == Looper.myLooper()}")
+        requester!!.checkAndRequest(list)        
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

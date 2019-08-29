@@ -1,8 +1,5 @@
 package cn.wandersnail.commons.observer;
 
-import cn.wandersnail.commons.poster.MethodInfo;
-import cn.wandersnail.commons.poster.ThreadMode;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -12,48 +9,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import cn.wandersnail.commons.poster.MethodInfo;
+
 /**
  * date: 2019/8/9 15:13
  * author: zengfansheng
  */
 class ObserverMethodHelper {
-    private static final Map<Class<?>, Map<String, ObserverMethod>> METHOD_CACHE = new ConcurrentHashMap<>();
-    private ThreadMode defaultMode;
+    private static final Map<Class<?>, Map<MethodInfo, Method>> METHOD_CACHE = new ConcurrentHashMap<>();
     private boolean isObserveAnnotationRequired;
 
-    ObserverMethodHelper(ThreadMode defaultMode, boolean isObserveAnnotationRequired) {
-        this.defaultMode = defaultMode;
+    ObserverMethodHelper(boolean isObserveAnnotationRequired) {
         this.isObserveAnnotationRequired = isObserveAnnotationRequired;
     }
 
     void clearCache() {
         METHOD_CACHE.clear();
-    }
-
-    /**
-     * 生成方法唯一识别字符串
-     */
-    private String getMethodString(Method method) {
-        StringBuilder sb = new StringBuilder(method.getName());
-        Class<?>[] types = method.getParameterTypes();
-        for (Class<?> type : types) {
-            sb.append(",").append(type);
-        }
-        return sb.toString();
-    }
-
-    /**
-     * 生成方法唯一识别字符串
-     */
-    String getMethodString(MethodInfo info) {
-        StringBuilder sb = new StringBuilder(info.getName());
-        MethodInfo.Parameter[] parameters = info.getParameters();
-        if (parameters != null) {
-            for (MethodInfo.Parameter parameter : parameters) {
-                sb.append(",").append(parameter.getType());
-            }
-        }
-        return sb.toString();
     }
 
     /**
@@ -88,8 +59,8 @@ class ObserverMethodHelper {
     /**
      * 查找观察者监听的方法
      */
-    Map<String, ObserverMethod> findObserverMethod(Observer observer) {
-        Map<String, ObserverMethod> map = METHOD_CACHE.get(observer.getClass());
+    Map<MethodInfo, Method> findObserverMethod(Observer observer) {
+        Map<MethodInfo, Method> map = METHOD_CACHE.get(observer.getClass());
         if (map != null) {
             return map;
         }
@@ -113,12 +84,11 @@ class ObserverMethodHelper {
             cls = cls.getSuperclass();
         }
         for (Method method : methods) {
-            Observe anno = method.getAnnotation(Observe.class);
+            Observe anno = method.getAnnotation(Observe.class);          
             if (anno != null) {
-                ThreadMode threadMode = anno.value() == ThreadMode.UNSPECIFIED ? defaultMode : anno.value();
-                map.put(getMethodString(method), new ObserverMethod(method, threadMode));
+                map.put(MethodInfo.valueOf(method), method);
             } else if (!isObserveAnnotationRequired) {
-                map.put(getMethodString(method), new ObserverMethod(method, defaultMode));
+                map.put(MethodInfo.valueOf(method), method);
             }
         }
         if (!map.isEmpty()) {

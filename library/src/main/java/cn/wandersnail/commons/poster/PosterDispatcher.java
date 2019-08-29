@@ -3,7 +3,6 @@ package cn.wandersnail.commons.poster;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.concurrent.ExecutorService;
@@ -60,30 +59,10 @@ public class PosterDispatcher {
      */
     public void post(@Nullable Method method, @NonNull Runnable runnable) {
         if (method != null) {
-            post(method, RunOn.class, runnable);
-        }
-    }
-
-    /**
-     * 根据方法上带的注解，将任务post到指定线程执行。如果方法上没有带注解，使用配置的默认值
-     *
-     * @param method   方法
-     * @param cls      方法上注解的字节码
-     * @param runnable 要执行的任务
-     */
-    public void post(@Nullable Method method, @NonNull Class<? extends Annotation> cls, @NonNull Runnable runnable) {
-        if (method != null) {
-            Annotation annotation = method.getAnnotation(cls);
+            RunOn annotation = method.getAnnotation(RunOn.class);
             ThreadMode mode = defaultMode;
             if (annotation != null) {
-                try {
-                    Method m = annotation.getClass().getMethod("value");
-                    Object value = m.invoke(annotation);
-                    if (value instanceof ThreadMode) {
-                        mode = (ThreadMode) value;
-                    }
-                } catch (Exception ignore) {
-                }
+                mode = annotation.value();
             }
             post(mode, runnable);
         }
@@ -120,10 +99,65 @@ public class PosterDispatcher {
      *
      * @param owner      方法的所在的对象实例
      * @param methodName 方法名
+     * @param tag        {@link Tag#value()}
      * @param parameters 参数信息
      */
-    public void post(@NonNull Object owner, @NonNull String methodName, @Nullable MethodInfo.Parameter... parameters) {
-        post(owner, methodName, RunOn.class, parameters);
+    public void post(@NonNull Object owner, @NonNull String methodName, @NonNull String tag,
+                     @Nullable MethodInfo.Parameter... parameters) {
+        Class<?>[] classes = new Class[0];
+        Object[] params = new Object[0];
+        if (parameters != null) {
+            params = new Object[parameters.length];
+            classes = new Class[parameters.length];
+            for (int i = 0; i < parameters.length; i++) {
+                MethodInfo.Parameter parameter = parameters[i];
+                classes[i] = parameter.getType();
+                params[i] = parameter.getValue();
+            }
+        }
+        Method[] methods = owner.getClass().getDeclaredMethods();
+        Method tm = null;
+        Method mm = null;
+        for (Method method : methods) {
+            Tag annotation = method.getAnnotation(Tag.class);
+            if (annotation != null && !annotation.value().isEmpty() && annotation.value().equals(tag) &&
+                    equalParamTypes(method.getParameterTypes(), classes)) {
+                tm = method;
+            }
+            if (tm == null) {
+                if (method.getName().equals(methodName) && equalParamTypes(method.getParameterTypes(), classes)) {
+                    mm = method;
+                }
+            } else {
+                break;
+            }
+        }
+        Method method = tm == null ? mm : tm;
+        if (method == null) {
+            return;
+        }
+        try {
+            Object[] finalParams = params;
+            post(method, () -> {
+                try {
+                    method.invoke(owner, finalParams);
+                } catch (IllegalAccessException | InvocationTargetException e) {
+                    e.printStackTrace();
+                }
+            });
+        } catch (Exception ignore) {
+        }
+    }
+
+    private boolean equalParamTypes(Class<?>[] params1, Class<?>[] params2) {
+        if (params1.length == params2.length) {
+            for (int i = 0; i < params1.length; i++) {
+                if (params1[i] != params2[i])
+                    return false;
+            }
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -131,54 +165,10 @@ public class PosterDispatcher {
      *
      * @param owner      方法的所在的对象实例
      * @param methodName 方法名
-     * @param cls        方法上注解的字节码
      * @param parameters 参数信息
      */
-    public void post(@NonNull final Object owner, @NonNull String methodName, @NonNull Class<? extends Annotation> cls,
-                     @Nullable MethodInfo.Parameter... parameters) {
-        if (parameters == null || parameters.length == 0) {
-            try {
-                final Method method = owner.getClass().getMethod(methodName);
-                post(method, cls, () -> {
-                    try {
-                        method.invoke(owner);
-                    } catch (IllegalAccessException | InvocationTargetException e) {
-                        e.printStackTrace();
-                    }
-                });
-            } catch (Exception ignore) {
-            }
-        } else {
-            final Object[] params = new Object[parameters.length];
-            final Class<?>[] paramTypes = new Class[parameters.length];
-            for (int i = 0; i < parameters.length; i++) {
-                MethodInfo.Parameter parameter = parameters[i];
-                params[i] = parameter.getValue();
-                paramTypes[i] = parameter.getType();
-            }
-            try {
-                final Method method = owner.getClass().getMethod(methodName, paramTypes);
-                post(method, cls, () -> {
-                    try {
-                        method.invoke(owner, params);
-                    } catch (IllegalAccessException | InvocationTargetException e) {
-                        e.printStackTrace();
-                    }
-                });
-            } catch (Exception ignore) {
-            }
-        }
-    }
-
-    /**
-     * 将任务post到指定线程执行
-     *
-     * @param owner      方法的所在的对象实例
-     * @param methodInfo 方法信息实例
-     * @param cls        方法上注解的字节码
-     */
-    public void post(@NonNull Object owner, @NonNull MethodInfo methodInfo, @NonNull Class<? extends Annotation> cls) {
-        post(owner, methodInfo.getName(), cls, methodInfo.getParameters());
+    public void post(@NonNull final Object owner, @NonNull String methodName, @Nullable MethodInfo.Parameter... parameters) {
+        post(owner, methodName, "", parameters);
     }
 
     /**
@@ -188,6 +178,6 @@ public class PosterDispatcher {
      * @param methodInfo 方法信息实例
      */
     public void post(@NonNull Object owner, @NonNull MethodInfo methodInfo) {
-        post(owner, methodInfo.getName(), RunOn.class, methodInfo.getParameters());
+        post(owner, methodInfo.getName(), methodInfo.getTag(), methodInfo.getParameters());
     }
 }

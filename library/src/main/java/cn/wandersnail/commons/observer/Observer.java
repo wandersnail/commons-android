@@ -10,5 +10,6 @@ public interface Observer {
     /**
      * 数据变化
      */
+    @Observe
     default void onChanged(Object o) {}
 }
