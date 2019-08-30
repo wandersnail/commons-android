@@ -19,7 +19,7 @@ public class MethodInfo {
     private String tag;
 
     public MethodInfo(@NonNull String name, @Nullable Parameter... parameters) {
-        this(name, "", parameters);
+        this(name, name, parameters);
     }
 
     /**
@@ -38,7 +38,7 @@ public class MethodInfo {
      * @param parameterTypes 方法参数类型
      */
     public MethodInfo(@NonNull String name, @Nullable Class<?>[] parameterTypes) {
-        this(name, "", parameterTypes);
+        this(name, name, parameterTypes);
     }
 
     /**
@@ -54,7 +54,7 @@ public class MethodInfo {
     
     public static MethodInfo valueOf(@NonNull Method method) {
         Tag annotation = method.getAnnotation(Tag.class);
-        return new MethodInfo(method.getName(), annotation == null ? "" : annotation.value(),
+        return new MethodInfo(method.getName(), annotation == null ? method.getName() : annotation.value(),
                 method.getParameterTypes());
     }
 
