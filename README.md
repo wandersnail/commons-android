@@ -4,8 +4,32 @@
 
 
 ## 使用
+1. 因为使用了jdk8的一些特性，需要在module的build.gradle里添加如下配置：
+```
+//纯java的项目
+android {
+	compileOptions {
+		sourceCompatibility JavaVersion.VERSION_1_8
+		targetCompatibility JavaVersion.VERSION_1_8
+	}
+}
 
-1. module的build.gradle中的添加依赖，自行修改为最新版本，需要哪个就依赖哪个，同步后通常就可以用了：
+//有kotlin的项目还需要在project的build.gradle里添加
+allprojects {
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+
+        kotlinOptions {
+            jvmTarget = '1.8'
+            apiVersion = '1.3'
+            languageVersion = '1.3'
+        }
+    }
+}
+
+```
+2. module的build.gradle中的添加依赖，自行修改为最新版本，需要哪个就依赖哪个，同步后通常就可以用了：
 ```
 dependencies {
 	...

@@ -1,7 +1,5 @@
 package cn.wandersnail.commons.util;
 
-import androidx.annotation.NonNull;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,56 +10,37 @@ import java.util.List;
  * author: zengfansheng
  */
 public class VersionUtils {
-    /**
-     * 抽取版本号。如果是xxx1.2.3 Rev 456之类的，只对1.2.3进行抽取
-     */
-    @NonNull
-    public static String extractVersion(@NonNull String version) {
-        if (version.contains(" ")) {
-            version = version.substring(0, version.indexOf(" "));
-        }
-        return version.replace("^\\D+", "");
-    }
-
-    /**
-     * 将数字抽取出来。如果是xxx1.2.3 Rev 456之类的，只对1.2.3进行抽取
-     */
-    public static String[] splitVersion(@NonNull String version) {
-        version = extractVersion(version);
-        String[] strings = version.split("\\D+");
+    //将字母和数字拆分出来
+    private static List<String> splitCell(String s) {
         List<String> list = new ArrayList<>();
-        for (String s : strings) {
-            if (s.isEmpty()) {
-                break;
+        StringBuilder sb = new StringBuilder();
+        char[] chars = s.toCharArray();
+        Boolean isNum = null;
+        for (char c : chars) {
+            boolean same = true;
+            boolean num = c >= '0' && c <= '9';
+            if (isNum == null) {
+                isNum = num;
             } else {
-                list.add(s);
+                same = isNum && num;
+                isNum = num;
             }
+            if (!same) {
+                list.add(sb.toString());
+                sb.setLength(0);
+            }
+            sb.append(c);
         }
-        return list.toArray(new String[0]);
+        //添加最后一个
+        list.add(sb.toString());
+        return list;
     }
 
-    /**
-     * 递归比较大小
-     *
-     * @param index 从第几个元素开始比较
-     * @return 相等，则返回值0；小于，则返回负数；大于，则返回正数。
-     */
-    private static int compare(String[] ver1, String[] ver2, int index) {
+    private static Integer toInt(String s) {
         try {
-            int a = Integer.valueOf(ver1[index]);
-            int b = Integer.valueOf(ver2[index]);
-            if (a == b) {
-                if (ver1.length - 1 == index || ver2.length - 1 == index) {
-                    return Integer.compare(ver1.length, ver2.length);
-                } else {
-                    return compare(ver1, ver2, index + 1);
-                }
-            } else {
-                return a - b;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return -1;
+            return Integer.parseInt(s);
+        } catch (Exception e){
+            return null;
         }
     }
 
@@ -70,7 +49,7 @@ public class VersionUtils {
      *
      * @return 相等，则返回值0；小于，则返回负数；大于，则返回正数。
      */
-    public static int compareVersion(@NonNull String ver1, @NonNull String ver2) {
+    public static int compare(String ver1, String ver2) {
         if (ver1.isEmpty() && ver2.isEmpty()) {
             return 0;
         } else if (ver1.isEmpty()) {
@@ -78,12 +57,38 @@ public class VersionUtils {
         } else if (ver2.isEmpty()) {
             return 1;
         }
-        try {
-            //如果是纯数字，则转换成Long型直接比较
-            return ver1.compareTo(ver2);
-        } catch (Exception e) {
-            //转换失败，则进行字符串比较
-            return compare(splitVersion(ver1), splitVersion(ver2), 0);
+        //将将版本号字符串以.分割进行比较
+        String[] vCells1 = ver1.replaceAll(" ", "").split("\\.");
+        String[] vCells2 = ver2.replaceAll(" ", "").split("\\.");
+        //以长度短的，对分割元素逐个比较
+        int len = Math.min(vCells1.length, vCells2.length);
+        for (int i = 0; i < len; i++) {
+            List<String> cellList1 = splitCell(vCells1[i]);
+            List<String> cellList2 = splitCell(vCells2[i]);
+            //同样逐个比较
+            int len1 = Math.min(cellList1.size(), cellList2.size());
+            for (int j = 0; j < len1; j++) {
+                String cell1 = cellList1.get(j);
+                String cell2 = cellList2.get(j);
+                Integer cell1Int = toInt(cell1);
+                Integer cell2Int = toInt(cell2);
+                int result;
+                if (cell1Int != null && cell2Int != null) {
+                    result = cell1Int.compareTo(cell2Int);
+                } else {
+                    result = cell1.compareTo(cell2);
+                }
+                if (result != 0) {
+                    return result;
+                }
+            }
+            //如果到这里，说明短的部分是相等的，最后比较长度
+            int result = Integer.compare(cellList1.size(), cellList2.size());
+            if (result != 0) {
+                return result;
+            }
         }
+        //如果到这里，说明短的部分是相等的，最后比较长度
+        return Integer.compare(vCells1.length, vCells2.length);
     }
 }
