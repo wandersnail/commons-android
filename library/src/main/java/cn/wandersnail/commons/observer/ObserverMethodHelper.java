@@ -1,5 +1,7 @@
 package cn.wandersnail.commons.observer;
 
+import android.util.Log;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -10,13 +12,14 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import cn.wandersnail.commons.poster.MethodInfo;
+import cn.wandersnail.commons.poster.Tag;
 
 /**
  * date: 2019/8/9 15:13
  * author: zengfansheng
  */
 class ObserverMethodHelper {
-    private static final Map<Class<?>, Map<MethodInfo, Method>> METHOD_CACHE = new ConcurrentHashMap<>();
+    private static final Map<Class<?>, Map<String, Method>> METHOD_CACHE = new ConcurrentHashMap<>();
     private boolean isObserveAnnotationRequired;
 
     ObserverMethodHelper(boolean isObserveAnnotationRequired) {
@@ -57,10 +60,26 @@ class ObserverMethodHelper {
     }
 
     /**
+     * 生成方法唯一识别字符串
+     */
+    String generateKey(String tag, String name, Class<?>[] paramTypes) {
+        StringBuilder sb = new StringBuilder();
+        if (tag.isEmpty()) {
+            sb.append(name);
+        } else {
+            sb.append(tag);
+        }
+        for (Class<?> type : paramTypes) {
+            sb.append(",").append(type);
+        }
+        return sb.toString();
+    }
+
+    /**
      * 查找观察者监听的方法
      */
-    Map<MethodInfo, Method> findObserverMethod(Observer observer) {
-        Map<MethodInfo, Method> map = METHOD_CACHE.get(observer.getClass());
+    Map<String, Method> findObserverMethod(Observer observer) {
+        Map<String, Method> map = METHOD_CACHE.get(observer.getClass());
         if (map != null) {
             return map;
         }
@@ -75,6 +94,7 @@ class ObserverMethodHelper {
             }
             if (ms != null) {
                 for (Method m : ms) {
+                    Log.d("observer", "observer method: " + m);
                     int ignore = Modifier.ABSTRACT | Modifier.STATIC | 0x40 | 0x1000;
                     if ((m.getModifiers() & Modifier.PUBLIC) != 0 && (m.getModifiers() & ignore) == 0 &&  !contains(methods, m)) {
                         methods.add(m);
@@ -85,10 +105,12 @@ class ObserverMethodHelper {
         }
         for (Method method : methods) {
             Observe anno = method.getAnnotation(Observe.class);          
-            if (anno != null) {
-                map.put(MethodInfo.valueOf(method), method);
-            } else if (!isObserveAnnotationRequired) {
-                map.put(MethodInfo.valueOf(method), method);
+            if (anno != null || !isObserveAnnotationRequired) {
+                Tag tagAnno = method.getAnnotation(Tag.class);
+                String tag = tagAnno == null ? "" : tagAnno.value();
+                String key = generateKey(tag, method.getName(), method.getParameterTypes());
+                Log.d("observer", "observer save key: " + key);
+                map.put(key, method);
             }
         }
         if (!map.isEmpty()) {

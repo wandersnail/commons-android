@@ -3,12 +3,10 @@ package cn.wandersnail.commonsdemo
 import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
-import cn.wandersnail.commons.poster.MethodInfo
 import cn.wandersnail.commons.util.EncryptUtils
 import cn.wandersnail.commons.util.SignUtils
 import cn.wandersnail.fileselector.FileSelector
 import kotlinx.android.synthetic.main.activity_md5.*
-import kotlin.concurrent.thread
 
 /**
  * 描述:
@@ -18,7 +16,6 @@ import kotlin.concurrent.thread
 class MD5Activity : BaseActivity() {
     private val fileSelector = FileSelector()
     private var selectType = -1
-    private val testObserve = TestObserve()
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,17 +56,6 @@ class MD5Activity : BaseActivity() {
             val signInfo = SignUtils.getSignatureInstalled(this)
             tvSignInfo.text = "hashCode: ${signInfo?.hashCode}\nmd5: ${signInfo?.md5}\nsha1: ${EncryptUtils.addSeparator(signInfo!!.sha1 ?: "", ":")}"
         }
-        App.instance?.observable?.registerObserver(testObserve)
-        thread {
-            try {
-                Thread.sleep(2000)
-                App.instance?.observable?.notifyObservers(MethodInfo("test", "test_tag"))
-            } catch (e: Exception) {
-            }
-        }
-        thread {
-            App.instance?.observable?.notifyObservers("coming")
-        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -77,10 +63,5 @@ class MD5Activity : BaseActivity() {
         btnCalc.postDelayed({
             fileSelector.onActivityResult(requestCode, resultCode, data)
         }, 200)
-    }
-
-    override fun onDestroy() {
-        App.instance?.observable?.unregisterObserver(testObserve)
-        super.onDestroy()
     }
 }

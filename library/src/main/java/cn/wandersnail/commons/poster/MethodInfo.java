@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
 
 /**
  * date: 2019/8/3 09:28
@@ -126,33 +125,6 @@ public class MethodInfo {
             }
             return values;
         }
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof MethodInfo)) return false;
-
-        MethodInfo that = (MethodInfo) o;
-        if (!tag.equals(that.tag)) return false;
-        //tag一样，并且不是""，则忽略方法名
-        if (tag.isEmpty() && !name.equals(that.name)) return false;
-        if (parameters != null) {
-            if (((MethodInfo) o).parameters == null) return false;
-            return Arrays.equals(parameters, that.parameters);
-        } else return ((MethodInfo) o).parameters == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result;
-        if (tag.isEmpty()) {
-            result = name.hashCode();
-        } else {
-            result = tag.hashCode();
-        }
-        result = 31 * result + Arrays.hashCode(parameters);
-        return result;
     }
 
     public static class Parameter {

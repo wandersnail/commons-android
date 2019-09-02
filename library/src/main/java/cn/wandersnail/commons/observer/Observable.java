@@ -1,5 +1,7 @@
 package cn.wandersnail.commons.observer;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -61,7 +63,7 @@ public final class Observable {
             if (registered) {
                 throw new RuntimeException("Observer " + observer + " is already registered.");
             }
-            Map<MethodInfo, Method> methodMap = helper.findObserverMethod(observer);
+            Map<String, Method> methodMap = helper.findObserverMethod(observer);
             observerInfos.add(new ObserverInfo(observer, methodMap));
         }
     }
@@ -142,7 +144,9 @@ public final class Observable {
         for (ObserverInfo oi : infos) {
             Observer observer = oi.weakObserver.get();
             if (observer != null) {
-                Method method = oi.methodMap.get(info);
+                String key = helper.generateKey(info.getTag(), info.getName(), info.getParameterTypes());
+                Log.d("observer", "observer find key: " + key);
+                Method method = oi.methodMap.get(key);
                 if (method != null) {
                     Runnable runnable = helper.generateRunnable(observer, method, info);
                     posterDispatcher.post(method, runnable);

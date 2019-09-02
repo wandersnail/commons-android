@@ -7,7 +7,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 方法TAG，可用于方法被混淆后的标识
+ * 可用于方法的唯一标识
  * <p>
  * date: 2019/8/2 23:53
  * author: zengfansheng
