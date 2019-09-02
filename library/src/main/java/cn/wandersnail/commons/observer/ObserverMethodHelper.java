@@ -94,7 +94,6 @@ class ObserverMethodHelper {
             }
             if (ms != null) {
                 for (Method m : ms) {
-                    Log.d("observer", "observer method: " + m);
                     int ignore = Modifier.ABSTRACT | Modifier.STATIC | 0x40 | 0x1000;
                     if ((m.getModifiers() & Modifier.PUBLIC) != 0 && (m.getModifiers() & ignore) == 0 &&  !contains(methods, m)) {
                         methods.add(m);
@@ -109,7 +108,6 @@ class ObserverMethodHelper {
                 Tag tagAnno = method.getAnnotation(Tag.class);
                 String tag = tagAnno == null ? "" : tagAnno.value();
                 String key = generateKey(tag, method.getName(), method.getParameterTypes());
-                Log.d("observer", "observer save key: " + key);
                 map.put(key, method);
             }
         }

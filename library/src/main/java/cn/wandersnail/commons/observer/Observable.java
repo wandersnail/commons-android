@@ -1,7 +1,5 @@
 package cn.wandersnail.commons.observer;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -145,7 +143,6 @@ public final class Observable {
             Observer observer = oi.weakObserver.get();
             if (observer != null) {
                 String key = helper.generateKey(info.getTag(), info.getName(), info.getParameterTypes());
-                Log.d("observer", "observer find key: " + key);
                 Method method = oi.methodMap.get(key);
                 if (method != null) {
                     Runnable runnable = helper.generateRunnable(observer, method, info);
