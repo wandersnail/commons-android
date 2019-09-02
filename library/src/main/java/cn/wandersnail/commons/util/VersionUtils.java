@@ -39,7 +39,7 @@ public class VersionUtils {
     private static Integer toInt(String s) {
         try {
             return Integer.parseInt(s);
-        } catch (Exception e){
+        } catch (Exception e) {
             return null;
         }
     }
@@ -47,19 +47,22 @@ public class VersionUtils {
     /**
      * 比较版本号大小
      *
+     * @param shortBig 当较长的版本号包含短的时，true则短的为大，false则短的为小
      * @return 相等，则返回值0；小于，则返回负数；大于，则返回正数。
      */
-    public static int compare(String ver1, String ver2) {
-        if (ver1.isEmpty() && ver2.isEmpty()) {
-            return 0;
-        } else if (ver1.isEmpty()) {
-            return -1;
-        } else if (ver2.isEmpty()) {
-            return 1;
-        }
+    public static int compare(String ver1, String ver2, boolean shortBig) {
         //将将版本号字符串以.分割进行比较
-        String[] vCells1 = ver1.replaceAll(" ", "").split("\\.");
-        String[] vCells2 = ver2.replaceAll(" ", "").split("\\.");
+        String s1 = ver1.replaceAll(" ", "");
+        String s2 = ver2.replaceAll(" ", "");
+        if (s1.equals(s2)) {
+            return 0;
+        } else if (s1.contains(s2)) {
+            return shortBig ? -1 : 1;
+        } else if (s2.contains(s1)) {
+            return shortBig ? 1 : -1;
+        }        
+        String[] vCells1 = s1.split("\\.");
+        String[] vCells2 = s2.split("\\.");
         //以长度短的，对分割元素逐个比较
         int len = Math.min(vCells1.length, vCells2.length);
         for (int i = 0; i < len; i++) {
@@ -82,13 +85,7 @@ public class VersionUtils {
                     return result;
                 }
             }
-            //如果到这里，说明短的部分是相等的，最后比较长度
-            int result = Integer.compare(cellList1.size(), cellList2.size());
-            if (result != 0) {
-                return result;
-            }
         }
-        //如果到这里，说明短的部分是相等的，最后比较长度
-        return Integer.compare(vCells1.length, vCells2.length);
+        return 0;
     }
 }
