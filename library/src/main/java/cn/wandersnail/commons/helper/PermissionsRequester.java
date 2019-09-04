@@ -24,14 +24,15 @@ import java.util.List;
  */
 public class PermissionsRequester {
     private static final int PERMISSION_REQUEST_CODE = 0;
-    private static final int REQUEST_CODE_WRITE_SETTINGS = 0;
-    private static final int REQUEST_CODE_UNKNOWN_APP_SOURCES = 0;
+    private static final int REQUEST_CODE_WRITE_SETTINGS = 1;
+    private static final int REQUEST_CODE_UNKNOWN_APP_SOURCES = 2;
     
     private final List<String> allPermissions = new ArrayList<>();
     private final List<String> refusedPermissions = new ArrayList<>();
     private Callback callback;
     private Activity activity;
     private Fragment fragment;
+    private boolean checking;
 
     public PermissionsRequester(@NonNull Activity activity) {
         this.activity = activity;
@@ -50,6 +51,9 @@ public class PermissionsRequester {
      * @param permissions 需要申请的权限
      */
     public void checkAndRequest(@NonNull List<String> permissions) {
+        if (checking) {
+            return;
+        }
         refusedPermissions.clear();
         allPermissions.clear();
         allPermissions.addAll(permissions);
@@ -73,6 +77,7 @@ public class PermissionsRequester {
                     } else {
                         fragment.startActivityForResult(intent, REQUEST_CODE_WRITE_SETTINGS);
                     }
+                    checking = true;
                 }
                 return false;
             }
@@ -86,6 +91,7 @@ public class PermissionsRequester {
                     } else {
                         fragment.startActivityForResult(intent, REQUEST_CODE_UNKNOWN_APP_SOURCES);
                     }
+                    checking = true;
                 }
                 return false;
             }
@@ -99,11 +105,13 @@ public class PermissionsRequester {
             } else {
                 fragment.requestPermissions(needRequestPermissonList.toArray(new String[0]), PERMISSION_REQUEST_CODE);
             }
+            checking = true;
             return false;
         } else {
             if (callback != null) {
                 callback.onRequestResult(refusedPermissions);
             }
+            checking = false;
             return true;
         }
     }
@@ -151,6 +159,7 @@ public class PermissionsRequester {
             if (callback != null) {
                 callback.onRequestResult(refusedPermissions);
             }
+            checking = false;
         }
     }
     
