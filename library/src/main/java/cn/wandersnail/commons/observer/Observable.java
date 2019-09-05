@@ -1,5 +1,7 @@
 package cn.wandersnail.commons.observer;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -59,7 +61,8 @@ public final class Observable {
                 }
             }
             if (registered) {
-                throw new RuntimeException("Observer " + observer + " is already registered.");
+                Log.e("Observable", "", new Error("Observer " + observer + " is already registered."));
+                return;
             }
             Map<String, Method> methodMap = helper.findObserverMethod(observer);
             observerInfos.add(new ObserverInfo(observer, methodMap));

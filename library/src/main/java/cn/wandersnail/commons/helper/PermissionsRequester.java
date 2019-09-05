@@ -23,9 +23,9 @@ import java.util.List;
  * author: zengfansheng
  */
 public class PermissionsRequester {
-    private static final int PERMISSION_REQUEST_CODE = 0;
-    private static final int REQUEST_CODE_WRITE_SETTINGS = 1;
-    private static final int REQUEST_CODE_UNKNOWN_APP_SOURCES = 2;
+    private static final int PERMISSION_REQUEST_CODE = 10;
+    private static final int REQUEST_CODE_WRITE_SETTINGS = 11;
+    private static final int REQUEST_CODE_UNKNOWN_APP_SOURCES = 12;
     
     private final List<String> allPermissions = new ArrayList<>();
     private final List<String> refusedPermissions = new ArrayList<>();
