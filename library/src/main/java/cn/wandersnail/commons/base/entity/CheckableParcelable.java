@@ -25,6 +25,14 @@ public class CheckableParcelable<T extends Parcelable> extends CheckableItem<T> 
     public CheckableParcelable() {
     }
 
+    public CheckableParcelable(T data) {
+        super(data);
+    }
+
+    public CheckableParcelable(T data, boolean isChecked) {
+        super(data, isChecked);
+    }
+
     @SuppressWarnings("unchecked")
     protected CheckableParcelable(Parcel in) {
         Bundle bundle = in.readBundle(getClass().getClassLoader());
