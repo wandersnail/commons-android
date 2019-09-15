@@ -10,8 +10,8 @@ import cn.wandersnail.commons.helper.PermissionsRequester
 import cn.wandersnail.commons.poster.Tag
 import cn.wandersnail.commons.util.Logger
 import cn.wandersnail.commons.util.ToastUtils
-import com.snail.widget.listview.BaseListAdapter
-import com.snail.widget.listview.BaseViewHolder
+import cn.wandersnail.widget.listview.BaseListAdapter
+import cn.wandersnail.widget.listview.BaseViewHolder
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity(), TestObserver {
         )
         lv.adapter = object : BaseListAdapter<String>(this, data) {
             override fun createViewHolder(position: Int): BaseViewHolder<String> {
-                return object : BaseViewHolder<String>() {
+                return object : BaseViewHolder<String> {
                     private var tv: TextView? = null
 
                     override fun onBind(item: String, position: Int) {

@@ -22,7 +22,7 @@ class MD5Activity : BaseActivity() {
         setContentView(R.layout.activity_md5)
         fileSelector.setRoot(Environment.getExternalStorageDirectory())
         fileSelector.setSelectionMode(FileSelector.FILES_ONLY)
-        fileSelector.setOnFileSelectListener { paths ->
+        fileSelector.setOnFileSelectListener { _, paths ->
             if (selectType == 0) {
                 val md5 = EncryptUtils.getFileMD5Code(paths[0])
                 val sha1 = EncryptUtils.getFileSHA1Code(paths[0])
@@ -36,7 +36,7 @@ class MD5Activity : BaseActivity() {
         }
         btnCalcFile.setOnClickListener {
             selectType = 0
-            fileSelector.select(this)
+            fileSelector.select(this, 0)
         }
         btnCalc.setOnClickListener { 
             val text = et.text.toString()
@@ -50,7 +50,7 @@ class MD5Activity : BaseActivity() {
         }
         btnApk.setOnClickListener { 
             selectType = 1
-            fileSelector.select(this)
+            fileSelector.select(this, 2)
         }
         btnApp.setOnClickListener {
             val signInfo = SignUtils.getSignatureInstalled(this)

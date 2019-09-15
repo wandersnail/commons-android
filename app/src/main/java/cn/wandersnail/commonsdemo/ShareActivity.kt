@@ -24,26 +24,26 @@ class ShareActivity : BaseActivity() {
         fileSelector.setSelectionMode(FileSelector.FILES_ONLY)
         fileSelector.setMultiSelectionEnabled(true)
         btnSelectImage.setOnClickListener {
-            fileSelector.setOnFileSelectListener { paths -> tvImagePath.text = paths[0] }
-            fileSelector.select(this)
+            fileSelector.setOnFileSelectListener { _, paths -> tvImagePath.text = paths[0] }
+            fileSelector.select(this, 0)
         }
         btnSelectImages.setOnClickListener {
-            fileSelector.setOnFileSelectListener { paths ->
+            fileSelector.setOnFileSelectListener { _, paths ->
                 tvImagePaths.text = ""
                 paths.forEach { path ->
                     tvImagePaths.append("$path\n")
                     imageFiles.add(File(path))
                 }
             }
-            fileSelector.select(this)
+            fileSelector.select(this, 1)
         }
         btnSelectFile.setOnClickListener {
-            fileSelector.setOnFileSelectListener { paths -> tvFilePath.text = paths[0] }
-            fileSelector.select(this)
+            fileSelector.setOnFileSelectListener { _, paths -> tvFilePath.text = paths[0] }
+            fileSelector.select(this, 2)
         }
         btnSelectVideo.setOnClickListener {
-            fileSelector.setOnFileSelectListener { paths -> tvVideoPath.text = paths[0] }
-            fileSelector.select(this)
+            fileSelector.setOnFileSelectListener { _, paths -> tvVideoPath.text = paths[0] }
+            fileSelector.select(this, 3)
         }
         btnShareText.setOnClickListener { 
             val text = etText.text.toString().trim()

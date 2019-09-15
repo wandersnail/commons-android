@@ -23,12 +23,12 @@ class FileOperateActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_file_operate)
-        fileSelector.setOnFileSelectListener { paths ->
+        fileSelector.setOnFileSelectListener { _, paths ->
             path = paths[0]
             tvPath.text = path
         }
         fileSelector2.setSelectionMode(FileSelector.DIRECTORIES_ONLY)
-        fileSelector2.setOnFileSelectListener { paths ->
+        fileSelector2.setOnFileSelectListener { _, paths ->
             if (copy) {
                 FileUtils.copy(File(path), File(paths[0], FileUtils.getFileName(path)))
             } else {
@@ -38,22 +38,22 @@ class FileOperateActivity : BaseActivity() {
         }
         btnSelectFile.setOnClickListener { 
             fileSelector.setSelectionMode(FileSelector.FILES_ONLY)
-            fileSelector.select(this)
+            fileSelector.select(this, 0)
         }
         btnSelectDir.setOnClickListener {
             fileSelector.setSelectionMode(FileSelector.DIRECTORIES_ONLY)
-            fileSelector.select(this)
+            fileSelector.select(this, 1)
         }
         btnCopy.setOnClickListener { 
             if (path.isNotEmpty()) {
                 copy = true
-                fileSelector2.select(this)
+                fileSelector2.select(this, 2)
             }
         }
         btnMove.setOnClickListener {
             if (path.isNotEmpty()) {
                 copy = false
-                fileSelector2.select(this)
+                fileSelector2.select(this, 3)
             }
         }
         btnClear.setOnClickListener { 

@@ -33,30 +33,30 @@ class ZipActivity : BaseActivity() {
             }
             fileSelector.setMultiSelectionEnabled(true)
             fileSelector.setSelectionMode(FileSelector.FILES_ONLY)
-            fileSelector.select(this)
+            fileSelector.select(this, 0)
         }
         btnSelectFile.setOnClickListener {
             selectType = 1
             fileSelector.setFilenameFilter(null)
             fileSelector.setMultiSelectionEnabled(true)
             fileSelector.setSelectionMode(FileSelector.FILES_AND_DIRECTORIES)
-            fileSelector.select(this)
+            fileSelector.select(this, 1)
         }
         btnUnzipTo.setOnClickListener {
             selectType = 2
             fileSelector.setFilenameFilter(null)
             fileSelector.setMultiSelectionEnabled(false)
             fileSelector.setSelectionMode(FileSelector.DIRECTORIES_ONLY)
-            fileSelector.select(this)
+            fileSelector.select(this, 2)
         }
         btnZipTo.setOnClickListener {
             selectType = 3
             fileSelector.setFilenameFilter(null)
             fileSelector.setMultiSelectionEnabled(false)
             fileSelector.setSelectionMode(FileSelector.DIRECTORIES_ONLY)
-            fileSelector.select(this)
+            fileSelector.select(this, 3)
         }
-        fileSelector.setOnFileSelectListener { paths ->
+        fileSelector.setOnFileSelectListener { _, paths ->
             tvPaths.text = ""
             when (selectType) {
                 0 -> {

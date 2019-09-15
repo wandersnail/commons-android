@@ -24,9 +24,9 @@ class DebugJudgeActivity : BaseActivity() {
         }
         fileSelector.setMultiSelectionEnabled(false)
         fileSelector.setSelectionMode(FileSelector.FILES_ONLY)        
-        fileSelector.setOnFileSelectListener { paths -> tvApkState.text = if (SystemUtils.isDebugApk(this@DebugJudgeActivity, paths[0])) "选择的apk是debug包" else "选择的apk是release包" }
+        fileSelector.setOnFileSelectListener { _, paths -> tvApkState.text = if (SystemUtils.isDebugApk(this@DebugJudgeActivity, paths[0])) "选择的apk是debug包" else "选择的apk是release包" }
         tvAppState.text = if (SystemUtils.isRunInDebug(this)) "当前app是debug包" else "当前app是release包"
-        btnSelect.setOnClickListener { fileSelector.select(this) }
+        btnSelect.setOnClickListener { fileSelector.select(this, 0) }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

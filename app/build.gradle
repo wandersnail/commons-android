@@ -28,15 +28,28 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    //强制所有的包使用指定版本
+    configurations.all {
+        resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+            def requested = details.requested
+            if (requested.group == 'androidx.core' && (requested.name == 'core' || requested.name == 'core-ktx')) {
+                details.useVersion '1.1.0'
+            }
+            if (requested.group == 'androidx.appcompat' && requested.name == 'appcompat') {
+                details.useVersion appcompat_version
+            }
+        }
+    }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
     implementation "androidx.appcompat:appcompat:$appcompat_version"
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation "androidx.core:core-ktx:1.0.2"
-    implementation 'cn.wandersnail:file-selector:1.0.2'
-    implementation 'com.github.wandersnail:widgets:1.2.2'
+    implementation "androidx.core:core-ktx:1.1.0"
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
+    implementation 'cn.wandersnail:file-selector:1.0.4'
+    implementation 'cn.wandersnail:widget-generic:1.0.5'
     implementation "com.squareup.retrofit2:retrofit:$retrofit2_version"
     implementation "com.github.bumptech.glide:glide:$glide_version"
     implementation "io.reactivex.rxjava2:rxjava:$rxjava2_version"

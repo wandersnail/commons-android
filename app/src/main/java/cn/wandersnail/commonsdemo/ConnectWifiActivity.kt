@@ -16,8 +16,8 @@ import android.widget.TextView
 import cn.wandersnail.commons.helper.WifiHelper
 import cn.wandersnail.commons.util.ToastUtils
 import cn.wandersnail.commons.util.UiUtils
-import com.snail.widget.listview.BaseListAdapter
-import com.snail.widget.listview.BaseViewHolder
+import cn.wandersnail.widget.listview.BaseListAdapter
+import cn.wandersnail.widget.listview.BaseViewHolder
 import kotlinx.android.synthetic.main.activity_connect_wifi.*
 
 /**
@@ -88,7 +88,7 @@ class ConnectWifiActivity : BaseActivity() {
     private inner class ListAdapter(context: Context, data: MutableList<ScanResult>) :
         BaseListAdapter<ScanResult>(context, data) {
         override fun createViewHolder(position: Int): BaseViewHolder<ScanResult> {
-            return object : BaseViewHolder<ScanResult>() {
+            return object : BaseViewHolder<ScanResult> {
                 private var tv: TextView? = null
 
                 override fun onBind(item: ScanResult, position: Int) {

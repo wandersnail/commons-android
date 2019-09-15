@@ -7,8 +7,8 @@ import android.widget.TextView
 import cn.wandersnail.commons.util.FileUtils
 import cn.wandersnail.commons.util.SystemUtils
 import cn.wandersnail.commons.util.entity.Storage
-import com.snail.widget.listview.BaseListAdapter
-import com.snail.widget.listview.BaseViewHolder
+import cn.wandersnail.widget.listview.BaseListAdapter
+import cn.wandersnail.widget.listview.BaseViewHolder
 import kotlinx.android.synthetic.main.activity_storage.*
 
 
@@ -30,7 +30,7 @@ class StorageActivity : BaseActivity() {
 
     private inner class ListAdapter(context: Context, data: MutableList<Storage>) : BaseListAdapter<Storage>(context, data) {
         override fun createViewHolder(position: Int): BaseViewHolder<Storage> {
-            return object : BaseViewHolder<Storage>() {
+            return object : BaseViewHolder<Storage> {
                 private var tvPath: TextView? = null
                 private var tvAvailaleSize: TextView? = null
                 private var tvTotalSize: TextView? = null
