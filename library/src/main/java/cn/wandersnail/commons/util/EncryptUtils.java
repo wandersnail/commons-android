@@ -132,15 +132,18 @@ public class EncryptUtils {
      * @return md5值，文件不存在返回null
      */
     public static String getFileMD5Code(String path) {
+        InputStream fis = null;
         try {
-            InputStream fis = new FileInputStream(path);
+            fis = new FileInputStream(path);
             String code = getMD5Code(fis);
             fis.close();
             return code;
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
+        } finally {
+            IOUtils.closeQuietly(fis);
         }
-        return null;
     }
 
     /**
@@ -150,15 +153,18 @@ public class EncryptUtils {
      * @return SHA1值，文件不存在返回null
      */
     public static String getFileSHA1Code(String path) {
+        InputStream fis = null;
         try {
-            InputStream fis = new FileInputStream(path);
+            fis = new FileInputStream(path);
             String code = getSHA1Code(fis);
             fis.close();
             return code;
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
+        } finally {
+            IOUtils.closeQuietly(fis);
         }
-        return null;
     }
 
     /**
@@ -168,15 +174,18 @@ public class EncryptUtils {
      * @return md5值，文件不存在返回null
      */
     public static String getFileMD5Code(File file) {
+        InputStream fis = null;
         try {
-            InputStream fis = new FileInputStream(file);
+            fis = new FileInputStream(file);
             String code = getMD5Code(fis);
             fis.close();
             return code;
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
+        } finally {
+            IOUtils.closeQuietly(fis);
         }
-        return null;
     }
 
     /**
@@ -186,15 +195,18 @@ public class EncryptUtils {
      * @return SHA1值，文件不存在返回null
      */
     public static String getFileSHA1Code(File file) {
+        InputStream fis = null;
         try {
-            InputStream fis = new FileInputStream(file);
+            fis = new FileInputStream(file);
             String code = getSHA1Code(fis);
             fis.close();
             return code;
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
+        } finally {
+            IOUtils.closeQuietly(fis);
         }
-        return null;
     }
 
     /**
