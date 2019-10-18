@@ -6,12 +6,14 @@ import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.documentfile.provider.DocumentFile
 import cn.wandersnail.commons.helper.PermissionsRequester
 import cn.wandersnail.commons.poster.Tag
 import cn.wandersnail.commons.util.Logger
 import cn.wandersnail.commons.util.ToastUtils
 import cn.wandersnail.widget.listview.BaseListAdapter
 import cn.wandersnail.widget.listview.BaseViewHolder
+import com.tencent.mmkv.MMKV
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
@@ -23,7 +25,7 @@ class MainActivity : AppCompatActivity(), TestObserver {
         setContentView(R.layout.activity_main)
         val data = arrayListOf(
             "储存信息获取", "md5和sha1算法", "系统分享", "网络及位置服务状态", "解压缩", "点击波纹", "Toast", "系统文件选择器", "debug包判断",
-            "系统下载并安装APP", "文件操作", "观察者模式"
+            "系统下载并安装APP", "文件操作", "观察者模式", "崩溃测试"
         )
         val clsArr = arrayListOf(
             StorageActivity::class.java,
@@ -57,9 +59,13 @@ class MainActivity : AppCompatActivity(), TestObserver {
             }
         }
         lv.setOnItemClickListener { _, _, position, _ ->
-            val intent = Intent(this, clsArr[position])
-            intent.putExtra("title", data[position])
-            startActivity(intent)
+            if (data[position] == "崩溃测试") {
+                throw RuntimeException("This is a RuntimeException test")
+            } else {
+                val intent = Intent(this, clsArr[position])
+                intent.putExtra("title", data[position])
+                startActivity(intent)
+            }
         }
         Logger.setPrintLevel(Logger.ALL)
         requester = PermissionsRequester(this)
@@ -71,6 +77,12 @@ class MainActivity : AppCompatActivity(), TestObserver {
         requester!!.setCallback {
             if (it.isNotEmpty()) {
                 ToastUtils.showShort("部分权限被拒绝，可能造成某些功能无法使用")
+            } else {
+                val uriString = MMKV.defaultMMKV().decodeString("uri")
+                if (uriString == null) {
+                    val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
+                    startActivityForResult(intent, 1101)
+                }
             }
         }
         requester!!.checkAndRequest(list)
@@ -85,6 +97,17 @@ class MainActivity : AppCompatActivity(), TestObserver {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         requester?.onActivityResult(requestCode)
+        if (requestCode == 1101) {
+            //授予打开的文档树永久性的读写权限
+            val takeFlags =
+                intent.flags and (Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+            val treeUri = data!!.data!!
+            MMKV.defaultMMKV().encode("uri", treeUri.toString())
+            contentResolver.takePersistableUriPermission(data.data!!, takeFlags)
+            //使用DocumentFile构建一个根文档，之后的操作可以在该文档上进行
+            val file = DocumentFile.fromTreeUri(this, treeUri)!!
+            file.createDirectory("logs")
+        }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

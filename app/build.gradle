@@ -13,7 +13,7 @@ android {
     }
     buildTypes {
         debug {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         release {
@@ -56,4 +56,6 @@ dependencies {
     implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit2_version"
     implementation "com.alibaba:fastjson:$fastjson_version"
     implementation project(':library')
+    implementation "androidx.documentfile:documentfile:$documentfile_version"
+    implementation 'com.tencent:mmkv:1.0.22'
 }

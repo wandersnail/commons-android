@@ -15,7 +15,7 @@ version = lib_version
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
-        minSdkVersion rootProject.ext.minSdkVersion
+        minSdkVersion 19
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "$lib_version"
@@ -40,6 +40,7 @@ dependencies {
     compileOnly fileTree(dir: 'libs', include: ['*.jar'])
     compileOnly "androidx.appcompat:appcompat:$appcompat_version"
     compileOnly "androidx.exifinterface:exifinterface:$exifinterface_version"
+    compileOnly "androidx.documentfile:documentfile:$documentfile_version"
 }
 
 task sourcesJar(type: Jar) {

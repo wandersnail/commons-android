@@ -34,7 +34,12 @@ class ApkDownloadActivity : BaseActivity() {
         }
         val apkFile = File(dir, "toutiao.apk")
         val savePath = apkFile.absolutePath
-        downloader = FileDownloadHelper(this, FileDownloadHelper.MIME_TYPE_APK, url, "今日头条", "下载中...嗒嗒嗒", savePath)
+        val builder = FileDownloadHelper.Builder(this, url)
+        builder.setMimeType(FileDownloadHelper.MIME_TYPE_APK)
+        builder.setTitle("今日头条")
+        builder.setDescription("下载中...嗒嗒嗒")
+        builder.setSavePath(savePath)
+        downloader = builder.build()
         downloader!!.setCallback(object : FileDownloadHelper.Callback {
             override fun onProgress(downloaded: Int, total: Int) {
                 progressBar.max = total
@@ -47,18 +52,20 @@ class ApkDownloadActivity : BaseActivity() {
                     DownloadManager.STATUS_RUNNING -> tvStatus.text = "下载中..."
                     DownloadManager.STATUS_PAUSED -> tvStatus.text = "下载暂停"
                     DownloadManager.STATUS_PENDING -> tvStatus.text = "等待下载..."
-                    DownloadManager.STATUS_SUCCESSFUL -> {
-                        tvStatus.text = "下载成功"
-                        apkInstallHelper.install(apkFile)
-                    }
+                    else -> tvStatus.text = "未知状态..."
                 }
+            }
+
+            override fun onCompleted(file: File) {
+                tvStatus.text = "下载成功"
+                apkInstallHelper.install(file)
             }
         })
         btnDownload.setOnClickListener { 
             downloader!!.start()
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            PermissionsRequester(this);
+            PermissionsRequester(this)
             permissionsRequester?.checkAndRequest(listOf(Manifest.permission.REQUEST_INSTALL_PACKAGES))
         }
     }

@@ -6,8 +6,14 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 
 import androidx.annotation.NonNull;
+import androidx.documentfile.provider.DocumentFile;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -15,26 +21,46 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * date: 2019/8/6 14:16
  * author: zengfansheng
  */
 public class CrashHandler implements Thread.UncaughtExceptionHandler {
-    private final File logDir;
+    private File logDir;
+    private DocumentFile logDirFile;
     private Thread.UncaughtExceptionHandler defaultHandler;
     private Callback callback;
     private final String appVerName;
     private final String packageName;
     private final String appName;
     private final Map<String, String> customInfoMap = new HashMap<>();
+    private final Context context;
 
+    /**
+     * Android Q上不可用
+     * 
+     * @param context
+     * @param logDir
+     * @param callback
+     */
+    @Deprecated
     public CrashHandler(@NonNull Context context, @NonNull File logDir, Callback callback) {
-        Objects.requireNonNull(context, "context is null");
-        Objects.requireNonNull(logDir, "logDir is null");
+        this(context, callback);
         this.logDir = logDir;
+        if (!logDir.exists()) {
+            logDir.mkdirs();
+        }
+    }
+    
+    public CrashHandler(@NonNull Context context, @NonNull DocumentFile logDir, Callback callback) {
+        this(context, callback);
+        this.logDirFile = logDir;
+    }
+    
+    private CrashHandler(@NonNull Context context, Callback callback) {
         this.callback = callback;
+        this.context = context.getApplicationContext();
         packageName = context.getPackageName();
         String appName = "CrashLogs";
         String appVerName = "null";
@@ -47,9 +73,6 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         }
         this.appName = appName;
         this.appVerName = appVerName;
-        if (!logDir.exists()) {
-            logDir.mkdirs();
-        }
         defaultHandler = Thread.getDefaultUncaughtExceptionHandler();
         Thread.setDefaultUncaughtExceptionHandler(this);
     }
@@ -65,7 +88,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     }
 
     @Override
-    public void uncaughtException(Thread t, Throwable e) {
+    public void uncaughtException(@NonNull Thread t, @NonNull Throwable e) {
         if (saveErrorLog(e)) {
             android.os.Process.killProcess(android.os.Process.myPid());
             System.exit(0);
@@ -76,9 +99,10 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
 
     private boolean saveErrorLog(Throwable e) {
         String time = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(System.currentTimeMillis());
-        File file = new File(logDir, String.format("crash_log_%s.txt", time));
+        String filename = String.format("crash_log_%s.txt", time);
         StringWriter sw = new StringWriter();
         OutputStream out = null;
+        InputStream inputStream = null;
         try {
             PrintWriter pw = new PrintWriter(sw);
             pw.println("*********************************** CRASH START ***********************************");
@@ -97,9 +121,30 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             e.printStackTrace(pw);
             pw.println("*********************************** CRASH END ***********************************\n");
             String detailError = sw.toString();
-            out = new FileOutputStream(file, true);
-            out.write(detailError.getBytes());
-            out.close();
+            if (logDirFile == null) {
+                logDirFile = DocumentFile.fromFile(logDir);
+            }
+            DocumentFile originFile = logDirFile.findFile(filename);
+            DocumentFile logFile = logDirFile.createFile("text/plain", filename + ".tmp");            
+            if (originFile != null) {
+                inputStream = context.getContentResolver().openInputStream(originFile.getUri());
+            }
+            if (logFile != null) {
+                out = context.getContentResolver().openOutputStream(logFile.getUri(), "rwt");
+                if (out != null) {
+                    if (inputStream != null) {
+                        byte[] bytes = new byte[10240];
+                        int len;
+                        while ((len = inputStream.read(bytes)) != -1) {
+                            out.write(bytes, 0, len);
+                        }
+                        originFile.delete();
+                    }
+                    out.write(detailError.getBytes());
+                    out.close();
+                    logFile.renameTo(filename);
+                }
+            }
             if (callback != null) {
                 return callback.onSaved(detailError, e);
             } else {
@@ -112,6 +157,13 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             if (out != null) {
                 try {
                     out.close();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
