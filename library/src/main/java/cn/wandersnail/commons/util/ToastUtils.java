@@ -13,7 +13,7 @@ import java.lang.ref.WeakReference;
 import cn.wandersnail.commons.base.AppHolder;
 
 /**
- * 单例Toast工具类，依赖AppHolder，需要在AppHolder初始化后方可使用
+ * 单例Toast工具类
  * <p>
  * date: 2019/8/6 20:19
  * author: zengfansheng
@@ -22,7 +22,11 @@ public final class ToastUtils {
     private static WeakReference<View> weakRef;
     private static Toast toast;
     private static Handler handler;
+    private static Looper mainLooper;
     
+    /**
+     * 只适用于依赖了cn.wandersnail:common-base时
+     */
     public static void reset() {
         postToMainThread(() -> {
             weakRef = null;
@@ -30,7 +34,7 @@ public final class ToastUtils {
             toast = Toast.makeText(AppHolder.getInstance().getContext(), "", Toast.LENGTH_SHORT);
         });
     }
-    
+        
     public static void cancel() {
         postToMainThread(() -> toast.cancel());
     }
@@ -114,13 +118,16 @@ public final class ToastUtils {
     }
 
     private static void postToMainThread(final Runnable runnable) {
+        if (mainLooper == null) {
+            mainLooper = Looper.getMainLooper();
+        }
         if (toast == null) {
-            handler = new Handler(AppHolder.getInstance().getMainLooper());
+            handler = new Handler(mainLooper);
             handler.post(() -> {
                 toast = Toast.makeText(AppHolder.getInstance().getContext(), "", Toast.LENGTH_SHORT);
                 runnable.run();
             });
-        } else if (Looper.myLooper() == AppHolder.getInstance().getMainLooper()) {
+        } else if (Looper.myLooper() == mainLooper) {
             runnable.run();
         } else {
             handler.post(runnable);

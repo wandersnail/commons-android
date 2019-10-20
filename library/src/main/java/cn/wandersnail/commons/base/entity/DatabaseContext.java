@@ -30,9 +30,7 @@ public class DatabaseContext extends ContextWrapper {
     @Override
     public File getDatabasePath(String name) {
         if (!dbDir.exists()) {
-            if (!dbDir.mkdirs()) {
-                return null;
-            }
+            dbDir.mkdirs();
         }        
         return new File(dbDir, name);
     }
@@ -40,5 +38,10 @@ public class DatabaseContext extends ContextWrapper {
     @Override
     public SQLiteDatabase openOrCreateDatabase(String name, int mode, SQLiteDatabase.CursorFactory factory, DatabaseErrorHandler errorHandler) {
         return SQLiteDatabase.openOrCreateDatabase(getDatabasePath(name), factory);
+    }
+
+    @Override
+    public SQLiteDatabase openOrCreateDatabase(String name, int mode, SQLiteDatabase.CursorFactory factory) {
+        return super.openOrCreateDatabase(getDatabasePath(name).getName(), mode, factory);
     }
 }

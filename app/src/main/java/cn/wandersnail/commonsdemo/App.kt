@@ -2,7 +2,6 @@ package cn.wandersnail.commonsdemo
 
 import android.app.Application
 import android.net.Uri
-import android.os.Environment
 import android.util.Log
 import androidx.documentfile.provider.DocumentFile
 import cn.wandersnail.commons.base.AppHolder
@@ -11,7 +10,6 @@ import cn.wandersnail.commons.observer.Observable
 import cn.wandersnail.commons.poster.PosterDispatcher
 import cn.wandersnail.commons.poster.ThreadMode
 import com.tencent.mmkv.MMKV
-import java.io.File
 import java.util.concurrent.Executors
 
 /**
@@ -35,8 +33,8 @@ class App : Application() {
                 documentFile = root.createDirectory("logs")
             }
             if (documentFile != null) {
-                Log.d("App", "logDir = ${documentFile!!.uri}")
-                CrashHandler(this, File(Environment.getExternalStorageDirectory(), "commons/logs"),
+                Log.d("App", "logDir = ${documentFile.uri}")
+                CrashHandler(this, documentFile,
                     CrashHandler.Callback { detailError, e ->
 
                         true

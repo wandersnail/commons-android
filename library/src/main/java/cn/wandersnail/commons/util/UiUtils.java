@@ -12,7 +12,6 @@ import android.view.ViewParent;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-
 import cn.wandersnail.commons.base.AppHolder;
 
 /**

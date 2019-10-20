@@ -44,7 +44,7 @@ public class FileDownloadHelper {
         description = builder.description;
         url = builder.url;
         mimeType = builder.mimeType;
-        if (builder.savePath != null && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+        if (builder.savePath != null && Build.VERSION.SDK_INT < 29) {
             targetFile = new File(builder.savePath);
         }
         init();
@@ -96,7 +96,7 @@ public class FileDownloadHelper {
         downloadId = -1;
         isSucceeded = false;
         context.getContentResolver().registerContentObserver(DownloadManagerPro.CONTENT_URI, true, observer);
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+        if (Build.VERSION.SDK_INT < 29) {
             //如果文件存在，先删除
             if (targetFile != null) {
                 if (targetFile.exists()) {
@@ -126,7 +126,7 @@ public class FileDownloadHelper {
             uri = Uri.fromFile(new File(context.getExternalCacheDir(), filename));
         }
         request.setDestinationUri(uri);
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+        if (Build.VERSION.SDK_INT < 29) {
             request.setVisibleInDownloadsUi(true);
             request.allowScanningByMediaScanner();
         } else {
@@ -190,7 +190,7 @@ public class FileDownloadHelper {
                 if (callback != null) {
                     callback.onStateChange(status);
                     if (status == DownloadManager.STATUS_SUCCESSFUL) {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q || targetFile == null) {
+                        if (Build.VERSION.SDK_INT >= 29 || targetFile == null) {
                             callback.onCompleted(new File(context.getExternalCacheDir(), filename));
                         } else {
                             callback.onCompleted(targetFile);

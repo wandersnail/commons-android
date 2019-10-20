@@ -29,6 +29,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.core.content.FileProvider;
 import androidx.core.graphics.drawable.RoundedBitmapDrawable;
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
@@ -425,6 +426,7 @@ public class ImageUtils {
      * @param allBackground true: 即使是ImageView，也设置到background。false: 如果是ImageView，则优先设置到src，如果drawable不存在才设置到background
      * @param recursive     如果第一个参数是ViewGroup类型，是否让子view也添加波纹
      */
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     public static void enableRipple(@NonNull View view, int color, boolean allBackground, boolean recursive) {
         enableRipple(view, ColorStateList.valueOf(color), allBackground, recursive);
     }
@@ -436,6 +438,7 @@ public class ImageUtils {
      * @param allBackground true: 即使是ImageView，也设置到background。false: 如果是ImageView，则优先设置到src，如果drawable不存在才设置到background
      * @param recursive     如果第一个参数是ViewGroup类型，是否让子view也添加波纹
      */
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     public static void enableRipple(@NonNull View view, @NonNull ColorStateList color, boolean allBackground, boolean recursive) {
         enableRipple(view, color, allBackground);
         if (recursive && view instanceof ViewGroup) {
@@ -447,6 +450,7 @@ public class ImageUtils {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private static void enableRipple(View view, ColorStateList color, boolean background) {
         if (background || !(view instanceof ImageView) || ((ImageView) view).getDrawable() == null) {
             if (view.getBackground() != null) {

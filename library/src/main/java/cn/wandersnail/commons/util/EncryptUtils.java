@@ -14,6 +14,7 @@ import java.util.Random;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 /**
@@ -282,9 +283,9 @@ public class EncryptUtils {
      * @param plain 原文
      * @return 密文
      */
-    public static String encrypt(String seed, String plain) throws Exception {
+    public static String encrypt(String seed, String plain, String iv) throws Exception {
         byte[] rawKey = getRawKey(seed.getBytes());
-        byte[] encrypted = encrypt(rawKey, plain.getBytes());
+        byte[] encrypted = encrypt(rawKey, plain.getBytes(), iv.getBytes());
         return Base64.encodeToString(encrypted, Base64.DEFAULT);
     }
 
@@ -295,10 +296,10 @@ public class EncryptUtils {
      * @param encrypted 密文
      * @return 原文
      */
-    public static String decrypt(String seed, String encrypted) throws Exception {
+    public static String decrypt(String seed, String encrypted, String iv) throws Exception {
         byte[] rawKey = getRawKey(seed.getBytes());
         byte[] enc = Base64.decode(encrypted.getBytes(), Base64.DEFAULT);
-        byte[] result = decrypt(rawKey, enc);
+        byte[] result = decrypt(rawKey, enc, iv.getBytes());
         return new String(result);
     }
 
@@ -311,17 +312,17 @@ public class EncryptUtils {
         return key.getEncoded();
     }
 
-    private static byte[] encrypt(byte[] raw, byte[] plain) throws Exception {
+    private static byte[] encrypt(byte[] raw, byte[] plain, byte[] iv) throws Exception {
         SecretKeySpec keySpec = new SecretKeySpec(raw, "AES");
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-        cipher.init(Cipher.ENCRYPT_MODE, keySpec);
+        cipher.init(Cipher.ENCRYPT_MODE, keySpec, new IvParameterSpec(iv));
         return cipher.doFinal(plain);
     }
 
-    private static byte[] decrypt(byte[] raw, byte[] encrypted) throws Exception {
+    private static byte[] decrypt(byte[] raw, byte[] encrypted, byte[] iv) throws Exception {
         SecretKeySpec keySpec = new SecretKeySpec(raw, "AES");
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-        cipher.init(Cipher.DECRYPT_MODE, keySpec);
+        cipher.init(Cipher.DECRYPT_MODE, keySpec, new IvParameterSpec(iv));
         return cipher.doFinal(encrypted);
     }
 }
