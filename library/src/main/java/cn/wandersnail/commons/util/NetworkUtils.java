@@ -186,7 +186,7 @@ public class NetworkUtils {
     }
 
     /**
-     * 判断是否是当前是否WIFI
+     * 判断当前是否使用WIFI网络
      */
     public static boolean isCurrentNetworkWifi(@NonNull Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -196,6 +196,30 @@ public class NetworkUtils {
                 if (network != null) {
                     NetworkCapabilities capabilities = cm.getNetworkCapabilities(network);
                     return capabilities != null && capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI);
+                }
+            } else {
+                NetworkInfo netInfo = cm.getActiveNetworkInfo();
+                if (netInfo != null) {
+                    return netInfo.getType() == ConnectivityManager.TYPE_WIFI;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * wifi是否已连接，不保证是正在使用的网络
+     */
+    public static boolean isWifiConnected(@NonNull Context context) {
+        ConnectivityManager cm = (ConnectivityManager) context.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (cm != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                Network[] networks = cm.getAllNetworks();
+                for (Network network : networks) {
+                    NetworkCapabilities capabilities = cm.getNetworkCapabilities(network);
+                    if (capabilities != null && capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                        return true;
+                    }
                 }
             } else {
                 NetworkInfo netInfo = cm.getActiveNetworkInfo();
