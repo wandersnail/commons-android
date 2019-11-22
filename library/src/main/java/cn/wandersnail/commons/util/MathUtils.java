@@ -170,6 +170,29 @@ public class MathUtils {
     }
 
     /**
+     * Name:    CRC-8   x8+x2+x+1
+     * Poly:    0x07
+     * Init:    0x00
+     * Refin:   False
+     * Refout:  False
+     * Xorout:  0x00
+     */
+    public static int calcCrc8(byte[] bytes) {
+        int crc = 0;
+        for (byte b : bytes) {
+            crc ^= b;
+            for (int i = 0; i < 8; i++) {
+                if ((crc & 0x80) != 0) {
+                    crc = (crc << 1) ^ 0x07;
+                } else {
+                    crc <<= 1;
+                }
+            }
+        }
+        return crc & 0xff;
+    }
+
+    /**
      * CRC16校验，Modbus
      */
     public static int calcCRC16_Modbus(byte[] data) {
