@@ -212,7 +212,7 @@ public class MathUtils {
                     crc >>= 1; // Just shift right  
             }
         }
-        return crc;
+        return crc & 0xffff;
     }
 
     /**
@@ -229,8 +229,7 @@ public class MathUtils {
                 if (c15 ^ bit) crc ^= polynomial;
             }
         }
-        crc &= 0xffff;
-        return crc;
+        return crc & 0xffff;
     }
 
     /**
@@ -248,8 +247,7 @@ public class MathUtils {
                 if (c15 ^ bit) crc ^= polynomial;
             }
         }
-        crc &= 0xffff;
-        return crc;
+        return crc & 0xffff;
     }
 
     /**
@@ -266,8 +264,7 @@ public class MathUtils {
                 if (c15 ^ bit) crc ^= polynomial;
             }
         }
-        crc &= 0xffff;
-        return crc;
+        return crc & 0xffff;
     }
 
     /**
@@ -285,7 +282,6 @@ public class MathUtils {
                 if (c15 ^ bit) crc ^= polynomial;
             }
         }
-        crc &= 0xffff;
-        return crc;
+        return crc & 0xffff;
     }
 }
