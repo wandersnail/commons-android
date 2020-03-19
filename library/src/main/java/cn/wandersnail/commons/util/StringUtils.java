@@ -183,4 +183,22 @@ public class StringUtils {
             return String.format(Locale.ENGLISH, "%02d:%02d:%02d", duration / 3600, duration % 3600 / 60, duration % 60);
         }
     }
+
+    /**
+     * 进16进制字符串转换成字节数组
+     *
+     * @param hexStr    16进制的字符串
+     * @param separator 字符串字节间的分隔符
+     */
+    public static byte[] toByteArray(String hexStr, String separator) {
+        String s = hexStr.replaceAll(separator, "");
+        if (s.length() % 2 != 0) {
+            s = "0" + s;
+        }
+        byte[] bytes = new byte[s.length() / 2];
+        for (int i = 0; i < bytes.length; i++) {
+            bytes[i] = (byte) Integer.parseInt(s.substring(i * 2, i * 2 + 2), 16);
+        }
+        return bytes;
+    }
 }
