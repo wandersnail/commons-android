@@ -49,10 +49,10 @@ dependencies {
     implementation "androidx.core:core-ktx:1.1.0"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
     implementation 'cn.wandersnail:file-selector:1.0.4'
-    implementation 'cn.wandersnail:widget-generic:1.0.6'
+    implementation 'cn.wandersnail:widget-generic:1.0.7'
     implementation "com.squareup.retrofit2:retrofit:$retrofit2_version"
     implementation "com.github.bumptech.glide:glide:$glide_version"
-    implementation "io.reactivex.rxjava2:rxjava:$rxjava2_version"
+    implementation "io.reactivex.rxjava2:rxandroid:$rxandroid_version"
     implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit2_version"
     implementation "com.alibaba:fastjson:$fastjson_version"
     implementation project(':library')
