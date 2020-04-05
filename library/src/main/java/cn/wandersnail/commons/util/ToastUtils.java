@@ -1,5 +1,7 @@
 package cn.wandersnail.commons.util;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
@@ -9,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 
 import java.lang.ref.WeakReference;
+import java.util.List;
 
 import cn.wandersnail.commons.base.AppHolder;
 
@@ -99,7 +102,7 @@ public final class ToastUtils {
     }
 
     public static void showShort(@StringRes final int resId) {
-        postToMainThread(() -> show(AppHolder.getInstance().getContext().getText(resId), Toast.LENGTH_SHORT));
+        postToMainThread(() -> show(getContext().getText(resId), Toast.LENGTH_SHORT));
     }
 
     public static void showLong() {
@@ -114,7 +117,7 @@ public final class ToastUtils {
     }
 
     public static void showLong(@StringRes final int resId) {
-        postToMainThread(() -> show(AppHolder.getInstance().getContext().getText(resId), Toast.LENGTH_LONG));
+        postToMainThread(() -> show(getContext().getText(resId), Toast.LENGTH_LONG));
     }
 
     private static void postToMainThread(final Runnable runnable) {
@@ -132,5 +135,13 @@ public final class ToastUtils {
         } else {
             handler.post(runnable);
         }
+    }
+    
+    private static Context getContext() {
+        List<Activity> allActivities = AppHolder.getInstance().getAllActivities();
+        if (!allActivities.isEmpty()) {
+            return allActivities.get(0);
+        }
+        return AppHolder.getInstance().getContext();
     }
 }
