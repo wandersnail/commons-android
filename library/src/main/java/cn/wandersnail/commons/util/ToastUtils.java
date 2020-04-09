@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 
 import java.lang.ref.WeakReference;
-import java.util.List;
 
 import cn.wandersnail.commons.base.AppHolder;
 
@@ -138,10 +137,7 @@ public final class ToastUtils {
     }
     
     private static Context getContext() {
-        List<Activity> allActivities = AppHolder.getInstance().getAllActivities();
-        if (!allActivities.isEmpty()) {
-            return allActivities.get(0);
-        }
-        return AppHolder.getInstance().getContext();
+        Activity activity = AppHolder.getInstance().getTopActivity();
+        return activity == null ? AppHolder.getInstance().getContext() : activity;
     }
 }

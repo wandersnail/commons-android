@@ -2,6 +2,7 @@ package cn.wandersnail.commons.util;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
@@ -9,9 +10,11 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+
 import cn.wandersnail.commons.base.AppHolder;
 
 /**
@@ -91,6 +94,44 @@ public class UiUtils {
         DisplayMetrics metrics = new DisplayMetrics();
         activity.getWindowManager().getDefaultDisplay().getRealMetrics(metrics);
         return new int[]{metrics.widthPixels, metrics.heightPixels};
+    }
+
+    /**
+     * 强制隐藏输入法键盘
+     */
+    public static void hideSoftInput(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+        View focusView = activity.getCurrentFocus();
+        if (imm != null && focusView != null) {
+            imm.hideSoftInputFromWindow(focusView.getWindowToken(), 0); //强制隐藏键盘
+        }
+    }
+
+    /**
+     * 根据属性ID获取颜色
+     *
+     * @param context  上下文
+     * @param attrId   属性ID
+     * @param defValue 没有找到时的默认值
+     */
+    public static int getColorByAttrId(Context context, int attrId, int defValue) {
+        TypedArray typedArray = context.obtainStyledAttributes(new int[attrId]);
+        int color = typedArray.getColor(0, defValue);
+        typedArray.recycle();
+        return color;
+    }
+
+    /**
+     * 根据上下文获取Activity
+     */
+    public static Activity getActivityByContext(Context context) {
+        while (context instanceof ContextWrapper) {
+            if (context instanceof Activity) {
+                return (Activity) context;
+            }
+            context = ((ContextWrapper) context).getBaseContext();
+        }
+        return null;
     }
 
     /**
