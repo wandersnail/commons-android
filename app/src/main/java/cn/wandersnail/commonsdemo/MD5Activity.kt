@@ -3,6 +3,7 @@ package cn.wandersnail.commonsdemo
 import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
+import cn.wandersnail.commons.base.AppHolder
 import cn.wandersnail.commons.util.EncryptUtils
 import cn.wandersnail.commons.util.SignUtils
 import cn.wandersnail.fileselector.FileSelector

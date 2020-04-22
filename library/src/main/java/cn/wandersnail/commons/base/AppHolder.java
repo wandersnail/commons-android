@@ -95,7 +95,7 @@ public class AppHolder implements Application.ActivityLifecycleCallbacks {
     @Override
     public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
         RunningActivity a = new RunningActivity(activity.getClass().getName(), new WeakReference<>(activity));
-        if (runningActivities.contains(a)) {
+        if (!runningActivities.contains(a)) {
             runningActivities.add(a);            
         }
         topActivity = a;

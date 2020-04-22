@@ -85,5 +85,7 @@
             android:configChanges="keyboardHidden|orientation|navigation|screenSize|keyboard"
             android:screenOrientation="portrait"/>
         <activity android:name=".Android10FileTestActivity" />
+        <activity android:name=".TestBack1Activity" />
+        <activity android:name=".TestBack2Activity" />
     </application>
 </manifest>
