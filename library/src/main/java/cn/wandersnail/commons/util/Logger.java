@@ -19,7 +19,7 @@ public class Logger {
     private static Filter filter;
     private static AbstractLogger logger = new AbstractLogger() {
         @Override
-        boolean accept(int priority, String tag, String msg) {
+        protected boolean accept(int priority, String tag, String msg) {
             int level = getLevel(priority);
             return (printLevel & NONE) != NONE && (printLevel & level) == level &&
                     (filter == null || filter.accept(tag, msg));

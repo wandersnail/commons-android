@@ -7,7 +7,7 @@ import android.util.Log;
  * author: zengfansheng
  */
 public abstract class AbstractLogger {
-    abstract boolean accept(int priority, String tag, String msg);
+    protected abstract boolean accept(int priority, String tag, String msg);
 
     public void v(String tag, String msg) {
         if (accept(Log.VERBOSE, tag, msg)) {
