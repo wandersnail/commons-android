@@ -17,6 +17,14 @@ public class Logger {
 
     private static int printLevel;
     private static Filter filter;
+    private static AbstractLogger logger = new AbstractLogger() {
+        @Override
+        boolean accept(int priority, String tag, String msg) {
+            int level = getLevel(priority);
+            return (printLevel & NONE) != NONE && (printLevel & level) == level &&
+                    (filter == null || filter.accept(tag, msg));
+        }
+    };
 
     public interface Filter {
         boolean accept(String tag, String log);
@@ -52,69 +60,43 @@ public class Logger {
         }
     }
 
-    private static boolean accept(int priority, String tag, String msg) {
-        int level = getLevel(priority);
-        return (printLevel & NONE) != NONE && (printLevel & level) == level &&
-                (filter == null || filter.accept(tag, msg));
-    }
-
     public static void v(String tag, String msg) {
-        if (accept(Log.VERBOSE, tag, msg)) {
-            Log.v(tag, msg);
-        }
+        logger.v(tag, msg);
     }
 
     public static void v(String tag, String msg, Throwable t) {
-        if (accept(Log.VERBOSE, tag, msg)) {
-            Log.v(tag, msg, t);
-        }
+        logger.v(tag, msg, t);
     }
 
     public static void d(String tag, String msg) {
-        if (accept(Log.DEBUG, tag, msg)) {
-            Log.d(tag, msg);
-        }
+        logger.d(tag, msg);
     }
 
     public static void d(String tag, String msg, Throwable t) {
-        if (accept(Log.DEBUG, tag, msg)) {
-            Log.d(tag, msg, t);
-        }
+        logger.d(tag, msg, t);
     }
 
     public static void i(String tag, String msg) {
-        if (accept(Log.INFO, tag, msg)) {
-            Log.i(tag, msg);
-        }
+        logger.i(tag, msg);
     }
 
     public static void i(String tag, String msg, Throwable t) {
-        if (accept(Log.INFO, tag, msg)) {
-            Log.i(tag, msg, t);
-        }
+        logger.i(tag, msg, t);
     }
 
     public static void w(String tag, String msg) {
-        if (accept(Log.WARN, tag, msg)) {
-            Log.w(tag, msg);
-        }
+        logger.w(tag, msg);
     }
 
     public static void w(String tag, String msg, Throwable t) {
-        if (accept(Log.WARN, tag, msg)) {
-            Log.w(tag, msg, t);
-        }
+        logger.w(tag, msg, t);
     }
 
     public static void e(String tag, String msg) {
-        if (accept(Log.ERROR, tag, msg)) {
-            Log.e(tag, msg);
-        }
+        logger.e(tag, msg);
     }
 
     public static void e(String tag, String msg, Throwable t) {
-        if (accept(Log.ERROR, tag, msg)) {
-            Log.e(tag, msg, t);
-        }
+        logger.e(tag, msg, t);
     }
 }
