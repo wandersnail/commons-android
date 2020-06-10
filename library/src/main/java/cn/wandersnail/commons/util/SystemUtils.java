@@ -3,6 +3,7 @@ package cn.wandersnail.commons.util;
 import android.app.ActivityManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -387,6 +388,26 @@ public class SystemUtils {
             return value == null ? null : value.toString();
         } catch (Exception e) {
             return null;
+        }
+    }
+    
+    public static void goNotificationSetting(Context context) {
+        Intent intent = new Intent();
+        //这种方案适用于 API 26, 即8.0（含8.0）以上可以用
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            intent.setAction(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
+            intent.putExtra(Settings.EXTRA_APP_PACKAGE, context.getPackageName());
+            intent.putExtra(Settings.EXTRA_CHANNEL_ID, context.getApplicationInfo().uid);
+        } else {
+            //这种方案适用于 API21——25，即 5.0——7.1 之间的版本可以使用
+            intent.setAction("android.settings.APP_NOTIFICATION_SETTINGS");
+            intent.putExtra("app_package", context.getPackageName());
+            intent.putExtra("app_uid", context.getApplicationInfo().uid);
+        }
+        try {
+            context.startActivity(intent);
+        } catch (Exception e) {
+            context.startActivity(new Intent(Settings.ACTION_SETTINGS));
         }
     }
 }

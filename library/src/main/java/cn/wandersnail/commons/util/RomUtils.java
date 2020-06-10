@@ -72,7 +72,7 @@ public class RomUtils {
 	}
 
 	public static boolean isFlyme() {
-		return Build.DISPLAY.toLowerCase(Locale.ENGLISH).contains("FLYME");
+		return Build.DISPLAY.toLowerCase(Locale.ENGLISH).toUpperCase().contains("FLYME");
 	}
 
 	public static boolean isSmartisan() {
