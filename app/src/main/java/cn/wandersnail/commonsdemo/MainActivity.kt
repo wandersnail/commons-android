@@ -1,6 +1,7 @@
 package cn.wandersnail.commonsdemo
 
 import android.Manifest
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -79,11 +80,11 @@ class MainActivity : AppCompatActivity(), TestObserver {
             if (it.isNotEmpty()) {
                 ToastUtils.showShort("部分权限被拒绝，可能造成某些功能无法使用")
             } else {
-                val uriString = MMKV.defaultMMKV().decodeString("uri")
-                if (uriString == null) {
-                    val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
-                    startActivityForResult(intent, 1101)
-                }
+//                val uriString = MMKV.defaultMMKV().decodeString("uri")
+//                if (uriString == null) {
+//                    val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
+//                    startActivityForResult(intent, 1101)
+//                }
             }
         }
         requester!!.checkAndRequest(list)
@@ -98,11 +99,11 @@ class MainActivity : AppCompatActivity(), TestObserver {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         requester?.onActivityResult(requestCode)
-        if (requestCode == 1101) {
+        if (requestCode == 1101 && resultCode == Activity.RESULT_OK && data?.data != null) {
             //授予打开的文档树永久性的读写权限
             val takeFlags =
                 intent.flags and (Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
-            val treeUri = data!!.data!!
+            val treeUri = data.data!!
             MMKV.defaultMMKV().encode("uri", treeUri.toString())
             contentResolver.takePersistableUriPermission(data.data!!, takeFlags)
             //使用DocumentFile构建一个根文档，之后的操作可以在该文档上进行

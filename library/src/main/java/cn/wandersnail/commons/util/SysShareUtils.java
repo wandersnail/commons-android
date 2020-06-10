@@ -124,7 +124,22 @@ public class SysShareUtils {
      */
     public static void shareFile(@NonNull Context context, @NonNull String title, @NonNull File file) {
         Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType(FileUtils.getMimeType(file.getAbsolutePath()));
+        intent.setType(FileUtils.getMimeType(context, file.getAbsolutePath()));
+        intent.putExtra(Intent.EXTRA_STREAM, FileUtils.toUri(file, context));
+        startShare(context, intent, title, true);
+    }
+
+    /**
+     * 分享文件
+     *
+     * @param context  上下文
+     * @param title    系统分享对话框的标题
+     * @param file     文件
+     * @param mimeType 文件类型，如：application/vnd.android.package-archive
+     */
+    public static void shareFile(@NonNull Context context, @NonNull String title, @NonNull File file, @NonNull String mimeType) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType(mimeType);
         intent.putExtra(Intent.EXTRA_STREAM, FileUtils.toUri(file, context));
         startShare(context, intent, title, true);
     }

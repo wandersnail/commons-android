@@ -12,9 +12,12 @@ import android.os.Environment;
 import android.provider.BaseColumns;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.webkit.MimeTypeMap;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
+
+import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -22,9 +25,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.DecimalFormat;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.zip.GZIPOutputStream;
 
@@ -161,19 +166,43 @@ public class FileUtils {
     }
 
     /**
-     * 根据路径获取MimeType
+     * 根据路径或文件名获取MimeType
      *
      * @param path 文件路径
      */
-    public static String getMimeType(@NonNull String path) {
-        MediaMetadataRetriever mmr = new MediaMetadataRetriever();
-        String mime = "*/*";
+    public static String getMimeType(@NonNull Context context, @NonNull String path) {
+        String mime = null;       
+        String suffix = getSuffix(path).toLowerCase(Locale.ENGLISH);
+        InputStream inputStream = null;
         try {
-            mmr.setDataSource(path);
-            mime = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_MIMETYPE);
-        } catch (Exception ignore) {
+            inputStream = context.getAssets().open("mimetype.json");
+            byte[] bytes = new byte[inputStream.available()];
+            inputStream.read(bytes);
+            String json = new String(bytes);
+            JSONObject jsonObject = new JSONObject(json);
+            mime = jsonObject.getString(suffix);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
-        return mime;
+        if (mime == null) {
+            MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+            try {
+                mmr.setDataSource(path);
+                mime = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_MIMETYPE);
+            } catch (Exception e) {
+                e.printStackTrace();
+                mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension(suffix);
+            }
+        }        
+        return mime == null ? "*/*" : mime;
     }
 
     /**

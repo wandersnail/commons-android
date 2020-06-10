@@ -7,6 +7,8 @@ import cn.wandersnail.commons.util.SysShareUtils
 import cn.wandersnail.fileselector.FileSelector
 import kotlinx.android.synthetic.main.activity_share.*
 import java.io.File
+import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * 描述:
@@ -60,7 +62,7 @@ class ShareActivity : BaseActivity() {
         btnShareVideo.setOnClickListener {
             SysShareUtils.shareVideo(this, "分享到", File(tvVideoPath.text.toString()))
         }
-        btnShareFile.setOnClickListener { 
+        btnShareFile.setOnClickListener {
             SysShareUtils.shareFile(this, "分享到", File(tvFilePath.text.toString()))
         }
     }
