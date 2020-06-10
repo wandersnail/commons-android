@@ -53,7 +53,7 @@ public class SystemUtils {
                     sb.append(c);
                 }
             }
-            long kbSize = Long.valueOf(sb.toString());
+            long kbSize = Long.parseLong(sb.toString());
             br.close();
             return kbSize * 1024;
         } catch (Exception ignore) {
@@ -133,14 +133,11 @@ public class SystemUtils {
      * @param packageName 要判断的应用包名
      */
     public static boolean isAppInstalled(@NonNull Context context, @NonNull String packageName) {
-        // 获取所有已安装程序的包信息
-        List<PackageInfo> pinfo = context.getPackageManager().getInstalledPackages(0);
-        for (int i = 0; i < pinfo.size(); i++) {
-            if (pinfo.get(i).packageName.equals(packageName)) {
-                return true;
-            }
+        try {
+            return context.getPackageManager().getPackageInfo(packageName, PackageManager.GET_GIDS) != null;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
         }
-        return false;
     }
 
     /**

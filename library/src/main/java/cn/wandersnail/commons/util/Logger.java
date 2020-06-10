@@ -38,6 +38,10 @@ public class Logger {
     public static void setPrintLevel(int level) {
         printLevel = level;
     }
+    
+    public static int getPrintLevel() {
+        return printLevel;
+    }
 
     public static void setFilter(Filter filter) {
         Logger.filter = filter;
