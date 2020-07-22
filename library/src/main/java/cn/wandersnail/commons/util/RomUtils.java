@@ -72,7 +72,7 @@ public class RomUtils {
 	}
 
 	public static boolean isFlyme() {
-		return Build.DISPLAY.toLowerCase(Locale.ENGLISH).toUpperCase().contains("FLYME");
+		return Build.DISPLAY.toLowerCase(Locale.ENGLISH).toLowerCase().contains("flyme");
 	}
 
 	public static boolean isSmartisan() {
@@ -82,6 +82,10 @@ public class RomUtils {
 		} catch (IOException e) {
 			return !TextUtils.isEmpty(getProp(KEY_SMARTISAN));
 		}
+	}
+
+	public static boolean isSamsung() {
+		return Build.BRAND != null && Build.BRAND.toLowerCase(Locale.ENGLISH).contains("samsung");
 	}
 	
     public static String getProp(String name) {
