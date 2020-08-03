@@ -153,13 +153,23 @@ public class BatteryOptimizationsUtils {
 
     public static void goSamsungSetting(@NonNull Context context) {
         try {
-            showActivity(context, "com.samsung.android.sm_cn");
+            showActivity(context, "com.samsung.android.sm_cn",
+                    "com.samsung.android.sm_cn.app.dashboard.SmartManagerDashBoardActivity");
         } catch (Exception e) {
             try {
-                showActivity(context, "com.samsung.android.sm");
+                showActivity(context, "com.samsung.android.sm",
+                        "com.samsung.android.sm.app.dashboard.SmartManagerDashBoardActivity");
             } catch (Exception ex) {
-                ex.printStackTrace();
+                try {
+                    showActivity(context, "com.samsung.android.sm_cn");
+                } catch (Exception ex1) {
+                    try {
+                        showActivity(context, "com.samsung.android.sm");
+                    } catch (Exception ex2) {
+                        ex.printStackTrace();
+                    }
+                }
             }
-        }
+        }        
     }
 }
