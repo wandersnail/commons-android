@@ -150,4 +150,16 @@ public class BatteryOptimizationsUtils {
             e.printStackTrace();
         }
     }
+
+    public static void goSamsungSetting(@NonNull Context context) {
+        try {
+            showActivity(context, "com.samsung.android.sm_cn");
+        } catch (Exception e) {
+            try {
+                showActivity(context, "com.samsung.android.sm");
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
 }
