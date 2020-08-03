@@ -3,6 +3,7 @@ package cn.wandersnail.commons.util;
 import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
@@ -270,5 +271,15 @@ public class UiUtils {
         ViewGroup.LayoutParams params = view.getLayoutParams();
         params.height = getStatusBarHeight();
         view.setLayoutParams(params);
+    }
+
+    /**
+     * 显示手机桌面
+     */
+    public static void showDesktop(@NonNull Context context) {
+        Intent setIntent = new Intent(Intent.ACTION_MAIN);
+        setIntent.addCategory(Intent.CATEGORY_HOME);
+        setIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(setIntent);
     }
 }

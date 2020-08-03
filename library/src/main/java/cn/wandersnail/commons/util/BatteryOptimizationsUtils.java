@@ -1,6 +1,7 @@
 package cn.wandersnail.commons.util;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -33,6 +34,17 @@ public class BatteryOptimizationsUtils {
             @SuppressLint("BatteryLife") Intent intent = new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
             intent.setData(Uri.parse("package:" + context.getPackageName()));
             context.startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public static void requestIgnoreBatteryOptimizations(@NonNull Activity activity, int requestCode) {
+        try {
+            @SuppressLint("BatteryLife") Intent intent = new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+            intent.setData(Uri.parse("package:" + activity.getPackageName()));
+            activity.startActivityForResult(intent, requestCode);
         } catch (Exception e) {
             e.printStackTrace();
         }
