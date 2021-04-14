@@ -5,9 +5,9 @@ apply plugin: 'maven'
 def lib_version = '1.2.4'
 def user_name = 'wandersnail'
 def lib_group = 'cn.wandersnail'
-def lib_artifact = 'common-full'
+def lib_artifact = 'commons-android'
 def lib_packaging = 'aar'
-def lib_description = 'common-full for Android'
+def lib_description = 'utils for Android'
 def lib_website = 'https://github.com/wandersnail/commons-android'
 group = lib_group
 version = lib_version
