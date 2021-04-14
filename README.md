@@ -1,6 +1,6 @@
 ## 代码托管
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/cn.wandersnail/common-full/badge.svg)](https://maven-badges.herokuapp.com/maven-central/cn.wandersnail/common-full)
-[![Release](https://jitpack.io/v/wandersnail/common-full.svg)](https://jitpack.io/#wandersnail/common-full)
+[![Release](https://jitpack.io/v/cn.wandersnail/common-full.svg)](https://jitpack.io/#cn.wandersnail/common-full)
 
 
 ## 使用
