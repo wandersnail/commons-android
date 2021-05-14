@@ -1,6 +1,10 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.novoda.bintray-release'
 apply plugin: 'maven'
+apply plugin: 'signing'
+
+signing {
+    sign configurations.archives
+}
 
 def lib_version = '1.2.4'
 def user_name = 'wandersnail'
@@ -11,6 +15,7 @@ def lib_description = 'utils for Android'
 def lib_website = 'https://github.com/wandersnail/commons-android'
 group = lib_group
 version = lib_version
+archivesBaseName = "commons-android"
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -63,86 +68,42 @@ artifacts {
     archives javadocJar
 }
 
-publish {
-    repoName="androidx"//仓库名
-    userOrg = user_name //bintray.com用户名  
-    groupId = lib_group //jcenter上的路径  
-    artifactId = lib_artifact //项目名称  
-    publishVersion = lib_version //版本号  
-    desc = lib_description
-    website = lib_website
-}
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
 
-if (project.getGradle().startParameter.taskNames.any { it.contains('bintrayUpload') }) {
-    gradle.taskGraph.whenReady { taskGraph ->
-        taskGraph.getAllTasks().find {
-            it.path == ":$project.name:generatePomFileForReleasePublication"
-        }.doLast {
-            file("build/publications/release/pom-default.xml").delete()
-            println 'Overriding pom-file to make sure we can sync to maven central!'
-            pom {
-                //noinspection GroovyAssignabilityCheck
-                project {
-                    name lib_artifact
-                    artifactId lib_artifact
-                    packaging lib_packaging
-                    description lib_description
-                    version lib_version
+            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+            pom.project {
+                name lib_artifact
+                artifactId lib_artifact
+                packaging lib_packaging
+                description lib_description
+                version lib_version
+                url lib_website
+
+                scm {
                     url lib_website
+                    connection "scm:git:${lib_website}.git"
+                    developerConnection "scm:git:${lib_website}.git"
+                }
 
-                    scm {
-                        url lib_website
-                        connection "scm:git:${lib_website}.git"
-                        developerConnection "scm:git:${lib_website}.git"
-                    }
-
-                    licenses {
-                        license {
-                            name 'The Apache License, Version 2.0'
-                            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                        }
-                    }
-
-                    developers {
-                        developer {
-                            id user_name
-                            name 'Zeng Fansheng'
-                            email 'bingmo977@qq.com'
-                        }
+                licenses {
+                    license {
+                        name 'The Apache License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
                     }
                 }
-            }.writeTo("build/publications/release/pom-default.xml")
-        }
-    }
-}
 
-afterEvaluate { project ->
-    uploadArchives {
-        //加载资源
-        Properties properties = new Properties()
-        InputStream inputStream = rootProject.file('local.properties').newDataInputStream()
-        properties.load(inputStream)
-        //读取本地maven的url
-        def localMavenBaseUrl = properties.containsKey('maven.local.url.base') ? properties['maven.local.url.base']
-                : rootProject.hasProperty('maven.local.url.base') ? rootProject['maven.local.url.base'] : null
-        if (localMavenBaseUrl != null) {
-            def username = properties.containsKey('nexus.username') ? properties['nexus.username'] : rootProject['nexus.username']
-            def password = properties.containsKey('nexus.password') ? properties['nexus.password'] : rootProject['nexus.password']
-            repositories {
-                mavenDeployer {
-                    repository(url: "${localMavenBaseUrl}repository/maven-releases") {
-                        authentication(userName: username, password: password)
-                    }
-
-                    snapshotRepository(url: "${localMavenBaseUrl}repository/maven-snapshots") {
-                        authentication(userName: username, password: password)
-                    }
-                    pom.project {
-                        groupId lib_group
-                        artifactId lib_artifact
-                        version lib_version
-                        packaging lib_packaging
-                        description lib_description
+                developers {
+                    developer {
+                        id user_name
+                        name 'Zeng Fansheng'
+                        email 'bingmo977@qq.com'
                     }
                 }
             }
