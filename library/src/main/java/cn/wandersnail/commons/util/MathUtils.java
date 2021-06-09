@@ -5,6 +5,9 @@ import androidx.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
+
+import cn.wandersnail.commons.base.interfaces.IWeight;
 
 /**
  * date: 2019/8/7 21:01
@@ -283,5 +286,25 @@ public class MathUtils {
             }
         }
         return crc & 0xffff;
+    }
+
+    /**
+     * 按权重随机
+     *
+     * @return 根据权重随机的结果
+     */
+    public static <T extends IWeight> T randomByWeight(List<T> list) {
+        int sum = 0;
+        for (T w : list)//计算总权重
+            sum += w.getWeight() * 10000;
+        int random = new Random().nextInt(sum);//[0，总权重）随机一个数
+        int partSum = 0;//权重区间右值
+        for (T w : list) {
+            partSum += w.getWeight() * 10000;
+            if (random <= partSum) {
+                return w;//命中获取对应值
+            }
+        }
+        return null;
     }
 }

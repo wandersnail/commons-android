@@ -6,7 +6,7 @@ signing {
     sign configurations.archives
 }
 
-def lib_version = '1.2.4'
+def lib_version = '1.2.5'
 def user_name = 'wandersnail'
 def lib_group = 'cn.wandersnail'
 def lib_artifact = 'commons-android'
@@ -67,6 +67,12 @@ artifacts {
     archives sourcesJar
     archives javadocJar
 }
+
+Properties properties = new Properties()
+InputStream inputStream = project.rootProject.file('local.properties').newDataInputStream()
+properties.load(inputStream)
+def ossrhUsername = properties.containsKey('ossrhUsername') ? properties['ossrhUsername'] : ''
+def ossrhPassword = properties.containsKey('ossrhPassword') ? properties['ossrhPassword'] : ''
 
 uploadArchives {
     repositories {
