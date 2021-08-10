@@ -52,6 +52,16 @@ public class RomUtils {
                     Build.HOST.toLowerCase().contains("emui") || Build.MANUFACTURER.equalsIgnoreCase("huawei");
 		}
 	}
+
+	public static boolean isHarmonyOS(){
+		try {
+			Class<?> buildExClass = Class.forName("com.huawei.system.BuildEx");
+			Object osBrand = buildExClass.getMethod("getOsBrand").invoke(buildExClass);
+			return "harmony".equalsIgnoreCase(osBrand != null ? osBrand.toString() : null);
+		} catch (Throwable e){
+			return false;
+		}
+	}
 	
 	public static boolean isVivoOS() {
 		try {
