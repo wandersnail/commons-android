@@ -6,7 +6,7 @@ signing {
     sign configurations.archives
 }
 
-def lib_version = '1.2.5'
+def lib_version = '1.2.6'
 def user_name = 'wandersnail'
 def lib_group = 'cn.wandersnail'
 def lib_artifact = 'commons-android'
@@ -23,7 +23,7 @@ android {
         minSdkVersion 19
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        versionName "$lib_version"
+        versionName lib_version
     }
 
     buildTypes {

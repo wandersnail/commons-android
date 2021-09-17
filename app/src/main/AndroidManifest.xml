@@ -10,6 +10,9 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
+    <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 
     <application
         android:name="cn.wandersnail.commonsdemo.App"
@@ -23,9 +26,9 @@
         <activity
             android:name="cn.wandersnail.commonsdemo.MainActivity"
             android:configChanges="keyboardHidden|orientation|navigation|screenSize|keyboard"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>

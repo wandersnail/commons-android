@@ -29,7 +29,7 @@ public class ApkInstallHelper {
     }
 
     /**
-     * 如果是Android8.0以上需要在Activity中的onActivityResult调用此方法
+     * 如果是Android8-Android12以上需要在Activity中的onActivityResult调用此方法
      */
     public void onActivityResult(int requestCode) {
         if (requestCode == REQUEST_CODE && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -53,7 +53,7 @@ public class ApkInstallHelper {
             install();
         }
     }
-
+    
     private void install() {
         if (apkFile.exists()) {
             Intent intent = new Intent(Intent.ACTION_VIEW);

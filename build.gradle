@@ -7,20 +7,19 @@ buildscript {
         targetSdkVersion = 30
 
         kotlin_version = '1.5.0'
-        appcompat_version = '1.1.0'
-        exifinterface_version = '1.1.0'
+        appcompat_version = '1.3.1'
+        exifinterface_version = '1.3.3'
         documentfile_version = '1.0.1'
-        retrofit2_version = '2.6.1'
-        rxandroid_version = '2.1.1'
-        rxjava2_version = '2.2.8'
-        rxkotlin_version = '2.4.0'
+        retrofit2_version = '2.9.0'
+        ver_rxandroid = '2.1.1'
+        ver_rxkotlin = '2.4.0'
         glide_version = '4.9.0'
+        ver_easyhttp = '2.2.0'
         fastjson_version = '1.1.71.android'
     }
     repositories {
         google()
-//        jcenter()
-        maven { url 'https://maven.aliyun.com/repository/jcenter' }
+        maven { url 'https://maven.aliyun.com/repository/public' }
         mavenCentral()
     }
     dependencies {
@@ -34,8 +33,7 @@ buildscript {
 allprojects {
     repositories {
         google()
-//        jcenter()
-        maven { url 'https://maven.aliyun.com/repository/jcenter' }
+        maven { url 'https://maven.aliyun.com/repository/public' }
         maven { url 'https://jitpack.io' }
         mavenCentral()
     }
