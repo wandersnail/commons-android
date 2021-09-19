@@ -6,7 +6,7 @@ signing {
     sign configurations.archives
 }
 
-def lib_version = '1.2.6'
+def lib_version = '1.2.7'
 def user_name = 'wandersnail'
 def lib_group = 'cn.wandersnail'
 def lib_artifact = 'commons-android'
@@ -43,6 +43,7 @@ android {
 
 dependencies {
     compileOnly fileTree(dir: 'libs', include: ['*.jar'])
+    compileOnly "androidx.annotation:annotation:1.2.0"
     compileOnly "androidx.appcompat:appcompat:$appcompat_version"
     compileOnly "androidx.exifinterface:exifinterface:$exifinterface_version"
     compileOnly "androidx.documentfile:documentfile:$documentfile_version"

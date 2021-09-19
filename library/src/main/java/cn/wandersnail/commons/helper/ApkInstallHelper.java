@@ -6,11 +6,10 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
 
-import androidx.annotation.NonNull;
-
 import java.io.File;
 import java.util.Objects;
 
+import androidx.annotation.NonNull;
 import cn.wandersnail.commons.util.FileUtils;
 
 /**
@@ -22,10 +21,11 @@ import cn.wandersnail.commons.util.FileUtils;
 public class ApkInstallHelper {
     private static final int REQUEST_CODE = 3984;
     private final Activity activity;
-    private File apkFile;
+    private final File apkFile;
 
-    public ApkInstallHelper(@NonNull Activity activity) {
+    public ApkInstallHelper(@NonNull Activity activity, @NonNull File apkFile) {
         this.activity = activity;
+        this.apkFile = apkFile;
     }
 
     /**
@@ -34,7 +34,7 @@ public class ApkInstallHelper {
     public void onActivityResult(int requestCode) {
         if (requestCode == REQUEST_CODE && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             if (activity.getPackageManager().canRequestPackageInstalls()) {
-                install();
+                installImmediately();
             }
         }
     }
@@ -42,19 +42,18 @@ public class ApkInstallHelper {
     /**
      * 安装apk
      */
-    public void install(@NonNull File apkFile) {
+    public void install() {
         Objects.requireNonNull(apkFile, "apkFile is null");
-        this.apkFile = apkFile;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !activity.getPackageManager().canRequestPackageInstalls()) {
             Uri uri = Uri.parse("package:" + activity.getPackageName());
             Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, uri);
             activity.startActivityForResult(intent, REQUEST_CODE);
         } else {
-            install();
+            installImmediately();
         }
     }
     
-    private void install() {
+    private void installImmediately() {
         if (apkFile.exists()) {
             Intent intent = new Intent(Intent.ACTION_VIEW);
             FileUtils.setIntentDataAndType(apkFile, activity, intent, "application/vnd.android.package-archive", false);

@@ -6,15 +6,14 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
 
+import java.io.File;
+
 import androidx.activity.ComponentActivity;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
-import java.io.File;
-
 import cn.wandersnail.commons.util.FileUtils;
 
 /**
@@ -26,14 +25,15 @@ import cn.wandersnail.commons.util.FileUtils;
 public class ApkInstaller {
     private ComponentActivity activity;
     private Fragment fragment;
-    private File apkFile;
+    private final File apkFile;
     private final ActivityResultLauncher<Intent> launcher;
 
     /**
      * 实例化必须在activity的onCreate()方法里进行
      */
-    public ApkInstaller(@NonNull ComponentActivity activity) {
+    public ApkInstaller(@NonNull ComponentActivity activity, @NonNull File apkFile) {
         this.activity = activity;
+        this.apkFile = apkFile;
         launcher = activity.registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             onActivityResult();
         });
@@ -42,8 +42,9 @@ public class ApkInstaller {
     /**
      * 实例化必须在fragment的onCreate()、onAttach()方法里进行
      */
-    public ApkInstaller(@NonNull Fragment fragment) {
+    public ApkInstaller(@NonNull Fragment fragment, @NonNull File apkFile) {
         this.fragment = fragment;
+        this.apkFile = apkFile;
         launcher = fragment.registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             onActivityResult();
         });
@@ -72,8 +73,7 @@ public class ApkInstaller {
     /**
      * 安装apk
      */
-    public void install(@NonNull File apkFile) {
-        this.apkFile = apkFile;
+    public void install() {
         Activity activity = getActivity();
         if (activity != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && 
