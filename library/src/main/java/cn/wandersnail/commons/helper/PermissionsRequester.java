@@ -9,11 +9,11 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
 
+import java.util.List;
+
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
-
-import java.util.List;
 
 /**
  * 动态申请权限
@@ -41,7 +41,7 @@ public class PermissionsRequester extends BasePermissionsRequester {
     @NonNull
     @Override
     protected Activity getActivity() {
-        return activity;
+        return activity != null ? activity : fragment.requireActivity();
     }
 
     @Override
