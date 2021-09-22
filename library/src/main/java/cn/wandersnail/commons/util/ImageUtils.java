@@ -216,7 +216,7 @@ public class ImageUtils {
         Uri uri;
         // 判断版本大于等于7.0
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            uri = FileProvider.getUriForFile(context, context.getPackageName() + ".fileprovider", srcFile);
+            uri = FileProvider.getUriForFile(context, context.getPackageName() + ".WSFileProvider", srcFile);
         } else {
             uri = Uri.fromFile(srcFile);
         }

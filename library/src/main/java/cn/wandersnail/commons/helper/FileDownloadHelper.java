@@ -19,6 +19,7 @@ import java.util.UUID;
  * date: 2019/8/6 14:58
  * author: zengfansheng
  */
+@Deprecated
 public class FileDownloadHelper {
     public static final String MIME_TYPE_BINARY = "application/octet-stream";
     public static final String MIME_TYPE_APK = "application/vnd.android.package-archive";

@@ -15,6 +15,7 @@ buildscript {
         ver_rxkotlin = '2.4.0'
         glide_version = '4.9.0'
         ver_easyhttp = '2.2.0'
+        ver_lifecycle = '2.2.0'
         fastjson_version = '1.1.71.android'
     }
     repositories {

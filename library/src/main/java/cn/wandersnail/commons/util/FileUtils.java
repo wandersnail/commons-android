@@ -528,7 +528,7 @@ public class FileUtils {
     public static Uri toUri(@NonNull File file, @NonNull Context context) {
         // 判断版本大于等于7.0
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            String authority = context.getPackageName() + ".fileprovider";
+            String authority = context.getPackageName() + ".WSFileProvider";
             return FileProvider.getUriForFile(context, authority, file);
         } else {
             return Uri.fromFile(file);

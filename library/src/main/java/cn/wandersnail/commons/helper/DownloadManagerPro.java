@@ -36,6 +36,7 @@ import java.lang.reflect.Method;
  * 
  * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2013-5-4
  */
+@Deprecated
 public class DownloadManagerPro {
 
     public static final Uri    CONTENT_URI                 = Uri.parse("content://downloads/my_downloads");

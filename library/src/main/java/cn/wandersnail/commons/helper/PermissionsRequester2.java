@@ -101,10 +101,4 @@ public class PermissionsRequester2 extends BasePermissionsRequester {
     protected void requestOtherPermissions(@NonNull List<String> permissions) {
         permissionsLauncher.launch(permissions.toArray(new String[0]));
     }
-    
-    public void destroy() {
-        writeSettingsLauncher.unregister();
-        installPackagesLauncher.unregister();
-        permissionsLauncher.unregister();
-    }
 }

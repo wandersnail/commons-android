@@ -6,14 +6,15 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
 
-import java.io.File;
-
 import androidx.activity.ComponentActivity;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import java.io.File;
+
 import cn.wandersnail.commons.util.FileUtils;
 
 /**
@@ -94,9 +95,5 @@ public class ApkInstaller {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             activity.startActivity(intent);
         }
-    }
-    
-    public void destroy() {
-        launcher.unregister();
     }
 }

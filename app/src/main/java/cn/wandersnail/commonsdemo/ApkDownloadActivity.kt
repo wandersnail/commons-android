@@ -56,9 +56,4 @@ class ApkDownloadActivity : BaseActivity() {
                 .build()
         }
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        apkInstaller?.destroy()
-    }
 }
