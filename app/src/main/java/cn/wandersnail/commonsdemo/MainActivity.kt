@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity(), TestObserver {
         setContentView(R.layout.activity_main)
         val data = arrayListOf(
             "储存信息获取", "md5和sha1算法", "系统分享", "网络及位置服务状态", "解压缩", "点击波纹", "Toast", "系统文件选择器", "debug包判断",
-            "系统下载并安装APP", "文件操作", "观察者模式", "测试返回到首页"
+            "系统下载并安装APP", "文件操作", "观察者模式", "测试返回到首页", "系统图片剪裁"
         )
         val clsArr = arrayListOf(
             StorageActivity::class.java,
@@ -41,7 +41,8 @@ class MainActivity : AppCompatActivity(), TestObserver {
             ApkDownloadActivity::class.java,
             FileOperateActivity::class.java,
             TestObserverActivity::class.java,
-            TestBack1Activity::class.java
+            TestBack1Activity::class.java,
+            CropActivity::class.java
         )
         lv.adapter = object : BaseListAdapter<String>(this, data) {
             override fun createViewHolder(position: Int): BaseViewHolder<String> {
@@ -97,7 +98,6 @@ class MainActivity : AppCompatActivity(), TestObserver {
 
     override fun onDestroy() {
         App.instance?.observable?.unregisterObserver(this)
-        requester?.destroy()
         super.onDestroy()
     }
     
@@ -105,8 +105,7 @@ class MainActivity : AppCompatActivity(), TestObserver {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 1101 && resultCode == Activity.RESULT_OK && data?.data != null) {
             //授予打开的文档树永久性的读写权限
-            val takeFlags =
-                intent.flags and (Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+            val takeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
             val treeUri = data.data!!
             MMKV.defaultMMKV().encode("uri", treeUri.toString())
             contentResolver.takePersistableUriPermission(data.data!!, takeFlags)

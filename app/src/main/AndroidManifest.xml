@@ -87,7 +87,7 @@
             android:name="cn.wandersnail.commonsdemo.TestObserverActivity"
             android:configChanges="keyboardHidden|orientation|navigation|screenSize|keyboard"
             android:screenOrientation="portrait"/>
-        <activity android:name=".Android10FileTestActivity" />
+        <activity android:name=".CropActivity" />
         <activity android:name=".TestBack1Activity" />
         <activity android:name=".TestBack2Activity" />
     </application>
