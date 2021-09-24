@@ -1,4 +1,5 @@
-<manifest package="cn.wandersnail.commonsdemo"
+<manifest xmlns:tools="http://schemas.android.com/tools"
+    package="cn.wandersnail.commonsdemo"
           xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
@@ -10,9 +11,12 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
-    <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
+    <uses-permission android:name="android.permission.WRITE_SETTINGS"
+        tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.READ_PRIVILEGED_PHONE_STATE"
+        tools:ignore="ProtectedPermissions" />
 
     <application
         android:name="cn.wandersnail.commonsdemo.App"
@@ -85,6 +89,10 @@
             android:screenOrientation="portrait"/>
         <activity
             android:name="cn.wandersnail.commonsdemo.TestObserverActivity"
+            android:configChanges="keyboardHidden|orientation|navigation|screenSize|keyboard"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name="cn.wandersnail.commonsdemo.DeviceInfoActivity"
             android:configChanges="keyboardHidden|orientation|navigation|screenSize|keyboard"
             android:screenOrientation="portrait"/>
         <activity android:name=".CropActivity" />

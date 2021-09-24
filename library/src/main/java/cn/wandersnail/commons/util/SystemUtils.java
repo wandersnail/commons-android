@@ -1,5 +1,6 @@
 package cn.wandersnail.commons.util;
 
+import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -16,8 +17,10 @@ import android.os.PowerManager;
 import android.os.StatFs;
 import android.os.storage.StorageManager;
 import android.provider.Settings;
+import android.telephony.TelephonyManager;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.os.EnvironmentCompat;
 
@@ -391,7 +394,7 @@ public class SystemUtils {
         }
     }
     
-    public static void goNotificationSetting(Context context) {
+    public static void goNotificationSetting(@NonNull Context context) {
         Intent intent = new Intent();
         //这种方案适用于 API 26, 即8.0（含8.0）以上可以用
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -408,6 +411,24 @@ public class SystemUtils {
             context.startActivity(intent);
         } catch (Exception e) {
             context.startActivity(new Intent(Settings.ACTION_SETTINGS));
+        }
+    }
+
+    /**
+     * 获取IMEI
+     */
+    @SuppressLint("MissingPermission")
+    @Nullable
+    public static String getImei(@NonNull Context context) {
+        try {
+            TelephonyManager tm = (TelephonyManager) context.getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                return tm.getImei();
+            } else {
+                return tm.getDeviceId();
+            }
+        } catch (Exception e) {
+            return null;
         }
     }
 }

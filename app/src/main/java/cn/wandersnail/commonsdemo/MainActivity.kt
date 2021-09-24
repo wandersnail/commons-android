@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity(), TestObserver {
         setContentView(R.layout.activity_main)
         val data = arrayListOf(
             "储存信息获取", "md5和sha1算法", "系统分享", "网络及位置服务状态", "解压缩", "点击波纹", "Toast", "系统文件选择器", "debug包判断",
-            "系统下载并安装APP", "文件操作", "观察者模式", "测试返回到首页", "系统图片剪裁"
+            "系统下载并安装APP", "文件操作", "观察者模式", "测试返回到首页", "系统图片剪裁", "设备信息"
         )
         val clsArr = arrayListOf(
             StorageActivity::class.java,
@@ -42,7 +42,8 @@ class MainActivity : AppCompatActivity(), TestObserver {
             FileOperateActivity::class.java,
             TestObserverActivity::class.java,
             TestBack1Activity::class.java,
-            CropActivity::class.java
+            CropActivity::class.java,
+            DeviceInfoActivity::class.java
         )
         lv.adapter = object : BaseListAdapter<String>(this, data) {
             override fun createViewHolder(position: Int): BaseViewHolder<String> {

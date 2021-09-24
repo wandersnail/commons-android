@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:padding="8dp"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <TableRow>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:text="MAC地址："/>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:textColor="#000"
+            android:id="@+id/tvMac"/>
+    </TableRow>
+    <TableRow android:layout_marginTop="2dp">
+        <androidx.appcompat.widget.AppCompatTextView
+            android:text="IMEI："/>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:textColor="#000"
+            android:id="@+id/tvImei"/>
+    </TableRow>
+    <TableRow android:layout_marginTop="2dp">
+        <androidx.appcompat.widget.AppCompatTextView
+            android:text="OAID："/>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:textColor="#000"
+            android:id="@+id/tvOaid"/>
+    </TableRow>
+</TableLayout>
