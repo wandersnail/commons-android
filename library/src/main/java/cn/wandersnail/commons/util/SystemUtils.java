@@ -201,9 +201,21 @@ public class SystemUtils {
         return am == null ? 0 : am.getRunningAppProcesses().size();
     }
 
+    @Nullable
+    public static String getCurrentProcessName(@NonNull Context context) {
+        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningAppProcessInfo processInfo : manager.getRunningAppProcesses()) {
+            if (processInfo.pid == android.os.Process.myPid()) {
+                return processInfo.processName;
+            }
+        }
+        return null;
+    }
+
     /**
      * 获取所有存储路径
      */
+    @NonNull
     public static List<String> getStoragePaths(@NonNull Context context) {
         try {
             StorageManager sm = (StorageManager) context.getApplicationContext().getSystemService(Context.STORAGE_SERVICE);
@@ -223,6 +235,7 @@ public class SystemUtils {
     /**
      * 获取设备存储信息
      */
+    @NonNull
     public static List<Storage> getStorages(@NonNull Context context) {
         try {
             StorageManager storageManager = (StorageManager) context.getApplicationContext().getSystemService(Context.STORAGE_SERVICE);
@@ -334,6 +347,7 @@ public class SystemUtils {
      * @param name meta名
      * @return 没有返回null
      */
+    @Nullable
     public static String getServiceMetaValue(@NonNull Context context, @NonNull Class<?> cls, @NonNull String name) {
         try {
             ServiceInfo info = context.getPackageManager().getServiceInfo(new ComponentName(context, cls.getName()), PackageManager.GET_META_DATA);
@@ -351,6 +365,7 @@ public class SystemUtils {
      * @param name meta名
      * @return 没有返回null
      */
+    @Nullable
     public static String getReceiverMetaValue(@NonNull Context context, @NonNull Class<?> cls, @NonNull String name) {
         try {
             ActivityInfo info = context.getPackageManager().getReceiverInfo(new ComponentName(context, cls.getName()), PackageManager.GET_META_DATA);
@@ -368,6 +383,7 @@ public class SystemUtils {
      * @param name meta名
      * @return 没有返回null
      */
+    @Nullable
     public static String getActivityMetaValue(@NonNull Context context, @NonNull Class<?> cls, @NonNull String name) {
         try {
             ActivityInfo info = context.getPackageManager().getActivityInfo(new ComponentName(context, cls.getName()), PackageManager.GET_META_DATA);
@@ -384,6 +400,7 @@ public class SystemUtils {
      * @param name meta名
      * @return 没有返回null
      */
+    @Nullable
     public static String getApplicationMetaValue(@NonNull Context context, @NonNull String name) {
         try {
             ApplicationInfo info = context.getPackageManager().getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
