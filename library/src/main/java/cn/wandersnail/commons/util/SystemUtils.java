@@ -145,6 +145,20 @@ public class SystemUtils {
     }
 
     /**
+     * 判断是否是系统应用
+     * 
+     * @param packageName 要判断的应用包名
+     */
+    public static boolean isSystemApp(@NonNull Context context, @NonNull String packageName) {
+        try {
+            PackageInfo info = context.getPackageManager().getPackageInfo(packageName, PackageManager.GET_GIDS);
+            return info != null && (info.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
+    }
+
+    /**
      * 判断位置服务是否打开
      */
     public static boolean isLocationEnabled(@NonNull Context context) {

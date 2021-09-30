@@ -1,7 +1,10 @@
 package cn.wandersnail.commons.util;
 
+import android.content.Context;
 import android.os.Build;
 import android.text.TextUtils;
+
+import androidx.annotation.NonNull;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -96,6 +99,14 @@ public class RomUtils {
 
 	public static boolean isSamsung() {
 		return Build.BRAND != null && Build.BRAND.toLowerCase(Locale.ENGLISH).contains("samsung");
+	}
+	
+	public static boolean isRealMeUI(@NonNull Context context) {
+		return SystemUtils.isSystemApp(context, "com.heytap.market");
+	}
+	
+	public static boolean isOnePlus(@NonNull Context context) {
+		return SystemUtils.isSystemApp(context, "com.oneplus.market");
 	}
 	
     public static String getProp(String name) {

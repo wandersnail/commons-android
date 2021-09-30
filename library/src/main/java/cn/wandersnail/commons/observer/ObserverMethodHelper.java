@@ -18,7 +18,7 @@ import cn.wandersnail.commons.poster.Tag;
  */
 class ObserverMethodHelper {
     private static final Map<Class<?>, Map<String, Method>> METHOD_CACHE = new ConcurrentHashMap<>();
-    private boolean isObserveAnnotationRequired;
+    private final boolean isObserveAnnotationRequired;
 
     ObserverMethodHelper(boolean isObserveAnnotationRequired) {
         this.isObserveAnnotationRequired = isObserveAnnotationRequired;
