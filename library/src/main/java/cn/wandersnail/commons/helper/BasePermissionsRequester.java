@@ -50,6 +50,7 @@ public abstract class BasePermissionsRequester {
         if (checking) {
             return;
         }
+        checking = true;
         refusedPermissions.clear();
         allPermissions.clear();
         allPermissions.addAll(permissions);
@@ -86,7 +87,6 @@ public abstract class BasePermissionsRequester {
             if (!Settings.System.canWrite(getActivity())) {
                 if (!onlyCheck) {
                     requestWriteSettingsPermission();
-                    checking = true;
                 }
                 return false;
             }
@@ -95,7 +95,6 @@ public abstract class BasePermissionsRequester {
             if (!getActivity().getPackageManager().canRequestPackageInstalls()) {
                 if (!onlyCheck) {
                     requestInstallPackagesPermission();
-                    checking = true;
                 }
                 return false;
             }
@@ -105,7 +104,6 @@ public abstract class BasePermissionsRequester {
             return needRequestPermissonList.isEmpty();
         } else if (!needRequestPermissonList.isEmpty()) {
             requestOtherPermissions(needRequestPermissonList);
-            checking = true;
             return false;
         } else {
             if (callback != null && checking) {

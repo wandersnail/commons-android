@@ -8,6 +8,8 @@ import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.documentfile.provider.DocumentFile
+import cn.wandersnail.commons.helper.BasePermissionsRequester
+import cn.wandersnail.commons.helper.PermissionsRequester
 import cn.wandersnail.commons.helper.PermissionsRequester2
 import cn.wandersnail.commons.poster.Tag
 import cn.wandersnail.commons.util.Logger
@@ -19,7 +21,8 @@ import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
 class MainActivity : AppCompatActivity(), TestObserver {
-    private var requester: PermissionsRequester2? = null
+    private var requester2: PermissionsRequester2? = null
+    private var requester: PermissionsRequester? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,7 +75,6 @@ class MainActivity : AppCompatActivity(), TestObserver {
             }
         }
         Logger.setPrintLevel(Logger.ALL)
-        requester = PermissionsRequester2(this)
         val list = ArrayList<String>()
         list.add(Manifest.permission.CAMERA)
         list.add(Manifest.permission.READ_PHONE_STATE)
@@ -81,19 +83,22 @@ class MainActivity : AppCompatActivity(), TestObserver {
         list.add(Manifest.permission.WRITE_SETTINGS)
         list.add(Manifest.permission.ACCESS_FINE_LOCATION)
         list.add(Manifest.permission.ACCESS_NETWORK_STATE)
-        requester!!.setCallback {
+        val callback = BasePermissionsRequester.Callback {
             Logger.d("MainActivity", "refusedPermissions = $it")
             if (it.isNotEmpty()) {
                 ToastUtils.showShort("部分权限被拒绝，可能造成某些功能无法使用")
-            } else {
-//                val uriString = MMKV.defaultMMKV().decodeString("uri")
-//                if (uriString == null) {
-//                    val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
-//                    startActivityForResult(intent, 1101)
-//                }
             }
         }
-        requester!!.checkAndRequest(list)
+        val bRequester: BasePermissionsRequester
+        if (false) {
+            requester2 = PermissionsRequester2(this)
+            bRequester = requester2!!
+        } else {
+            requester = PermissionsRequester(this)
+            bRequester = requester!!
+        }
+        bRequester.setCallback(callback)
+        bRequester.checkAndRequest(list)
         App.instance?.observable?.registerObserver(this)
     }
 
@@ -104,6 +109,7 @@ class MainActivity : AppCompatActivity(), TestObserver {
     
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        requester?.onActivityResult(requestCode)
         if (requestCode == 1101 && resultCode == Activity.RESULT_OK && data?.data != null) {
             //授予打开的文档树永久性的读写权限
             val takeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
@@ -114,6 +120,15 @@ class MainActivity : AppCompatActivity(), TestObserver {
             val file = DocumentFile.fromTreeUri(this, treeUri)!!
             file.createDirectory("logs")
         }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        requester?.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
     
     @Tag("test")
