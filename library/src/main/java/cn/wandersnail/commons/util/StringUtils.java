@@ -4,6 +4,7 @@ import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 
+import java.math.BigDecimal;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -149,13 +150,11 @@ public class StringUtils {
     }
 
     /**
-     * 使用java正则表达式去掉小数点后多余的0，如最后一位是.则去掉
+     * 去掉小数点后多余的0
      */
     public static String subZeroAndDot(String number) {
-        if (TextUtils.isEmpty(number)) return number;
         if (number.indexOf(".") > 0) {
-            number = number.replace("0+?$", "");//去掉多余的0  
-            number = number.replace("[.]$", "");//如最后一位是.则去掉  
+            return new BigDecimal(number).stripTrailingZeros().toPlainString();
         }
         return number;
     }
