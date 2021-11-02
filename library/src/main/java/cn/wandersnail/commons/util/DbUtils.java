@@ -5,6 +5,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,18 +42,26 @@ public class DbUtils {
         public String name;
         public String dataType;
         public Object defaultValue;
+        public boolean nonNull;
 
         public Column() {
         }
 
-        public Column(String name, String dataType, Object defaultValue) {
+        public Column(@NonNull String name, @NonNull String dataType, @NonNull Object defaultValue) {
             this.name = name;
             this.dataType = dataType;
             this.defaultValue = defaultValue;
         }
+
+        public Column(@NonNull String name, @NonNull String dataType, boolean nonNull, @Nullable Object defaultValue) {
+            this.name = name;
+            this.dataType = dataType;
+            this.nonNull = nonNull;
+            this.defaultValue = defaultValue;
+        }
     }
 
-    private static void execSQL(Object db, String sql) {
+    private static void execSQL(@NonNull Object db, @NonNull String sql) {
         try {
             db.getClass().getMethod("execSQL", String.class).invoke(db, sql);
         } catch (Exception e) {
@@ -58,7 +69,7 @@ public class DbUtils {
         }
     }
 
-    private static void execSQL(Object db, String sql, Object... bindArgs) {
+    private static void execSQL(@NonNull Object db, @NonNull String sql, Object... bindArgs) {
         try {
             db.getClass().getMethod("execSQL", String.class, Object[].class).invoke(db, sql, bindArgs);
         } catch (Exception e) {
@@ -66,7 +77,7 @@ public class DbUtils {
         }
     }
 
-    private static void invokeVoidNoParam(Object db, String methodName) {
+    private static void invokeVoidNoParam(@NonNull Object db, @NonNull String methodName) {
         try {
             db.getClass().getMethod(methodName).invoke(db);
         } catch (Exception e) {
@@ -74,36 +85,36 @@ public class DbUtils {
         }
     }
 
-    private static void beginTransaction(Object db) {
+    private static void beginTransaction(@NonNull Object db) {
         invokeVoidNoParam(db, "beginTransaction");
     }
 
-    private static void endTransaction(Object db) {
+    private static void endTransaction(@NonNull Object db) {
         invokeVoidNoParam(db, "endTransaction");
     }
 
-    private static void setTransactionSuccessful(Object db) {
+    private static void setTransactionSuccessful(@NonNull Object db) {
         invokeVoidNoParam(db, "setTransactionSuccessful");
     }
 
     /**
      * 重命名表
      */
-    public static void renameTable(Object db, String oldName, String newName) {
+    public static void renameTable(@NonNull Object db, @NonNull String oldName, @NonNull String newName) {
         execSQL(db, "ALTER TABLE " + oldName + " RENAME TO " + newName + "");
     }
 
     /**
      * 删除表
      */
-    public static void deleteTable(Object db, String tableName) {
+    public static void deleteTable(@NonNull Object db, @NonNull String tableName) {
         execSQL(db, "DROP TABLE " + tableName + "");
     }
 
     /**
      * 获取数据表的所有字段名
      */
-    public static Column[] getColumns(Object db, String tableName) {
+    public static Column[] getColumns(@NonNull Object db, @NonNull String tableName) {
         Column[] columns = null;
         Cursor cursor = null;
         try {
@@ -154,7 +165,7 @@ public class DbUtils {
      *
      * @param columnNames 要删除的列名
      */
-    public static void deleteColumns(Object db, String tableName, String... columnNames) {
+    public static void deleteColumns(@NonNull Object db, @NonNull String tableName, @NonNull String... columnNames) {
         try {
             beginTransaction(db);
             Column[] columns = getColumns(db, tableName);
@@ -194,7 +205,7 @@ public class DbUtils {
      *
      * @param columns 需要增加的列的信息
      */
-    public static void addColumns(Object db, String tableName, Column... columns) {
+    public static void addColumns(@NonNull Object db, @NonNull String tableName, @NonNull Column... columns) {
         try {
             beginTransaction(db);
             for (Column column : columns) {
@@ -231,7 +242,7 @@ public class DbUtils {
      *
      * @param map key为旧列名，value为新列名
      */
-    public static void renameColumns(Object db, String tableName, Map<String, String> map) {
+    public static void renameColumns(@NonNull Object db, @NonNull String tableName, @NonNull Map<String, String> map) {
         try {
             beginTransaction(db);
             Column[] columns = getColumns(db, tableName);
@@ -276,13 +287,13 @@ public class DbUtils {
         protected String or = "";
         protected List<Object> values = new ArrayList<>();
 
-        public Builder(SQLiteDatabase db, String table) {
+        public Builder(@NonNull SQLiteDatabase db, @NonNull String table) {
             this.db = db;
             this.table = table;
         }
 
         @SuppressWarnings("unchecked")
-        public T where(String column, String op, Object value) {
+        public T where(@NonNull String column, @NonNull String op, @NonNull Object value) {
             where = String.format(" where %s%s", column, op);
             int index = whereStartIndex();
             while (values.size() > index) {
@@ -298,14 +309,14 @@ public class DbUtils {
         }
 
         @SuppressWarnings("unchecked")
-        public T and(String column, String op, Object value) {
+        public T and(@NonNull String column, @NonNull String op, @NonNull Object value) {
             and += String.format(" and %s%s", column, op);
             values.add(value);
             return (T) this;
         }
 
         @SuppressWarnings("unchecked")
-        public T or(String column, String op, Object value) {
+        public T or(@NonNull String column, @NonNull String op, @NonNull Object value) {
             or += String.format(" or %s%s", column, op);
             values.add(value);
             return (T) this;
@@ -313,17 +324,17 @@ public class DbUtils {
     }
 
     public static class QureyBuilder extends Builder<QureyBuilder> {
-        private StringBuilder whats = new StringBuilder();
+        private final StringBuilder whats = new StringBuilder();
         private String orderBy = "";
-        private StringBuilder groupBy = new StringBuilder();
+        private final StringBuilder groupBy = new StringBuilder();
         private String limit = "";
         private String offset = "";
 
-        public QureyBuilder(SQLiteDatabase db, String table) {
+        public QureyBuilder(@NonNull SQLiteDatabase db, @NonNull String table) {
             super(db, table);
         }
 
-        public QureyBuilder select(String what, String... whats) {
+        public QureyBuilder select(@Nullable String what, String... whats) {
             if (what == null) {
                 this.whats.append("*");
             } else {
@@ -335,12 +346,12 @@ public class DbUtils {
             return this;
         }
 
-        public QureyBuilder orderByAsc(String column) {
+        public QureyBuilder orderByAsc(@NonNull String column) {
             orderBy = " order by " + column + " asc";
             return this;
         }
 
-        public QureyBuilder orderByDesc(String column) {
+        public QureyBuilder orderByDesc(@NonNull String column) {
             orderBy = " order by " + column + " desc";
             return this;
         }
@@ -383,11 +394,11 @@ public class DbUtils {
     public static class UpdateBuilder extends Builder<UpdateBuilder> {
         private String sets = "";
 
-        public UpdateBuilder(SQLiteDatabase db, String table) {
+        public UpdateBuilder(@NonNull SQLiteDatabase db, @NonNull String table) {
             super(db, table);
         }
 
-        public UpdateBuilder set(String column, Object value) {
+        public UpdateBuilder set(@NonNull String column, @NonNull Object value) {
             if (TextUtils.isEmpty(sets)) {
                 sets = " set " + column + "=?";
             } else {
@@ -410,7 +421,7 @@ public class DbUtils {
 
     public static class DeleteBuilder extends Builder<DeleteBuilder> {
 
-        public DeleteBuilder(SQLiteDatabase db, String table) {
+        public DeleteBuilder(@NonNull SQLiteDatabase db, @NonNull String table) {
             super(db, table);
         }
 
@@ -426,7 +437,7 @@ public class DbUtils {
      * @param cursor 数据库游标
      * @return 当前行对应的所有(列名, 列值)
      */
-    public static ContentValues getRowValues(Cursor cursor) {
+    public static ContentValues getRowValues(@NonNull Cursor cursor) {
         ContentValues values = new ContentValues();
         for (int i = 0; i < cursor.getColumnCount(); i++) {
             switch (cursor.getType(i)) {
@@ -450,7 +461,7 @@ public class DbUtils {
     /**
      * 将查询结果装载成ContentValues集合
      */
-    public static List<ContentValues> getValuesList(Cursor cursor) {
+    public static List<ContentValues> getValuesList(@NonNull Cursor cursor) {
         List<ContentValues> valuesList = new ArrayList<>();
         while (cursor.moveToNext()) {
             valuesList.add(getRowValues(cursor));
@@ -465,7 +476,7 @@ public class DbUtils {
      * @param table  表名
      * @param values 行对应的所有(列名,列值)
      */
-    public static void insertRecord(SQLiteDatabase db, String table, ContentValues values) {
+    public static void insertRecord(@NonNull SQLiteDatabase db, @NonNull String table, @NonNull ContentValues values) {
         Set<String> keys = values.keySet();
         if (keys.size() > 0) {
             Iterator<String> i = keys.iterator();
@@ -498,7 +509,7 @@ public class DbUtils {
      * @param table  表名
      * @param values 行对应的所有(列名,列值)
      */
-    public static void deleteRecord(SQLiteDatabase db, String table, ContentValues values) {
+    public static void deleteRecord(@NonNull SQLiteDatabase db, @NonNull String table, @NonNull ContentValues values) {
         Set<String> keys = values.keySet();
         if (keys.size() > 0) {
             Iterator<String> i = keys.iterator();
@@ -527,7 +538,7 @@ public class DbUtils {
      * @param columnIndex 列索引
      */
     @SuppressWarnings("unchecked")
-    public static <T> T getColumnValue(Class<T> clazz, Cursor cursor, int columnIndex) {
+    public static <T> T getColumnValue(@NonNull Class<T> clazz, @NonNull Cursor cursor, int columnIndex) {
         Object o;
         if (clazz == int.class || clazz == Integer.class) {
             o = cursor.getInt(columnIndex);
@@ -553,7 +564,7 @@ public class DbUtils {
      * @param cursor     数据库游标
      * @param columnName 列名
      */
-    public static <T> T getColumnValue(Class<T> clazz, Cursor cursor, String columnName) {
+    public static <T> T getColumnValue(@NonNull Class<T> clazz, @NonNull Cursor cursor, @NonNull String columnName) {
         return getColumnValue(clazz, cursor, cursor.getColumnIndex(columnName));
     }
 
@@ -564,7 +575,8 @@ public class DbUtils {
      * @param columnName   列名
      * @param defaultValue 默认值
      */
-    public static <T> T getColumnValue(Class<T> clazz, Cursor cursor, String columnName, T defaultValue) {
+    @Nullable
+    public static <T> T getColumnValue(@NonNull Class<T> clazz, @NonNull Cursor cursor, @NonNull String columnName, @Nullable T defaultValue) {
         try {
             T value = getColumnValue(clazz, cursor, columnName);
             return value == null ? defaultValue : value;
@@ -581,7 +593,8 @@ public class DbUtils {
      * @param columnIndex  列索引
      * @param defaultValue 默认值
      */
-    public static <T> T getColumnValue(Class<T> clazz, Cursor cursor, int columnIndex, T defaultValue) {
+    @Nullable
+    public static <T> T getColumnValue(@NonNull Class<T> clazz, @NonNull Cursor cursor, int columnIndex, @Nullable T defaultValue) {
         try {
             T value = getColumnValue(clazz, cursor, columnIndex);
             return value == null ? defaultValue : value;
@@ -599,7 +612,7 @@ public class DbUtils {
      * @param sql           统计类Sql
      * @param selectionArgs 点位符对应的值
      */
-    public static <T> T execScale(Class<T> clazz, SQLiteDatabase db, String sql, String[] selectionArgs) {
+    public static <T> T execScale(@NonNull Class<T> clazz, @NonNull SQLiteDatabase db, @NonNull String sql, String[] selectionArgs) {
         return execScale(clazz, db.rawQuery(sql, selectionArgs));
     }
 
@@ -609,7 +622,7 @@ public class DbUtils {
      * @param clazz  要获取的数据字节码
      * @param cursor 数据库游标
      */
-    public static <T> T execScale(Class<T> clazz, Cursor cursor) {
+    public static <T> T execScale(@NonNull Class<T> clazz, @NonNull Cursor cursor) {
         if (cursor.moveToNext()) {
             return getColumnValue(clazz, cursor, 0);
         }
@@ -624,7 +637,7 @@ public class DbUtils {
      * @param srcTable    源表
      * @param targetTable 目标表
      */
-    public static void copyData(SQLiteDatabase db, String srcTable, String targetTable, String column, String... columns) {
+    public static void copyData(@NonNull SQLiteDatabase db, @NonNull String srcTable, @NonNull String targetTable, String column, String... columns) {
         StringBuilder select;
         if (column == null) {
             select = new StringBuilder("*");
