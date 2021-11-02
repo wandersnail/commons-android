@@ -210,6 +210,9 @@ public class DbUtils {
             beginTransaction(db);
             for (Column column : columns) {
                 String sql = "ALTER TABLE " + tableName + " ADD " + column.name + " " + column.dataType;
+                if (column.nonNull) {
+                    sql += " NOT NULL";
+                }
                 Object[] bindArgs = null;
                 if (column.defaultValue != null) {
                     if (column.defaultValue instanceof String) {
