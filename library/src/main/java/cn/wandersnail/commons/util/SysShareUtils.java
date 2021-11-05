@@ -50,6 +50,7 @@ public class SysShareUtils {
      * @param title   系统分享对话框的标题
      * @param file    文件
      */
+    @Deprecated
     public static void shareImage(@NonNull Context context, @NonNull String title, @NonNull File file) {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("image/*");
@@ -65,6 +66,13 @@ public class SysShareUtils {
         }
     }
 
+    public static void shareImage(@NonNull Context context, @NonNull String title, @NonNull Uri uri) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("image/*");
+        intent.putExtra(Intent.EXTRA_STREAM, uri);
+        startShare(context, intent, title, true);
+    }
+
     /**
      * 分享多张图片
      *
@@ -72,6 +80,7 @@ public class SysShareUtils {
      * @param title   系统分享对话框的标题
      * @param files   文件
      */
+    @Deprecated
     public static void shareImages(@NonNull Context context, @NonNull String title, @NonNull List<File> files) {
         Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
         intent.setType("image/*");
@@ -94,12 +103,29 @@ public class SysShareUtils {
     }
 
     /**
+     * 分享多张图片
+     *
+     * @param context   上下文
+     * @param title     系统分享对话框的标题
+     * @param imageUris 文件
+     */
+    public static void shareImagesByUri(@NonNull Context context, @NonNull String title, @NonNull ArrayList<Uri> imageUris) {
+        Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
+        intent.setType("image/*");
+        if (imageUris.size() > 0) {
+            intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, imageUris);
+            startShare(context, intent, title, true);
+        }
+    }
+
+    /**
      * 分享视频
      *
      * @param context 上下文
      * @param title   系统分享对话框的标题
      * @param file    文件
      */
+    @Deprecated
     public static void shareVideo(@NonNull Context context, @NonNull String title, @NonNull File file) {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("video/*");
@@ -113,6 +139,20 @@ public class SysShareUtils {
             intent.putExtra(Intent.EXTRA_STREAM, uri);
             startShare(context, intent, title, true);
         }
+    }
+
+    /**
+     * 分享视频
+     *
+     * @param context 上下文
+     * @param title   系统分享对话框的标题
+     * @param uri     文件
+     */
+    public static void shareVideo(@NonNull Context context, @NonNull String title, @NonNull Uri uri) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("video/*");
+        intent.putExtra(Intent.EXTRA_STREAM, uri);
+        startShare(context, intent, title, true);
     }
 
     /**
