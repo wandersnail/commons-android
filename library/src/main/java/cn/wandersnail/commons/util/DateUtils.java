@@ -8,6 +8,44 @@ import java.util.Locale;
 
 public class DateUtils {
     /**
+     * 是否是今天
+     *
+     * @param time 时间戳
+     */
+    public static boolean isToday(long time) {
+        return isSame(Calendar.DATE, System.currentTimeMillis(), time);
+    }
+
+    /**
+     * 是否是今天
+     *
+     * @param date 日期
+     */
+    public static boolean isToday(Date date) {
+        return isSame(Calendar.DATE, new Date(), date);
+    }
+
+    /**
+     * 是否是昨天
+     *
+     * @param time 时间戳
+     */
+    public static boolean isYesterday(long time) {
+        long day = getDay(System.currentTimeMillis(), -1);
+        return isSame(Calendar.DATE, day, time);
+    }
+
+    /**
+     * 是否是昨天
+     *
+     * @param date 日期
+     */
+    public static boolean isYesterday(Date date) {
+        Date day = getDay(new Date(), -1);
+        return isSame(Calendar.DATE, day, date);
+    }
+
+    /**
      * 判断两个日期是否在同一类型的范围内
      *
      * @param field 给定的日历字段。Calendar.DATE, Calendar.MONTH, Calendar.YEAR

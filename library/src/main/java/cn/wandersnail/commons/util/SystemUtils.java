@@ -11,6 +11,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ServiceInfo;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.os.PowerManager;
@@ -461,5 +462,14 @@ public class SystemUtils {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    /**
+     * 跳转系统应用详情页
+     */
+    public static void jumpToSysAppDetail(@NonNull Context context) {
+        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        intent.setData(Uri.fromParts("package", context.getPackageName(), null));
+        context.startActivity(intent);
     }
 }

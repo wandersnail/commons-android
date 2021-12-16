@@ -5,9 +5,15 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.Build;
+import android.util.DisplayMetrics;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
+import java.io.File;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.List;
 
 /**
@@ -19,10 +25,12 @@ public class SignUtils {
         public int hashCode;
         public String md5;
         public String sha1;
+        public Signature origin;
     }
 
     private static SignInfo getSignature(Signature signature) {
         SignInfo info = new SignInfo();
+        info.origin = signature;
         info.hashCode = signature.hashCode();
         info.md5 = EncryptUtils.encryptByMessageDigest(signature.toByteArray(), EncryptUtils.MD5);
         if (info.md5 == null) {
@@ -60,11 +68,72 @@ public class SignUtils {
                 return getSignature(packageSign);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Signature signature = getUninstallAPKSignature(apkPath);
+            if (signature != null) {
+                return getSignature(signature);
+            }
         }
         return null;
     }
 
+    @SuppressWarnings("all")
+    @Nullable
+    public static Signature getUninstallAPKSignature(@NonNull String apkPath) {
+        String PATH_PackageParser = "android.content.pm.PackageParser";
+        try {
+            // apk包的文件路径
+            // 这是一个Package 解释器, 是隐藏的
+            // 构造函数的参数只有一个, apk文件的路径
+            Class pkgParserCls = Class.forName(PATH_PackageParser);
+            Class[] typeArgs = new Class[1];
+            typeArgs[0] = String.class;
+            // 这个是与显示有关的, 里面涉及到一些像素显示等等, 我们使用默认的情况
+            DisplayMetrics metrics = new DisplayMetrics();
+            metrics.setToDefaults();
+            Constructor pkgParserCt = null;
+            Object pkgParser = null;
+            if (Build.VERSION.SDK_INT > 20) {
+                pkgParserCt = pkgParserCls.getConstructor();
+                pkgParser = pkgParserCt.newInstance();
+                Method pkgParser_parsePackageMtd = pkgParserCls.getDeclaredMethod("parsePackage", File.class, int.class);
+                Object pkgParserPkg = pkgParser_parsePackageMtd.invoke(pkgParser, new File(apkPath), PackageManager.GET_SIGNATURES);
+
+                if (Build.VERSION.SDK_INT >= 28) {
+                    Method collectCertificatesMtd = pkgParserCls.getDeclaredMethod("collectCertificates", pkgParserPkg.getClass(), Boolean.TYPE);
+                    collectCertificatesMtd.invoke(pkgParser, pkgParserPkg, true);
+                    Field mSigningDetailsField = pkgParserPkg.getClass().getDeclaredField("mSigningDetails"); // SigningDetails
+                    mSigningDetailsField.setAccessible(true);
+                    Object mSigningDetails = mSigningDetailsField.get(pkgParserPkg);
+                    Field infoField = mSigningDetails.getClass().getDeclaredField("signatures");
+                    infoField.setAccessible(true);
+                    Signature[] info = (Signature[]) infoField.get(mSigningDetails);
+                    return info[0];
+
+                } else {
+                    Method pkgParser_collectCertificatesMtd = pkgParserCls.getDeclaredMethod("collectCertificates", pkgParserPkg.getClass(), Integer.TYPE);
+                    pkgParser_collectCertificatesMtd.invoke(pkgParser, pkgParserPkg, PackageManager.GET_SIGNATURES);
+                    Field packageInfoFld = pkgParserPkg.getClass().getDeclaredField("mSignatures");
+                    Signature[] info = (Signature[]) packageInfoFld.get(pkgParserPkg);
+                    return info[0];
+                }
+            } else {
+                pkgParserCt = pkgParserCls.getConstructor(typeArgs);
+                pkgParser = pkgParserCt.newInstance(apkPath);
+                Method pkgParser_parsePackageMtd = pkgParserCls.getDeclaredMethod("parsePackage", File.class, String.class, DisplayMetrics.class, Integer.TYPE);
+                Object pkgParserPkg = pkgParser_parsePackageMtd.invoke(pkgParser, new File(apkPath), apkPath, metrics, PackageManager.GET_SIGNATURES);
+                Method pkgParser_collectCertificatesMtd = pkgParserCls.getDeclaredMethod("collectCertificates", pkgParserPkg.getClass(), Integer.TYPE);
+                pkgParser_collectCertificatesMtd.invoke(pkgParser, pkgParserPkg, PackageManager.GET_SIGNATURES);
+                // 应用程序信息包, 这个公开的, 不过有些函数, 变量没公开
+                Field packageInfoFld = pkgParserPkg.getClass().getDeclaredField("mSignatures");
+                Signature[] info = (Signature[]) packageInfoFld.get(pkgParserPkg);
+                return info[0];
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
     /**
      * 从已安装的应用读取签名
      */
