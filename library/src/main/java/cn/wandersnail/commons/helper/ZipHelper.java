@@ -33,11 +33,11 @@ public class ZipHelper {
         private String comment;
         private int method = -1;
         private int level = -1;
-        private List<File> files = new ArrayList<>();
+        private final List<File> files = new ArrayList<>();
         private String targetDir;
         private String targetName;
         private boolean replace;
-        private Handler handler;
+        private final Handler handler;
 
         ZipExecutor() {
             handler = new Handler(Looper.getMainLooper());
@@ -230,9 +230,9 @@ public class ZipHelper {
     }
 
     public static class UnzipExecutor {
-        private List<File> zipFiles = new ArrayList<>();
+        private final List<File> zipFiles = new ArrayList<>();
         private String targetDir;
-        private Handler handler;
+        private final Handler handler;
 
         UnzipExecutor() {
             handler = new Handler(Looper.getMainLooper());
@@ -274,12 +274,16 @@ public class ZipHelper {
                     try {
                         zis = new ZipInputStream(new FileInputStream(source));
                         ZipEntry entry = zis.getNextEntry();
-                        while (entry != null) {
+                        while (entry != null) {                            
                             File target;
                             if (targetDir == null) {
                                 target = new File(source.getParent(), entry.getName());
                             } else {
                                 target = new File(targetDir, entry.getName());
+                            }
+                            //解决路径遍历漏洞
+                            if (!target.getCanonicalPath().startsWith(target.getParent())) {
+                                return false;
                             }
                             if (!target.getParentFile().exists()) {
                                 // 创建文件父目录
