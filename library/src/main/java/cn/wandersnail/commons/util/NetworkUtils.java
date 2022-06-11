@@ -52,7 +52,9 @@ public class NetworkUtils {
             WifiManager wifiManager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
             while (en.hasMoreElements()) {
                 NetworkInterface intf = en.nextElement();
-                if ("eth0".equals(intf.getName().toLowerCase(Locale.ENGLISH)) || "wlan0".equals(intf.getName().toLowerCase(Locale.ENGLISH))) {
+                if ("eth0".equals(intf.getName().toLowerCase(Locale.ENGLISH)) || 
+                        "wlan1".equals(intf.getName().toLowerCase(Locale.ENGLISH)) ||
+                        "wlan0".equals(intf.getName().toLowerCase(Locale.ENGLISH))) {
                     Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses();
                     while (enumIpAddr.hasMoreElements()) {
                         InetAddress inetAddress = enumIpAddr.nextElement();
@@ -63,7 +65,7 @@ public class NetworkUtils {
                                 info.ip = ipaddress;
                                 info.type = intf.getName().toLowerCase(Locale.ENGLISH);
                                 info.mac = StringUtils.toHex(intf.getHardwareAddress(), ":");
-                                if ("wlan0".equals(info.type)) {
+                                if ("wlan0".equals(info.type) || "wlan1".equals(info.type)) {
                                     if (isCurrentNetworkWifi(context)) {
                                         int ipAddress = Objects.requireNonNull(wifiManager).getDhcpInfo().ipAddress;
                                         info.isWifi = info.ip.equals(toAddressString(ipAddress));
