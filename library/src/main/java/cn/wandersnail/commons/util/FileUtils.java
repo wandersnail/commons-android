@@ -581,7 +581,7 @@ public class FileUtils {
                     }
                 } else if (isDownloadsDocument(uri)) {// DownloadsProvider
                     String id = DocumentsContract.getDocumentId(uri);
-                    if (id.startsWith("raw:")) {
+                    if (id.startsWith("raw:") || id.startsWith("msf:")) {
                         return id.substring(4);
                     }
                     Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
