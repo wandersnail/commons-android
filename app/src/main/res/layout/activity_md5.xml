@@ -91,10 +91,21 @@
             android:text="查看当前app"
             android:layout_width="wrap_content"
             android:layout_height="40dp"/>
+        <Button
+            android:id="@+id/btnAll"
+            android:text="查看当前已安装"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"/>
     </LinearLayout>
     
     <TextView
         android:id="@+id/tvSignInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
+
+    <ListView
+        android:id="@+id/lv"
+        android:overScrollMode="never"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 </LinearLayout>

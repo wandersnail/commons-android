@@ -3,10 +3,15 @@ package cn.wandersnail.commonsdemo
 import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
+import android.view.View
+import android.widget.TextView
 import cn.wandersnail.commons.base.AppHolder
 import cn.wandersnail.commons.util.EncryptUtils
 import cn.wandersnail.commons.util.SignUtils
+import cn.wandersnail.commons.util.SignUtils.SignInfo
 import cn.wandersnail.fileselector.FileSelector
+import cn.wandersnail.widget.listview.BaseListAdapter
+import cn.wandersnail.widget.listview.BaseViewHolder
 import kotlinx.android.synthetic.main.activity_md5.*
 
 /**
@@ -49,13 +54,42 @@ class MD5Activity : BaseActivity() {
                 tvSha1.text = if (separator.isEmpty()) sha1 else EncryptUtils.addSeparator(sha1 ?: "", separator)
             }
         }
-        btnApk.setOnClickListener { 
+        val adapter: BaseListAdapter<SignInfo> = object : BaseListAdapter<SignInfo>(this) {
+            override fun createViewHolder(position: Int): BaseViewHolder<SignInfo> {
+                return object : BaseViewHolder<SignInfo> {
+                    private var tvPkgName: TextView? = null
+                    private var tvSign: TextView? = null
+
+                    override fun onBind(item: SignInfo, position: Int) {
+                        tvPkgName?.text = item.pkgName
+                        tvSign?.text = item.md5
+                    }
+
+                    override fun createView(): View {
+                        val view = View.inflate(this@MD5Activity, R.layout.apk_sign_item, null)
+                        tvPkgName = view.findViewById(R.id.tvPkgName)
+                        tvSign = view.findViewById(R.id.tvSign)
+                        return view
+                    }
+                }
+            }
+        }
+        btnApk.setOnClickListener {
+            adapter.refresh(emptyList())
             selectType = 1
             fileSelector.select(this, 2)
         }
         btnApp.setOnClickListener {
+            adapter.refresh(emptyList())
             val signInfo = SignUtils.getSignatureInstalled(this)
             tvSignInfo.text = "hashCode: ${signInfo?.hashCode}\nmd5: ${signInfo?.md5}\nsha1: ${EncryptUtils.addSeparator(signInfo!!.sha1 ?: "", ":")}"
+        }
+        lv.adapter = adapter
+        btnAll.setOnClickListener {
+            tvSignInfo.text = ""
+            adapter.refresh(emptyList())
+            val list = SignUtils.getInstalledApkSignature(this)
+            adapter.refresh(list)
         }
     }
 

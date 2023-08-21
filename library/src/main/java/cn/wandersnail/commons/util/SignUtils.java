@@ -14,6 +14,7 @@ import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,9 +27,10 @@ public class SignUtils {
         public String md5;
         public String sha1;
         public Signature origin;
+        public String pkgName;
     }
 
-    private static SignInfo getSignature(Signature signature) {
+    private static SignInfo getSignature(Signature signature, String pkgName) {
         SignInfo info = new SignInfo();
         info.origin = signature;
         info.hashCode = signature.hashCode();
@@ -37,6 +39,7 @@ public class SignUtils {
             return null;
         }
         info.sha1 = EncryptUtils.encryptByMessageDigest(signature.toByteArray(), EncryptUtils.SHA1);
+        info.pkgName = pkgName;
         return info.sha1 == null ? null : info;
     }
 
@@ -51,26 +54,29 @@ public class SignUtils {
         } else {
             signature = info.signatures[0];
         }
-        return getSignature(signature);
+        return getSignature(signature, info.packageName);
     }
 
     /**
      * 从APK中读取签名
      */
     public static SignInfo getSignatureFromApk(@NonNull Context context, String apkPath) {
+        String pkgName = null;
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 PackageInfo info = context.getPackageManager().getPackageArchiveInfo(apkPath, PackageManager.GET_SIGNING_CERTIFICATES);
+                pkgName = info.packageName;
                 PackageInfo packageSign = context.getPackageManager().getPackageInfo(info.packageName, PackageManager.GET_SIGNING_CERTIFICATES);
                 return getSignature(packageSign);
             } else {
                 PackageInfo packageSign = context.getPackageManager().getPackageArchiveInfo(apkPath, PackageManager.GET_SIGNATURES);
+                pkgName = packageSign.packageName;
                 return getSignature(packageSign);
             }
         } catch (Exception e) {
             Signature signature = getUninstallAPKSignature(apkPath);
             if (signature != null) {
-                return getSignature(signature);
+                return getSignature(signature, pkgName);
             }
         }
         return null;
@@ -150,6 +156,25 @@ public class SignUtils {
                     return getSignature(info);
                 }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static List<SignInfo> getInstalledApkSignature(@NonNull Context context) {
+        try {
+            List<PackageInfo> infos;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                infos = context.getPackageManager().getInstalledPackages(PackageManager.GET_SIGNING_CERTIFICATES);
+            } else {
+                infos = context.getPackageManager().getInstalledPackages(PackageManager.GET_SIGNATURES);
+            }
+            List<SignInfo> list = new ArrayList<>();
+            for (PackageInfo info : infos) {
+                list.add(getSignature(info));
+            }
+            return list;
         } catch (Exception e) {
             e.printStackTrace();
         }
