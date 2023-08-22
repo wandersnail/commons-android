@@ -5,6 +5,8 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.Build;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.DisplayMetrics;
 
 import androidx.annotation.NonNull;
@@ -22,15 +24,52 @@ import java.util.List;
  * author: zengfansheng
  */
 public class SignUtils {
-    public static class SignInfo {
+    public static class SignInfo implements Parcelable {
         public int hashCode;
         public String md5;
         public String sha1;
         public Signature origin;
         public String pkgName;
+
+        public SignInfo() {
+        }
+
+        protected SignInfo(Parcel in) {
+            hashCode = in.readInt();
+            md5 = in.readString();
+            sha1 = in.readString();
+            origin = in.readParcelable(Signature.class.getClassLoader());
+            pkgName = in.readString();
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeInt(hashCode);
+            dest.writeString(md5);
+            dest.writeString(sha1);
+            dest.writeParcelable(origin, flags);
+            dest.writeString(pkgName);
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        public static final Creator<SignInfo> CREATOR = new Creator<SignInfo>() {
+            @Override
+            public SignInfo createFromParcel(Parcel in) {
+                return new SignInfo(in);
+            }
+
+            @Override
+            public SignInfo[] newArray(int size) {
+                return new SignInfo[size];
+            }
+        };
     }
 
-    private static SignInfo getSignature(Signature signature, String pkgName) {
+    public static SignInfo getSignature(Signature signature, String pkgName) {
         SignInfo info = new SignInfo();
         info.origin = signature;
         info.hashCode = signature.hashCode();
@@ -43,7 +82,7 @@ public class SignUtils {
         return info.sha1 == null ? null : info;
     }
 
-    private static SignInfo getSignature(PackageInfo info) {
+    public static SignInfo getSignature(PackageInfo info) {
         Signature signature;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             if (info.signingInfo.hasMultipleSigners()) {
