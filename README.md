@@ -1,10 +1,10 @@
 ## 推荐一款工具箱【蜗牛工具箱】APP，涵盖广，功能丰富。生活实用、效率办公、图片处理等等，还有隐藏的VIP功能，总之很多惊喜的功能。
 
 <div align="center">
-    <img src="https://appimg.dbankcdn.com/application/screenshut1/b894e330ffe84787ad617071e2739cc7.jpg" width=150>
-    <img src="https://appimg.dbankcdn.com/application/screenshut2/b894e330ffe84787ad617071e2739cc7.jpg" width=150>
-    <img src="https://appimg.dbankcdn.com/application/screenshut3/b894e330ffe84787ad617071e2739cc7.jpg" width=150>
-    <img src="https://appimg.dbankcdn.com/application/screenshut4/b894e330ffe84787ad617071e2739cc7.jpg" width=150>
+    <img src="https://appimg.dbankcdn.com/application/screenshut1/b894e330ffe84787ad617071e2739cc7.jpg" width=180>
+    <img src="https://appimg.dbankcdn.com/application/screenshut2/b894e330ffe84787ad617071e2739cc7.jpg" width=180>
+    <img src="https://appimg.dbankcdn.com/application/screenshut3/b894e330ffe84787ad617071e2739cc7.jpg" width=180>
+    <img src="https://appimg.dbankcdn.com/application/screenshut4/b894e330ffe84787ad617071e2739cc7.jpg" width=180>
 </div>
 
 点击下方按钮或扫码下载【蜗牛工具箱】
