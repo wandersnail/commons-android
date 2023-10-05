@@ -6,11 +6,14 @@ import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import android.view.WindowMetrics;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
@@ -92,9 +95,15 @@ public class UiUtils {
      * @return int[0]:宽度，int[1]:高度。
      */
     public static int[] getRealScreenResolution(@NonNull Activity activity) {
-        DisplayMetrics metrics = new DisplayMetrics();
-        activity.getWindowManager().getDefaultDisplay().getRealMetrics(metrics);
-        return new int[]{metrics.widthPixels, metrics.heightPixels};
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            WindowMetrics metrics = activity.getWindowManager().getCurrentWindowMetrics();
+            Rect bounds = metrics.getBounds();
+            return new int[]{bounds.width(), bounds.height()};
+        } else {
+            DisplayMetrics metrics = new DisplayMetrics();
+            activity.getWindowManager().getDefaultDisplay().getRealMetrics(metrics);
+            return new int[]{metrics.widthPixels, metrics.heightPixels};
+        }
     }
 
     /**

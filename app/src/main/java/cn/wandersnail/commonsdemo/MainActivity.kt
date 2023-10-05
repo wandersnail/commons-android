@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -14,6 +15,7 @@ import cn.wandersnail.commons.helper.PermissionsRequester2
 import cn.wandersnail.commons.poster.Tag
 import cn.wandersnail.commons.util.Logger
 import cn.wandersnail.commons.util.ToastUtils
+import cn.wandersnail.commons.util.UiUtils
 import cn.wandersnail.widget.listview.BaseListAdapter
 import cn.wandersnail.widget.listview.BaseViewHolder
 import com.tencent.mmkv.MMKV
@@ -100,6 +102,13 @@ class MainActivity : AppCompatActivity(), TestObserver {
         bRequester.setCallback(callback)
         bRequester.checkAndRequest(list)
         App.instance?.observable?.registerObserver(this)
+        val r = UiUtils.getRealScreenResolution(this)
+        Logger.d("MainActivity", "分辨率：${r[0]}x${r[1]}")
+        val metrics = DisplayMetrics()
+        windowManager.defaultDisplay.getRealMetrics(metrics)
+        Logger.d("MainActivity", "密度：${metrics.density}")
+        Logger.d("MainActivity", "dp：${UiUtils.px2dpF(r[1].toFloat())}")
+        Logger.d("MainActivity", "dp：${UiUtils.px2dpF(UiUtils.getDisplayScreenHeight().toFloat())}")
     }
 
     override fun onDestroy() {
