@@ -44,7 +44,9 @@ public class ApkInstallHelper {
      */
     public void install() {
         Objects.requireNonNull(apkFile, "apkFile is null");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !activity.getPackageManager().canRequestPackageInstalls()) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O &&
+                Build.VERSION.SDK_INT < Build.VERSION_CODES.R &&
+                !activity.getPackageManager().canRequestPackageInstalls()) {
             Uri uri = Uri.parse("package:" + activity.getPackageName());
             Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, uri);
             activity.startActivityForResult(intent, REQUEST_CODE);
