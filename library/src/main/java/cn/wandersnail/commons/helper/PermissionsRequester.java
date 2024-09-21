@@ -73,6 +73,11 @@ public class PermissionsRequester extends BasePermissionsRequester {
     }
 
     @Override
+    protected void requestManageExternalStoragePermission() {
+        throw new UnsupportedOperationException("请使用PermissionsRequester2.requestManageExternalStoragePermission()");
+    }
+
+    @Override
     protected void requestOtherPermissions(@NonNull List<String> permissions) {
         if (activity != null) {
             ActivityCompat.requestPermissions(activity, permissions.toArray(new String[0]), PERMISSION_REQUEST_CODE);

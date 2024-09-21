@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.Environment;
 import android.provider.Settings;
 
 import androidx.annotation.NonNull;
@@ -34,6 +35,8 @@ public abstract class BasePermissionsRequester {
     protected abstract void requestWriteSettingsPermission();
 
     protected abstract void requestInstallPackagesPermission();
+
+    protected abstract void requestManageExternalStoragePermission();
     
     protected abstract void requestOtherPermissions(@NonNull List<String> permissions);
     
@@ -68,7 +71,7 @@ public abstract class BasePermissionsRequester {
 
     private void checkPermissionsRegisterInManifest(List<String> requestPermissions) {
         List<String> manifest = getManifestPermissions(getActivity());
-        if (manifest != null && manifest.size() != 0) {
+        if (manifest != null && !manifest.isEmpty()) {
             for (String permission : requestPermissions) {
                 if (!manifest.contains(permission)) {
                     throw new RuntimeException(permission + " 权限未在AndroidManifest中注册");
@@ -83,18 +86,29 @@ public abstract class BasePermissionsRequester {
 
     @SuppressWarnings("all")
     protected boolean checkPermissions(List<String> permissions, boolean onlyCheck) {
-        if (permissions.remove(Manifest.permission.WRITE_SETTINGS) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && permissions.remove(Manifest.permission.WRITE_SETTINGS)) {
             if (!Settings.System.canWrite(getActivity())) {
                 if (!onlyCheck) {
                     requestWriteSettingsPermission();
+                    checking = true;
                 }
                 return false;
             }
         }
-        if (permissions.remove(Manifest.permission.REQUEST_INSTALL_PACKAGES) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && permissions.remove(Manifest.permission.REQUEST_INSTALL_PACKAGES)) {
             if (!getActivity().getPackageManager().canRequestPackageInstalls()) {
                 if (!onlyCheck) {
                     requestInstallPackagesPermission();
+                    checking = true;
+                }
+                return false;
+            }
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && permissions.remove(Manifest.permission.MANAGE_EXTERNAL_STORAGE)) {
+            if (!Environment.isExternalStorageManager()) {
+                if (!onlyCheck) {
+                    requestManageExternalStoragePermission();
+                    checking = true;
                 }
                 return false;
             }

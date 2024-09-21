@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
 import android.provider.Settings;
 
 import androidx.activity.ComponentActivity;
@@ -26,6 +27,7 @@ public class PermissionsRequester2 extends BasePermissionsRequester {
     private final ActivityResultLauncher<Intent> writeSettingsLauncher;
     private final ActivityResultLauncher<Intent> installPackagesLauncher;
     private final ActivityResultLauncher<String[]> permissionsLauncher;
+    private final ActivityResultLauncher<Intent> manageExternalStorageLauncher;
 
     /**
      * 实例化必须在activity的onCreate()方法里进行
@@ -35,6 +37,7 @@ public class PermissionsRequester2 extends BasePermissionsRequester {
         writeSettingsLauncher = registerWriteSettingsLauncher();
         installPackagesLauncher = registerInstallPackagesLauncher();
         permissionsLauncher = registerPermissionsLauncher();
+        manageExternalStorageLauncher = registerManagerExternalStorageLauncher();
     }
 
     private ActivityResultLauncher<Intent> registerWriteSettingsLauncher() {
@@ -75,6 +78,17 @@ public class PermissionsRequester2 extends BasePermissionsRequester {
                 });
     }
 
+    private ActivityResultLauncher<Intent> registerManagerExternalStorageLauncher() {
+        return activity.registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                if (!Environment.isExternalStorageManager()) {
+                    refusedPermissions.add(Manifest.permission.MANAGE_EXTERNAL_STORAGE);
+                }
+            }
+            checkPermissions(allPermissions, false);
+        });
+    }
+
     @NonNull
     @Override
     protected Activity getActivity() {
@@ -100,5 +114,13 @@ public class PermissionsRequester2 extends BasePermissionsRequester {
     @Override
     protected void requestOtherPermissions(@NonNull List<String> permissions) {
         permissionsLauncher.launch(permissions.toArray(new String[0]));
+    }
+
+    @Override
+    protected void requestManageExternalStoragePermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, Uri.parse("package:" + activity.getPackageName()));
+            manageExternalStorageLauncher.launch(intent);
+        }
     }
 }

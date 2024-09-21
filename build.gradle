@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
@@ -39,10 +41,10 @@ allprojects {
         mavenCentral()
     }
     // 指定编码
-    tasks.withType(JavaCompile) {
+    tasks.withType(JavaCompile).configureEach {
         options.encoding = "UTF-8"
     }
-    tasks.withType(Javadoc).all {
+    tasks.withType(Javadoc).configureEach {
         enabled = false
         options {
             encoding "UTF-8"
@@ -50,7 +52,7 @@ allprojects {
         }
         options.addStringOption('Xdoclint:none', '-quiet')
     }
-    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+    tasks.withType(KotlinCompile).configureEach {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
 
@@ -60,6 +62,6 @@ allprojects {
     }
 }
 
-task clean(type: Delete) {
+tasks.register('clean', Delete) {
     delete rootProject.buildDir
 }
