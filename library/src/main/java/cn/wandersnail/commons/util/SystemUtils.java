@@ -374,6 +374,22 @@ public class SystemUtils {
     }
 
     /**
+     * 获取Service的Meta资源ID
+     *
+     * @param cls  Service的class
+     * @param name meta名
+     * @return 没有返回null
+     */
+    public static int getServiceMetaResourceId(@NonNull Context context, @NonNull Class<?> cls, @NonNull String name) {
+        try {
+            ServiceInfo info = context.getPackageManager().getServiceInfo(new ComponentName(context, cls.getName()), PackageManager.GET_META_DATA);
+            return info.metaData.getInt(name);
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+
+    /**
      * 获取Receiver的Meta值
      *
      * @param cls  Receiver的class
@@ -388,6 +404,22 @@ public class SystemUtils {
             return value == null ? null : value.toString();
         } catch (Exception e) {
             return null;
+        }
+    }
+
+    /**
+     * 获取Receiver的Meta资源ID
+     *
+     * @param cls  Receiver的class
+     * @param name meta名
+     * @return 没有返回null
+     */
+    public static int getReceiverMetaResourceId(@NonNull Context context, @NonNull Class<?> cls, @NonNull String name) {
+        try {
+            ActivityInfo info = context.getPackageManager().getReceiverInfo(new ComponentName(context, cls.getName()), PackageManager.GET_META_DATA);
+            return info.metaData.getInt(name);
+        } catch (Exception e) {
+            return 0;
         }
     }
 
@@ -410,6 +442,22 @@ public class SystemUtils {
     }
 
     /**
+     * 获取Activity的Meta资源ID
+     *
+     * @param cls  Activity的class
+     * @param name meta名
+     * @return 没有返回null
+     */
+    public static int getActivityMetaResourceId(@NonNull Context context, @NonNull Class<?> cls, @NonNull String name) {
+        try {
+            ActivityInfo info = context.getPackageManager().getActivityInfo(new ComponentName(context, cls.getName()), PackageManager.GET_META_DATA);
+            return info.metaData.getInt(name);
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+
+    /**
      * 获取Application的Meta值
      *
      * @param name meta名
@@ -423,6 +471,21 @@ public class SystemUtils {
             return value == null ? null : value.toString();
         } catch (Exception e) {
             return null;
+        }
+    }
+
+    /**
+     * 获取Application的Meta资源ID
+     *
+     * @param name meta名
+     * @return 没有返回null
+     */
+    public static int getApplicationMetaResourceId(@NonNull Context context, @NonNull String name) {
+        try {
+            ApplicationInfo info = context.getPackageManager().getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
+            return info.metaData.getInt(name);
+        } catch (Exception e) {
+            return 0;
         }
     }
     

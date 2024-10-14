@@ -81,7 +81,7 @@ public abstract class BasePermissionsRequester {
     }
     
     public boolean hasPermissions(@NonNull List<String> permissions) {
-        return checkPermissions(permissions, true);
+        return checkPermissions(new ArrayList<>(permissions), true);
     }
 
     @SuppressWarnings("all")
