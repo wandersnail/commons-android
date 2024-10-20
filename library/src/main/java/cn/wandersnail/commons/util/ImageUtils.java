@@ -24,6 +24,7 @@ import android.renderscript.Element;
 import android.renderscript.RenderScript;
 import android.renderscript.ScriptIntrinsicBlur;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -43,6 +44,8 @@ import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 /**
  * date: 2019/8/7 17:33
@@ -88,7 +91,7 @@ public class ImageUtils {
             bitmap = BitmapFactory.decodeStream(inputStream);
             inputStream.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("ImageUtils", "getNetBitmap: ", e);
             bitmap = null;
         }
         return bitmap;
@@ -101,10 +104,15 @@ public class ImageUtils {
      */
     public static Bitmap getBitmap(@NonNull String path) {
         try {
-            InputStream fis = new FileInputStream(path);
+            InputStream fis;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                fis = Files.newInputStream(Paths.get(path));
+            } else {
+                fis = new FileInputStream(path);
+            }
             return BitmapFactory.decodeStream(fis);
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("ImageUtils", "getBitmap: ", e);
         }
         return null;
     }
@@ -138,7 +146,7 @@ public class ImageUtils {
             opts.inSampleSize = (int) scale;
             return BitmapFactory.decodeFile(path, opts);
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("ImageUtils", "getBitmap: ", e);
         }
         return null;
     }
@@ -170,7 +178,7 @@ public class ImageUtils {
             opts.inSampleSize = (int) scale;
             return BitmapFactory.decodeByteArray(bytes, 0, bytes.length, opts);
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("ImageUtils", "getBitmap: ", e);
         }
         return null;
     }
@@ -194,7 +202,30 @@ public class ImageUtils {
                     return 270;
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e("ImageUtils", "readPictureDegree: ", e);
+        }
+        return 0;
+    }
+
+    /**
+     * 读取图片属性：旋转的角度
+     *
+     * @return degree 旋转的角度
+     */
+    public static int readPictureDegree(InputStream inputStream) {
+        try {
+            ExifInterface exifInterface = new ExifInterface(inputStream);
+            int attributeInt = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+            switch (attributeInt) {
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    return 90;
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    return 180;
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    return 270;
+            }
+        } catch (Exception e) {
+            Log.e("ImageUtils", "readPictureDegree: ", e);
         }
         return 0;
     }
@@ -273,7 +304,7 @@ public class ImageUtils {
     /**
      * drawable转bitmap
      */
-    public static Bitmap toBitamp(@NonNull Drawable drawable) {
+    public static Bitmap toBitmap(@NonNull Drawable drawable) {
         if (drawable instanceof BitmapDrawable) {
             Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
             if (!bitmap.isRecycled()) {
@@ -317,7 +348,7 @@ public class ImageUtils {
                 value = fieldValue;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("ImageUtils", "getImageViewFieldValue: ", e);
         }
         return value;
     }
@@ -383,7 +414,7 @@ public class ImageUtils {
                 fos.flush();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("ImageUtils", "toFile: ", e);
         } finally {
             IOUtils.closeQuietly(fos);
         }

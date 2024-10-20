@@ -1,12 +1,16 @@
 package cn.wandersnail.commons.util;
 
+import android.os.Build;
 import android.util.Base64;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.util.Random;
 
@@ -21,9 +25,10 @@ import javax.crypto.spec.SecretKeySpec;
 public class EncryptUtils {
     public static final String MD5 = "MD5";
     public static final String SHA1 = "SHA1";
+    public static final String SHA256 = "SHA-256";
 
     /**
-     * 在MD5或SHA1加密过的字符串基础上加上分隔符
+     * 在各算法的哈希结果基础上加上分隔符
      *
      * @param code      MD5或SHA1加密过的字符串
      * @param separator 分隔符
@@ -43,17 +48,17 @@ public class EncryptUtils {
             }
             return sb.toString();
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("EncryptUtils", "addSeparator", e);
         }
         return null;
     }
 
     /**
-     * 获取经过MD5加密后的字符串
+     * 获取通过MD5计算的哈希值
      *
      * @param plainText  要加密的字符串
      * @param iterations 迭代加密的次数，0表示不加密，1表示md5(plainText), 2表示md5(md5(plainText))...
-     * @return 经过MD5算法加密的字符串形式的32位16进制, 如果参数表示的字符串为空，返回null
+     * @return 经过MD5算法计算的哈希值形式的32位16进制, 如果参数表示的字符串为空，返回null
      */
     public static String getMD5Code(@NonNull String plainText, int iterations) {
         if (iterations > 0) {
@@ -68,11 +73,11 @@ public class EncryptUtils {
     }
 
     /**
-     * 获取经过SHA1加密后的字符串
+     * 获取通过SHA1计算的哈希值
      *
      * @param plainText  要加密的字符串
      * @param iterations 迭代加密的次数，0表示不加密，1表示md5(plainText), 2表示md5(md5(plainText))...
-     * @return 经过SHA1算法加密的字符串形式的32位16进制, 如果参数表示的字符串为空，返回null
+     * @return 经过SHA1算法计算的哈希值形式的32位16进制, 如果参数表示的字符串为空，返回null
      */
     public static String getSHA1Code(@NonNull String plainText, int iterations) {
         if (iterations > 0) {
@@ -87,9 +92,28 @@ public class EncryptUtils {
     }
 
     /**
-     * 将MD5或SHA1码一段字符串替换成随机16进制字符
+     * 获取通过SHA256计算的哈希值
      *
-     * @param code   需要替换的MD5或SHA1码
+     * @param plainText  要加密的字符串
+     * @param iterations 迭代加密的次数，0表示不加密，1表示md5(plainText), 2表示md5(md5(plainText))...
+     * @return 经过SHA256算法计算的哈希值形式的32位16进制, 如果参数表示的字符串为空，返回null
+     */
+    public static String getSHA256Code(@NonNull String plainText, int iterations) {
+        if (iterations > 0) {
+            iterations--;
+            String result = getSHA256Code(plainText);
+            if (iterations > 0 && result != null) {
+                result = getSHA256Code(result, iterations);
+            }
+            return result;
+        }
+        return null;
+    }
+
+    /**
+     * 将哈希值的一段字符串替换成随机16进制字符
+     *
+     * @param code   需要替换的哈希值
      * @param offset 偏移量，即从第几个字符开始替换
      * @param len    要替换的字符数
      * @return 替换后的新字符串，如果参数表示的MD5码为空，则返回null
@@ -106,21 +130,30 @@ public class EncryptUtils {
     }
 
     /**
-     * 获取经过MD5加密后的字符串
+     * 获取通过MD5计算的哈希值
      *
-     * @param plainText 要加密的字符串
+     * @param plainText 要计算的字符串
      */
     public static String getMD5Code(String plainText) {
         return encryptByMessageDigest(plainText.getBytes(), MD5);
     }
 
     /**
-     * 获取经过SHA1加密后的字符串
+     * 获取通过SHA1计算的哈希值
      *
-     * @param plainText 要加密的字符串
+     * @param plainText 要计算的字符串
      */
     public static String getSHA1Code(String plainText) {
         return encryptByMessageDigest(plainText.getBytes(), SHA1);
+    }
+
+    /**
+     * 获取通过SHA256计算的哈希值
+     *
+     * @param plainText 要计算的字符串
+     */
+    public static String getSHA256Code(String plainText) {
+        return encryptByMessageDigest(plainText.getBytes(), SHA256);
     }
 
     /**
@@ -132,12 +165,16 @@ public class EncryptUtils {
     public static String getFileMD5Code(String path) {
         InputStream fis = null;
         try {
-            fis = new FileInputStream(path);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                fis = Files.newInputStream(Paths.get(path));
+            } else {
+                fis = new FileInputStream(path);
+            }
             String code = getMD5Code(fis);
             fis.close();
             return code;
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("EncryptUtils", "getFileMD5Code", e);
             return null;
         } finally {
             IOUtils.closeQuietly(fis);
@@ -153,12 +190,41 @@ public class EncryptUtils {
     public static String getFileSHA1Code(String path) {
         InputStream fis = null;
         try {
-            fis = new FileInputStream(path);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                fis = Files.newInputStream(Paths.get(path));
+            } else {
+                fis = new FileInputStream(path);
+            }
             String code = getSHA1Code(fis);
             fis.close();
             return code;
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("EncryptUtils", "getFileSHA1Code", e);
+            return null;
+        } finally {
+            IOUtils.closeQuietly(fis);
+        }
+    }
+
+    /**
+     * 获取文件的SHA256值
+     *
+     * @param path 文件的路径
+     * @return SHA256值，文件不存在返回null
+     */
+    public static String getFileSHA256Code(String path) {
+        InputStream fis = null;
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                fis = Files.newInputStream(Paths.get(path));
+            } else {
+                fis = new FileInputStream(path);
+            }
+            String code = getSHA256Code(fis);
+            fis.close();
+            return code;
+        } catch (Exception e) {
+            Log.e("EncryptUtils", "getFileSHA256Code", e);
             return null;
         } finally {
             IOUtils.closeQuietly(fis);
@@ -186,6 +252,16 @@ public class EncryptUtils {
     }
 
     /**
+     * 获取文件的SHA256值
+     *
+     * @param file 文件
+     * @return SHA256值，文件不存在返回null
+     */
+    public static String getFileSHA256Code(File file) {
+        return file == null ? null : getFileSHA256Code(file.getPath());
+    }
+
+    /**
      * 从输入流获取MD5值
      *
      * @param inputStream 输入流
@@ -204,10 +280,19 @@ public class EncryptUtils {
     }
 
     /**
+     * 从输入流获取SHA256值
+     *
+     * @param inputStream 输入流
+     */
+    public static String getSHA256Code(InputStream inputStream) {
+        return encryptByMessageDigest(inputStream, SHA256);
+    }
+
+    /**
      * 加密输入流，不执行流关闭
      *
      * @param inputStream 输入流
-     * @param algorithm   算法。[MD5], [SHA1]
+     * @param algorithm   算法。{@link #MD5}, {@link #SHA1}, {@link #SHA256}
      */
     public static String encryptByMessageDigest(InputStream inputStream, String algorithm) {
         try {
@@ -219,16 +304,16 @@ public class EncryptUtils {
             }
             return encryptByMessageDigest(messageDigest);
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("EncryptUtils", "encryptByMessageDigest", e);
         }
         return null;
     }
 
     /**
-     * 执行加密
+     * 执行哈希计算
      *
      * @param bytes     需要加密的字节
-     * @param algorithm 算法。[MD5], [SHA1]
+     * @param algorithm 算法。{@link #MD5}, {@link #SHA1}, {@link #SHA256}
      */
     public static String encryptByMessageDigest(byte[] bytes, String algorithm) {
         try {
@@ -236,7 +321,7 @@ public class EncryptUtils {
             md.update(bytes);
             return encryptByMessageDigest(md);
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("EncryptUtils", "encryptByMessageDigest", e);
         }
         return null;
     }
