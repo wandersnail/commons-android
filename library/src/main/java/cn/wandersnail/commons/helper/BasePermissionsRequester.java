@@ -120,7 +120,7 @@ public abstract class BasePermissionsRequester {
             requestOtherPermissions(needRequestPermissonList);
             return false;
         } else {
-            if (callback != null && checking) {
+            if (callback != null) {
                 callback.onRequestResult(refusedPermissions);
             }
             checking = false;
