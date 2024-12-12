@@ -125,7 +125,7 @@ public class UiUtils {
      * @param defValue 没有找到时的默认值
      */
     public static int getColorByAttrId(Context context, int attrId, int defValue) {
-        TypedArray typedArray = context.obtainStyledAttributes(new int[attrId]);
+        TypedArray typedArray = context.obtainStyledAttributes(new int[]{attrId});
         int color = typedArray.getColor(0, defValue);
         typedArray.recycle();
         return color;
