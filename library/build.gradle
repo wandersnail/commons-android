@@ -1,6 +1,8 @@
-apply plugin: 'com.android.library'
-apply plugin: 'maven-publish'
-apply plugin: 'signing'
+plugins {
+    id 'com.android.library'
+    id 'maven-publish'
+    id 'signing'
+}
 
 def lib_version = '1.4.4'
 def user_name = 'wandersnail'
@@ -58,69 +60,69 @@ tasks.register('javadocJar', Jar) {
     from javadoc.destinationDir
 }
 
-publishing {
-    publications {
-        release(MavenPublication) {
-            groupId = lib_group
-            artifactId = lib_artifact
-            version = lib_version
-            description = lib_description
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+                groupId lib_group
+                artifactId lib_artifact
+                version lib_version
+                description lib_description
 
-            artifact "$buildDir/outputs/aar/${project.name}-release.aar"
+                artifact(sourcesJar)
+                artifact(javadocJar)
 
-            // 增加 sourcesJar、javadocJar 任务
-            artifact sourcesJar
-            artifact javadocJar
-
-            pom {
-                name = lib_artifact
-                description = lib_description
-                url = lib_website
-
-                scm {
+                pom {
+                    name = lib_artifact
+                    description = lib_description
                     url = lib_website
-                    connection = "scm:git:${lib_website}.git"
-                    developerConnection = "scm:git:${lib_website}.git"
-                }
 
-                licenses {
-                    license {
-                        name = 'The Apache License, Version 2.0'
-                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    scm {
+                        url = lib_website
+                        connection = "scm:git:${lib_website}.git"
+                        developerConnection = "scm:git:${lib_website}.git"
+                    }
+
+                    licenses {
+                        license {
+                            name = 'The Apache License, Version 2.0'
+                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id = user_name
+                            name = 'Zeng Fansheng'
+                            email = 'bingmo977@qq.com'
+                        }
                     }
                 }
+            }
+        }
 
-                developers {
-                    developer {
-                        id = user_name
-                        name = 'Zeng Fansheng'
-                        email = 'bingmo977@qq.com'
+        Properties properties = new Properties()
+        InputStream inputStream = project.rootProject.file('local.properties').newDataInputStream()
+        properties.load(inputStream)
+        def ossrhUsername = properties.containsKey('ossrhUsername') ? properties['ossrhUsername'] : ''
+        def ossrhPassword = properties.containsKey('ossrhPassword') ? properties['ossrhPassword'] : ''
+        if (ossrhUsername != null && ossrhPassword != null) {
+            repositories {
+                mavenLocal()
+                maven {
+                    url "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+                    credentials {
+                        username = ossrhUsername
+                        password = ossrhPassword
                     }
                 }
             }
         }
     }
-
-    Properties properties = new Properties()
-    InputStream inputStream = project.rootProject.file('local.properties').newDataInputStream()
-    properties.load(inputStream)
-    def ossrhUsername = properties.containsKey('ossrhUsername') ? properties['ossrhUsername'] : ''
-    def ossrhPassword = properties.containsKey('ossrhPassword') ? properties['ossrhPassword'] : ''
-    if (ossrhUsername != null && ossrhPassword != null) {
-        repositories {
-            maven {
-                url "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
-                credentials {
-                    username = ossrhUsername
-                    password = ossrhPassword
-                }
-            }
-        }
+    signing {
+        sign publishing.publications.release
     }
-}
-
-signing {
-    sign publishing.publications.release
 }
 
 javadoc {
