@@ -26,15 +26,20 @@ import cn.wandersnail.commons.util.FileUtils;
 public class ApkInstaller {
     private ComponentActivity activity;
     private Fragment fragment;
-    private final File apkFile;
+    private final ApkProvider provider;
     private final ActivityResultLauncher<Intent> launcher;
+
+    public interface ApkProvider {
+        @Nullable
+        File getApkFile();
+    }
 
     /**
      * 实例化必须在activity的onCreate()方法里进行
      */
-    public ApkInstaller(@NonNull ComponentActivity activity, @NonNull File apkFile) {
+    public ApkInstaller(@NonNull ComponentActivity activity, @NonNull ApkProvider provider) {
         this.activity = activity;
-        this.apkFile = apkFile;
+        this.provider = provider;
         launcher = activity.registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             onActivityResult();
         });
@@ -43,14 +48,14 @@ public class ApkInstaller {
     /**
      * 实例化必须在fragment的onCreate()、onAttach()方法里进行
      */
-    public ApkInstaller(@NonNull Fragment fragment, @NonNull File apkFile) {
+    public ApkInstaller(@NonNull Fragment fragment, @NonNull ApkProvider provider) {
         this.fragment = fragment;
-        this.apkFile = apkFile;
+        this.provider = provider;
         launcher = fragment.registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             onActivityResult();
         });
     }
-    
+
     @Nullable
     private Activity getActivity() {
         if (activity != null) {
@@ -61,7 +66,7 @@ public class ApkInstaller {
             return null;
         }
     }
-    
+
     private void onActivityResult() {
         Activity activity = getActivity();
         if (activity != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -90,7 +95,8 @@ public class ApkInstaller {
     }
 
     private void install(Activity activity) {
-        if (apkFile.exists()) {
+        File apkFile = provider.getApkFile();
+        if (apkFile != null && apkFile.exists()) {
             Intent intent = new Intent(Intent.ACTION_VIEW);
             FileUtils.setIntentDataAndType(apkFile, activity, intent, "application/vnd.android.package-archive", false);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
