@@ -64,7 +64,6 @@ afterEvaluate {
     publishing {
         publications {
             release(MavenPublication) {
-                from components.release
                 groupId lib_group
                 artifactId lib_artifact
                 version lib_version
@@ -72,6 +71,7 @@ afterEvaluate {
 
                 artifact(sourcesJar)
                 artifact(javadocJar)
+                from components.release
 
                 pom {
                     name = lib_artifact
@@ -109,7 +109,6 @@ afterEvaluate {
         def ossrhPassword = properties.containsKey('ossrhPassword') ? properties['ossrhPassword'] : ''
         if (ossrhUsername != null && ossrhPassword != null) {
             repositories {
-                mavenLocal()
                 maven {
                     url "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
                     credentials {

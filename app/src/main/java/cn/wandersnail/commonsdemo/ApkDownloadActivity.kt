@@ -3,6 +3,7 @@ package cn.wandersnail.commonsdemo
 import android.os.Bundle
 import android.os.Environment
 import cn.wandersnail.commons.helper.ApkInstaller
+import cn.wandersnail.commons.helper.ApkInstaller.ApkProvider
 import cn.wandersnail.http.EasyHttp
 import cn.wandersnail.http.TaskInfo
 import cn.wandersnail.http.download.DownloadInfo
@@ -28,7 +29,8 @@ class ApkDownloadActivity : BaseActivity() {
             dir.mkdir()
         }
         val apkFile = File(dir, "bleutility.apk")        
-        apkInstaller = ApkInstaller(this, apkFile)
+        apkInstaller = ApkInstaller(this
+        ) { apkFile }
         btnDownload.setOnClickListener {
             EasyHttp.singleDownloadWorkerBuilder()
                 .setFileInfo(url, apkFile.absolutePath)
