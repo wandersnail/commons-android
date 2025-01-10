@@ -1,5 +1,6 @@
 package cn.wandersnail.commons.util;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -177,6 +178,39 @@ public class ImageUtils {
             float scale = Math.max(scaleWidth, scaleHeight);
             opts.inSampleSize = (int) scale;
             return BitmapFactory.decodeByteArray(bytes, 0, bytes.length, opts);
+        } catch (Exception e) {
+            Log.e("ImageUtils", "getBitmap: ", e);
+        }
+        return null;
+    }
+
+    /**
+     * 根据文件Uri加载bitmap
+     *
+     * @param w 宽
+     * @param h 高
+     */
+    public static Bitmap getBitmap(ContentResolver resolver, Uri uri, int w, int h) {
+        try {
+            BitmapFactory.Options opts = new BitmapFactory.Options();
+            // 设置为true只获取图片大小
+            opts.inJustDecodeBounds = true;
+            opts.inPreferredConfig = Bitmap.Config.ARGB_8888;
+            // 返回为空
+            BitmapFactory.decodeStream(resolver.openInputStream(uri), null, opts);
+            int width = opts.outWidth;
+            int height = opts.outHeight;
+            float scaleWidth = 0f;
+            float scaleHeight = 0f;
+            if (width > w || height > h) {
+                // 缩放
+                scaleWidth = width * 1f / w;
+                scaleHeight = height * 1f / h;
+            }
+            opts.inJustDecodeBounds = false;
+            float scale = Math.max(scaleWidth, scaleHeight);
+            opts.inSampleSize = (int) scale;
+            return BitmapFactory.decodeStream(resolver.openInputStream(uri), null, opts);
         } catch (Exception e) {
             Log.e("ImageUtils", "getBitmap: ", e);
         }
