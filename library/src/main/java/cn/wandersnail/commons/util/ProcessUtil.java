@@ -1,7 +1,11 @@
 package cn.wandersnail.commons.util;
 
+import android.app.ActivityManager;
 import android.app.Application;
+import android.content.Context;
 import android.os.Build;
+
+import androidx.annotation.NonNull;
 
 import java.io.FileInputStream;
 
@@ -10,16 +14,20 @@ import java.io.FileInputStream;
  */
 public class ProcessUtil {
 
-    public static String getProcessName() {
+    public static String getProcessName(@NonNull Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             // API 28及以上使用系统方法
             return Application.getProcessName();
         } else {
-            // 读取/proc/self/cmdline获取进程名
-            return readProcessNameFromProc();
+            String processName = readProcessNameFromProc();
+            if (processName != null) {
+                return processName;
+            }
+            return getProcessNameFromActivityManager(context);
         }
     }
 
+    // 读取/proc/self/cmdline获取进程名
     private static String readProcessNameFromProc() {
         try (FileInputStream in = new FileInputStream("/proc/self/cmdline")) {
             byte[] buffer = new byte[256];
@@ -33,6 +41,19 @@ public class ProcessUtil {
                 return new String(buffer, 0, end);
             }
         } catch (Exception ignore) {
+        }
+        return null;
+    }
+
+    private static String getProcessNameFromActivityManager(Context context) {
+        if (context == null) return null;
+        int pid = android.os.Process.myPid();
+        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        if (am == null) return null;
+        for (ActivityManager.RunningAppProcessInfo processInfo : am.getRunningAppProcesses()) {
+            if (processInfo.pid == pid) {
+                return processInfo.processName;
+            }
         }
         return null;
     }
