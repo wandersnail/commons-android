@@ -347,7 +347,7 @@ public class EncryptUtils {
         SecretKeySpec keySpec = new SecretKeySpec(seed.getBytes(), "AES");
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
         cipher.init(Cipher.ENCRYPT_MODE, keySpec, new IvParameterSpec(iv.getBytes()));
-        return Base64.encodeToString(cipher.doFinal(plain.getBytes()), Base64.DEFAULT);
+        return Base64.encodeToString(cipher.doFinal(plain.getBytes()), Base64.NO_WRAP);
     }
 
     /**
@@ -361,7 +361,7 @@ public class EncryptUtils {
         SecretKeySpec keySpec = new SecretKeySpec(seed.getBytes(), "AES");
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
         cipher.init(Cipher.DECRYPT_MODE, keySpec, new IvParameterSpec(iv.getBytes()));
-        byte[] enc = Base64.decode(encrypted.getBytes(), Base64.DEFAULT);
+        byte[] enc = Base64.decode(encrypted.getBytes(), Base64.NO_WRAP);
         return new String(cipher.doFinal(enc));
     }
 }
