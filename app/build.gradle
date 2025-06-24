@@ -1,6 +1,8 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'org.jetbrains.kotlin.kapt'
+}
 
 Properties properties = new Properties()
 InputStream inputStream = project.rootProject.file('local.properties').newDataInputStream()
@@ -21,7 +23,7 @@ android {
         versionName "1.0"
         ndk {
             ndkVersion ndkVer
-            abiFilters "armeabi-v7a", "arm64-v8a", "x86"
+            abiFilters "arm64-v8a"
         }
     }
     buildTypes {
@@ -46,6 +48,10 @@ android {
             keyAlias "alias"
             keyPassword "123456"
         }
+    }
+    buildFeatures {
+        dataBinding true
+        viewBinding true
     }
 }
 

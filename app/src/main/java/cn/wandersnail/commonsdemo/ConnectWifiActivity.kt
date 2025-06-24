@@ -16,32 +16,35 @@ import android.widget.TextView
 import cn.wandersnail.commons.helper.WifiHelper
 import cn.wandersnail.commons.util.ToastUtils
 import cn.wandersnail.commons.util.UiUtils
+import cn.wandersnail.commonsdemo.databinding.ActivityConnectWifiBinding
 import cn.wandersnail.widget.listview.BaseListAdapter
 import cn.wandersnail.widget.listview.BaseViewHolder
-import kotlinx.android.synthetic.main.activity_connect_wifi.*
 
 /**
  * 描述:
  * 时间: 2018/10/25 20:59
  * 作者: zengfansheng
  */
-class ConnectWifiActivity : BaseActivity() {
+class ConnectWifiActivity : BaseViewBindingActivity<ActivityConnectWifiBinding>() {
     private val scanResultList = ArrayList<ScanResult>()
     private var helper: WifiHelper? = null
     private var progressDialog: ProgressDialog? = null
 
+    override fun getViewBindingClass(): Class<ActivityConnectWifiBinding> {
+        return ActivityConnectWifiBinding::class.java
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_connect_wifi)
         title = "连接WiFi"
         val adapter = ListAdapter(this, scanResultList)
-        lv.adapter = adapter
+        binding.lv.adapter = adapter
         helper = WifiHelper(this)
         progressDialog = ProgressDialog(this)
-        refreshLayout.setOnRefreshListener {
+        binding.refreshLayout.setOnRefreshListener {
             startScan(adapter)
         }
-        lv.setOnItemClickListener { _, _, position, _ ->
+        binding.lv.setOnItemClickListener { _, _, position, _ ->
             val result = scanResultList[position]
             val wificipher = WifiHelper.getWifiCipher(result)
             if (wificipher == WifiHelper.WIFICIPHER_NOPASS) {
@@ -55,7 +58,7 @@ class ConnectWifiActivity : BaseActivity() {
                     }.show()
             }
         }
-        refreshLayout.isRefreshing = true
+        binding.refreshLayout.isRefreshing = true
         startScan(adapter)        
     }
 
@@ -63,7 +66,7 @@ class ConnectWifiActivity : BaseActivity() {
         scanResultList.clear()
         adapter.notifyDataSetChanged()
         helper?.startScan(10000) { scanResults ->
-            refreshLayout.isRefreshing = false
+            binding.refreshLayout.isRefreshing = false
             scanResultList.clear()
             scanResultList.addAll(scanResults)
             adapter.notifyDataSetChanged()

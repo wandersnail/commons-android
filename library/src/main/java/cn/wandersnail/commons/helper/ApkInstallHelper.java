@@ -6,10 +6,11 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
 
+import androidx.annotation.NonNull;
+
 import java.io.File;
 import java.util.Objects;
 
-import androidx.annotation.NonNull;
 import cn.wandersnail.commons.util.FileUtils;
 
 /**

@@ -7,9 +7,9 @@ import android.widget.TextView
 import cn.wandersnail.commons.util.FileUtils
 import cn.wandersnail.commons.util.SystemUtils
 import cn.wandersnail.commons.util.entity.Storage
+import cn.wandersnail.commonsdemo.databinding.ActivityStorageBinding
 import cn.wandersnail.widget.listview.BaseListAdapter
 import cn.wandersnail.widget.listview.BaseViewHolder
-import kotlinx.android.synthetic.main.activity_storage.*
 
 
 /**
@@ -17,15 +17,16 @@ import kotlinx.android.synthetic.main.activity_storage.*
  * 时间: 2018/5/27 14:20
  * 作者: zengfansheng
  */
-class StorageActivity : BaseActivity() {
+class StorageActivity : BaseViewBindingActivity<ActivityStorageBinding>() {
+
+    override fun getViewBindingClass(): Class<ActivityStorageBinding> {
+        return ActivityStorageBinding::class.java
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_storage)
         val storages = SystemUtils.getStorages(this)
-        if (storages != null) {
-            lv.adapter = ListAdapter(this, storages)
-        }
+        binding.lv.adapter = ListAdapter(this, storages)
     }
 
     private inner class ListAdapter(context: Context, data: MutableList<Storage>) : BaseListAdapter<Storage>(context, data) {

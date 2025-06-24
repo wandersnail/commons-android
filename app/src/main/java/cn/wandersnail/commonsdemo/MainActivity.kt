@@ -1,13 +1,11 @@
 package cn.wandersnail.commonsdemo
 
 import android.Manifest
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.View
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.documentfile.provider.DocumentFile
 import cn.wandersnail.commons.helper.BasePermissionsRequester
 import cn.wandersnail.commons.helper.PermissionsRequester
@@ -16,19 +14,21 @@ import cn.wandersnail.commons.poster.Tag
 import cn.wandersnail.commons.util.Logger
 import cn.wandersnail.commons.util.ToastUtils
 import cn.wandersnail.commons.util.UiUtils
+import cn.wandersnail.commonsdemo.databinding.ActivityMainBinding
 import cn.wandersnail.widget.listview.BaseListAdapter
 import cn.wandersnail.widget.listview.BaseViewHolder
 import com.tencent.mmkv.MMKV
-import kotlinx.android.synthetic.main.activity_main.*
-import java.util.*
 
-class MainActivity : AppCompatActivity(), TestObserver {
+class MainActivity : BaseViewBindingActivity<ActivityMainBinding>(), TestObserver {
     private var requester2: PermissionsRequester2? = null
     private var requester: PermissionsRequester? = null
 
+    override fun isDisplayHomeAsUpEnabled(): Boolean {
+        return false
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
         val data = arrayListOf(
             "储存信息获取", "md5和sha1算法", "系统分享", "网络及位置服务状态", "解压缩", "点击波纹", "Toast", "系统文件选择器", "debug包判断",
             "系统下载并安装APP", "文件操作", "观察者模式", "测试返回到首页", "系统图片剪裁", "设备信息"
@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity(), TestObserver {
             CropActivity::class.java,
             DeviceInfoActivity::class.java
         )
-        lv.adapter = object : BaseListAdapter<String>(this, data) {
+        binding.lv.adapter = object : BaseListAdapter<String>(this, data) {
             override fun createViewHolder(position: Int): BaseViewHolder<String> {
                 return object : BaseViewHolder<String> {
                     private var tv: TextView? = null
@@ -67,7 +67,7 @@ class MainActivity : AppCompatActivity(), TestObserver {
                 }
             }
         }
-        lv.setOnItemClickListener { _, _, position, _ ->
+        binding.lv.setOnItemClickListener { _, _, position, _ ->
             if (data[position] == "崩溃测试") {
                 throw RuntimeException("This is a RuntimeException test")
             } else {
@@ -119,7 +119,7 @@ class MainActivity : AppCompatActivity(), TestObserver {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         requester?.onActivityResult(requestCode)
-        if (requestCode == 1101 && resultCode == Activity.RESULT_OK && data?.data != null) {
+        if (requestCode == 1101 && resultCode == RESULT_OK && data?.data != null) {
             //授予打开的文档树永久性的读写权限
             val takeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
             val treeUri = data.data!!
@@ -143,5 +143,9 @@ class MainActivity : AppCompatActivity(), TestObserver {
     @Tag("test")
     override fun test(i: Int, f: Float, d: Double, b: Byte, b1: Boolean, c: Char, l: Long, s: Short) {
         ToastUtils.showShort("$i, $f, $d, $b, $b1, $c, $l, $s")
+    }
+
+    override fun getViewBindingClass(): Class<ActivityMainBinding> {
+        return ActivityMainBinding::class.java
     }
 }

@@ -209,25 +209,6 @@ public class SystemUtils {
     }
 
     /**
-     * 获取正在运行的进程数
-     */
-    public static int getRunningProcessCount(@NonNull Context context) {
-        ActivityManager am = (ActivityManager) context.getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
-        return am == null ? 0 : am.getRunningAppProcesses().size();
-    }
-
-    @Nullable
-    public static String getCurrentProcessName(@NonNull Context context) {
-        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningAppProcessInfo processInfo : manager.getRunningAppProcesses()) {
-            if (processInfo.pid == android.os.Process.myPid()) {
-                return processInfo.processName;
-            }
-        }
-        return null;
-    }
-
-    /**
      * 获取所有存储路径
      */
     @NonNull

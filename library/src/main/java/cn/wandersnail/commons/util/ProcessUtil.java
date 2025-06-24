@@ -13,6 +13,14 @@ import java.io.FileInputStream;
  * Created by 曾繁盛 on 2025/4/16 18:00
  */
 public class ProcessUtil {
+    /**
+     * 获取正在运行的进程数
+     */
+    public static int getRunningProcessCount(@NonNull Context context) {
+        ActivityManager am = (ActivityManager) context.getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
+        return am == null ? 0 : am.getRunningAppProcesses().size();
+    }
+
 
     public static String getProcessName(@NonNull Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
@@ -40,7 +48,7 @@ public class ProcessUtil {
                 }
                 return new String(buffer, 0, end);
             }
-        } catch (Exception ignore) {
+        } catch (Throwable ignore) {
         }
         return null;
     }

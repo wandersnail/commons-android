@@ -4,7 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import cn.wandersnail.commons.helper.SysFileChooser
-import kotlinx.android.synthetic.main.activity_sys_files.*
+import cn.wandersnail.commonsdemo.databinding.ActivitySysFilesBinding
 
 /**
  *
@@ -12,13 +12,16 @@ import kotlinx.android.synthetic.main.activity_sys_files.*
  * date: 2019/3/2 23:09
  * author: zengfansheng
  */
-class SysFileChooserActivity : BaseActivity() {
+class SysFileChooserActivity : BaseViewBindingActivity<ActivitySysFilesBinding>() {
     private val fileChooser = SysFileChooser()
-    
+
+    override fun getViewBindingClass(): Class<ActivitySysFilesBinding> {
+        return ActivitySysFilesBinding::class.java
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_sys_files)
-        btnFiles.setOnClickListener {
+        binding.btnFiles.setOnClickListener {
 //            val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
 //                type = "video/*"
 //                addCategory(Intent.CATEGORY_OPENABLE)
@@ -28,7 +31,7 @@ class SysFileChooserActivity : BaseActivity() {
 //            }
 //            startActivityForResult(Intent.createChooser(intent, "选择文件"), 200)
             val options = SysFileChooser.Options()
-            options.allowMultiple = chkMulti.isChecked
+            options.allowMultiple = binding.chkMulti.isChecked
             options.mimeTypes = arrayOf(SysFileChooser.MIME_TYPE_VIDEO, SysFileChooser.MIME_TYPE_AUDIO)
             fileChooser.choose(this, options)
         }
@@ -37,9 +40,9 @@ class SysFileChooserActivity : BaseActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         val list = fileChooser.getRealPathsFromResultData(this, requestCode, resultCode, data)
-        tvPaths.text = ""
-        list.forEach { 
-            tvPaths.append("$it\n")
+        binding.tvPaths.text = ""
+        list.forEach {
+            binding.tvPaths.append("$it\n")
         }
         if (requestCode == 200 && resultCode == Activity.RESULT_OK) {
 //            val clipData = items!!.clipData

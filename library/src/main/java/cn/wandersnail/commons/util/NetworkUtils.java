@@ -3,6 +3,8 @@ package cn.wandersnail.commons.util;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.ConnectivityManager;
+import android.net.LinkAddress;
+import android.net.LinkProperties;
 import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
@@ -17,7 +19,9 @@ import androidx.annotation.Nullable;
 
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.util.ArrayList;
@@ -39,6 +43,19 @@ public class NetworkUtils {
         public boolean isAp;
         public String ssid = "";
         public String mac = "";
+
+        @NonNull
+        @Override
+        public String toString() {
+            return "NetInfo{" +
+                    "type='" + type + '\'' +
+                    ", ip='" + ip + '\'' +
+                    ", isWifi=" + isWifi +
+                    ", isAp=" + isAp +
+                    ", ssid='" + ssid + '\'' +
+                    ", mac='" + mac + '\'' +
+                    '}';
+        }
     }
 
     /**
@@ -52,37 +69,35 @@ public class NetworkUtils {
             WifiManager wifiManager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
             while (en.hasMoreElements()) {
                 NetworkInterface intf = en.nextElement();
-                if ("eth0".equals(intf.getName().toLowerCase(Locale.ENGLISH)) || 
-                        "wlan1".equals(intf.getName().toLowerCase(Locale.ENGLISH)) ||
-                        "wlan0".equals(intf.getName().toLowerCase(Locale.ENGLISH))) {
-                    Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses();
-                    while (enumIpAddr.hasMoreElements()) {
-                        InetAddress inetAddress = enumIpAddr.nextElement();
-                        if (!inetAddress.isLoopbackAddress()) {
-                            String ipaddress = inetAddress.getHostAddress();
-                            if (ipaddress.matches("\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}")) { //符合规则才行
-                                NetInfo info = new NetInfo();
-                                info.ip = ipaddress;
-                                info.type = intf.getName().toLowerCase(Locale.ENGLISH);
-                                info.mac = StringUtils.toHex(intf.getHardwareAddress(), ":");
-                                if ("wlan0".equals(info.type) || "wlan1".equals(info.type)) {
-                                    if (isCurrentNetworkWifi(context)) {
-                                        int ipAddress = Objects.requireNonNull(wifiManager).getDhcpInfo().ipAddress;
-                                        info.isWifi = info.ip.equals(toAddressString(ipAddress));
-                                        if (info.isWifi) {
-                                            info.ssid = wifiManager.getConnectionInfo().getSSID();
-                                            list.add(info);
-                                        }
-                                    } else if (isApOn(context)) {
-                                        String apSsid = getApSsid(context);
-                                        info.ssid = apSsid == null ? "" : apSsid;
-                                        info.isAp = true;
-                                        list.add(info);
-                                    }
-                                } else {
-                                    list.add(info);
-                                }
+                Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses();
+                while (enumIpAddr.hasMoreElements()) {
+                    InetAddress inetAddress = enumIpAddr.nextElement();
+                    // 跳过回环地址（如127.0.0.1）和IPv6地址
+                    if (!inetAddress.isLoopbackAddress() && inetAddress instanceof Inet4Address) {
+                        String ipaddress = inetAddress.getHostAddress();
+                        NetInfo info = new NetInfo();
+                        info.ip = ipaddress;
+                        info.type = intf.getName().toLowerCase(Locale.ENGLISH);
+                        info.mac = StringUtils.toHex(intf.getHardwareAddress(), ":");
+                        if (isCurrentNetworkWifi(context)) {
+                            int ipAddress = Objects.requireNonNull(wifiManager).getDhcpInfo().ipAddress;
+                            info.isWifi = info.ip.equals(toAddressString(ipAddress));
+                            if (info.isWifi) {
+                                info.ssid = wifiManager.getConnectionInfo().getSSID();
+                                list.add(info);
+                            } else if (isApOn(context) || info.type.startsWith("ap")) {
+                                String apSsid = getApSsid(context);
+                                info.ssid = apSsid == null ? "" : apSsid;
+                                info.isAp = true;
+                                list.add(info);
                             }
+                        } else if (isApOn(context) || info.type.startsWith("ap")) {
+                            String apSsid = getApSsid(context);
+                            info.ssid = apSsid == null ? "" : apSsid;
+                            info.isAp = true;
+                            list.add(info);
+                        } else {
+                            list.add(info);
                         }
                     }
                 }
@@ -105,9 +120,34 @@ public class NetworkUtils {
         try {
             WifiManager manager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
             Method method = manager.getClass().getDeclaredMethod("isWifiApEnabled");
-            method.setAccessible(true);
-            return (boolean) method.invoke(manager);
+            if (method != null) {
+                method.setAccessible(true);
+                return (boolean) method.invoke(manager);
+            } else {
+                method = manager.getClass().getMethod("getWifiApState");
+                method.setAccessible(true);
+                int state = (int) method.invoke(manager);
+                Field field = WifiManager.class.getDeclaredField("WIFI_AP_STATE_ENABLED");
+                field.setAccessible(true);
+                int value = (int) field.get(null);
+                return state == value;
+            }
         } catch (Exception ignore) {
+            try {
+                ConnectivityManager cm = (ConnectivityManager) context.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+                Network network = cm.getActiveNetwork();
+                if (network != null) {
+                    LinkProperties properties = cm.getLinkProperties(network);
+                    List<LinkAddress> list = properties.getLinkAddresses();
+                    for (LinkAddress linkAddress : list) {
+                        if (linkAddress.getAddress().getHostAddress().startsWith("192.168.43.")) {
+                            return true;
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                return false;
+            }
         }
         return false;
     }
@@ -255,8 +295,7 @@ public class NetworkUtils {
         WifiInfo info = null;
         try {
             info = wifi.getConnectionInfo();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ignore) {
         }
 
         if (info == null) {
@@ -289,9 +328,7 @@ public class NetworkUtils {
                     break;
                 }
             }
-        } catch (Exception e) {
-            // 赋予默认值
-            e.printStackTrace();
+        } catch (Exception ignore) {
         }
         return macSerial;
     }
@@ -319,8 +356,7 @@ public class NetworkUtils {
                 }
                 return res1.toString();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ignore) {
         }
         return null;
     }

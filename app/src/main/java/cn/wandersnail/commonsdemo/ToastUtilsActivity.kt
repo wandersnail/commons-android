@@ -6,7 +6,7 @@ import android.view.Gravity
 import android.widget.TextView
 import cn.wandersnail.commons.util.ToastUtils
 import cn.wandersnail.commons.util.UiUtils
-import kotlinx.android.synthetic.main.activity_toast_utils.*
+import cn.wandersnail.commonsdemo.databinding.ActivityToastUtilsBinding
 import kotlin.concurrent.thread
 
 /**
@@ -15,28 +15,31 @@ import kotlin.concurrent.thread
  * date: 2019/1/7 21:03
  * author: zengfansheng
  */
-class ToastUtilsActivity : BaseActivity() {
+class ToastUtilsActivity : BaseViewBindingActivity<ActivityToastUtilsBinding>() {
+    override fun getViewBindingClass(): Class<ActivityToastUtilsBinding> {
+        return ActivityToastUtilsBinding::class.java
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_toast_utils)
-        btnDefault.setOnClickListener { 
+        binding.btnDefault.setOnClickListener {
             ToastUtils.reset()
             ToastUtils.showShort("这是一个正常的Toast")
         }
 
-        btnGravity.setOnClickListener {
+        binding.btnGravity.setOnClickListener {
             ToastUtils.reset()
             ToastUtils.setGravity(Gravity.TOP, UiUtils.dp2px(50f), UiUtils.dp2px(50f))
             ToastUtils.showShort("这是一个带位置及偏移Toast")
         }
 
-        btnMargin.setOnClickListener {
+        binding.btnMargin.setOnClickListener {
             ToastUtils.reset()
             ToastUtils.setMargin(0.2f, 0.1f)
             ToastUtils.showShort("带Margin的Toast")
         }
-        
-        btnCustomView.setOnClickListener {
+
+        binding.btnCustomView.setOnClickListener {
             ToastUtils.reset()
             val tv = TextView(this)
             tv.text = "自定义View的Toast"
@@ -46,7 +49,7 @@ class ToastUtilsActivity : BaseActivity() {
             ToastUtils.setView(tv)
             ToastUtils.showShort()
         }
-        btnBackground.setOnClickListener {
+        binding.btnBackground.setOnClickListener {
             thread {
                 ToastUtils.showShort("这是子线程的Toast")
             }

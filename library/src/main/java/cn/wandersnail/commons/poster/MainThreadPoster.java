@@ -3,6 +3,7 @@ package cn.wandersnail.commons.poster;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+
 import androidx.annotation.NonNull;
 
 import java.util.Objects;
