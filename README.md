@@ -49,7 +49,7 @@
 - 一些基类
 
 ## 代码托管
-[![Maven Central](https://img.shields.io/maven-central/v/cn.wandersnail/commons-android/badge.svg?color=4AC61C)](https://central.sonatype.com/artifact/cn.wandersnail/commons-android/versions)
+[![Maven Central](https://img.shields.io/maven-central/v/cn.wandersnail/commons-android.svg?color=4AC61C)](https://central.sonatype.com/artifact/cn.wandersnail/commons-android/versions)
 [![Release](https://jitpack.io/v/cn.wandersnail/commons-android.svg)](https://jitpack.io/#cn.wandersnail/commons-android)
 
 
