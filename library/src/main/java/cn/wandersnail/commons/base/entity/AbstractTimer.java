@@ -3,8 +3,9 @@ package cn.wandersnail.commons.base.entity;
 import android.os.Handler;
 import android.os.Looper;
 
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 简单的定时器
@@ -13,7 +14,7 @@ import java.util.TimerTask;
  * author: zengfansheng
  */
 public abstract class AbstractTimer {
-    private Timer timer;
+    private ScheduledExecutorService schedule;
     private final Handler handler;
     private final boolean callbackOnMainThread;
     
@@ -31,34 +32,26 @@ public abstract class AbstractTimer {
      * 开始
      */
     public synchronized final void start(long delay, long period) {
-        if (timer == null) {
-            timer = new Timer();
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    if (callbackOnMainThread) {
-                        handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                onTick();
-                            }
-                        });
-                    } else {
-                        onTick();
-                    }
+        if (schedule == null) {
+            schedule = Executors.newSingleThreadScheduledExecutor();
+            schedule.scheduleWithFixedDelay(() -> {
+                if (callbackOnMainThread) {
+                    handler.post(this::onTick);
+                } else {
+                    onTick();
                 }
-            }, delay, period);
+            }, delay, period, TimeUnit.MILLISECONDS);
         }
     }
     
     public synchronized final void stop() {
-        if (timer != null) {
-            timer.cancel();
-            timer = null;
+        if (schedule != null) {
+            schedule.shutdownNow();
+            schedule = null;
         }
     }
     
     public boolean isRunning() {
-        return timer != null;
+        return schedule != null;
     }
 }
